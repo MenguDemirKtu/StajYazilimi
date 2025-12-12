@@ -1,17 +1,18 @@
 using System; 
+using System; 
+using System.Collections.Generic; 
 using System.Collections.Generic; 
 using System.Linq; 
-using System.Web; 
-using Newtonsoft.Json;
-using System; 
 using System.Threading; 
-using Microsoft.EntityFrameworkCore; 
 using System.Threading; 
-using System.Collections.Generic; 
 using System.Threading.Tasks; 
+using System.Web; 
+using Microsoft.EntityFrameworkCore; 
+  using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using UniStaj.GenelIslemler;
 using UniStaj.veri; 
 using UniStaj.veriTabani; 
-  using Microsoft.EntityFrameworkCore;
 namespace UniStaj.Models 
 { 
    public class StajKurumuModel : ModelTabani 
@@ -78,7 +79,25 @@ silinecek._sayfaAta(sayfasi);
      kullanan = sayfasi.mevcutKullanici();
      kartVerisi._kontrolEt(sayfasi.dilKimlik, vari );
      kartVerisi._sayfaAta(sayfasi);
-    await kartVerisi.kaydetKos(vari,true);
+                KullaniciAYRINTI? eslesenKullaniciAdi = vari.KullaniciAYRINTIs.FirstOrDefault(p => p.kullaniciAdi == kartVerisi.vergiNo);
+                if (eslesenKullaniciAdi != null)
+                {
+                    throw new Exception("Bu vergi numarasýna sahip kullanýcý var.");
+                }
+                KullaniciAYRINTIArama _kullaniciKosulu = new KullaniciAYRINTIArama();
+                _kullaniciKosulu.kullaniciAdi = kartVerisi.vergiNo;
+                _kullaniciKosulu.varmi = true;
+                KullaniciAYRINTI? eskiKullanici = await _kullaniciKosulu.bul(vari);
+                if (eskiKullanici == null)
+                {
+                    Kullanici yeniKullanici = new Kullanici();
+                    yeniKullanici.kullaniciAdi = kartVerisi.vergiNo;
+                    yeniKullanici.sifre = GuvenlikIslemi.sifrele(kartVerisi.vergiNo.Substring(kartVerisi.vergiNo.Length - 5));
+                    yeniKullanici.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Kurum_Staj_Yetkilisi;
+                    yeniKullanici.gercekAdi = kartVerisi.stajKurumAdi;
+                    yeniKullanici.kaydet(vari, true);
+                }
+                await kartVerisi.kaydetKos(vari,true);
      return kartVerisi;
   }
   }
