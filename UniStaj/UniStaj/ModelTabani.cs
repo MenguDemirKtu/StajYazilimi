@@ -180,14 +180,17 @@ namespace UniStaj
         /// <returns></returns>
         public List<SelectListItem> _KullaniciAYRINTIler()
         {
-            List<SelectListItem> sonuc = new List<SelectListItem>();
-            List<KullaniciAYRINTI> hepsi = KullaniciAYRINTI.ara();
-            for (int i = 0; i < hepsi.Count; i++)
+            using (veri.Varlik vari = new Varlik())
             {
-                var yeni = eleman(hepsi[i]._tanimi(), hepsi[i]._birincilAnahtar());
-                sonuc.Add(yeni);
+                List<SelectListItem> sonuc = new List<SelectListItem>();
+                List<KullaniciAYRINTI> hepsi = vari.KullaniciAYRINTIs.ToList();
+                for (int i = 0; i < hepsi.Count; i++)
+                {
+                    var yeni = eleman(hepsi[i]._tanimi(), hepsi[i]._birincilAnahtar());
+                    sonuc.Add(yeni);
+                }
+                return sonuc;
             }
-            return sonuc;
         }
         /// <summary>
         ///parametre olarak girilen bütün kayıtları çeker.

@@ -152,22 +152,6 @@ namespace UniStaj.Models
         }
 
 
-        public void sil(Sayfa sayfasi, string id, Yonetici silen)
-        {
-            using (veri.Varlik vari = new veri.Varlik())
-            {
-                List<string> kayitlar = id.Split(',').ToList();
-                for (int i = 0; i < kayitlar.Count; i++)
-                {
-                    Kullanici silinecek = Kullanici.olustur(vari, kayitlar[i]);
-                    silinecek._sayfaAta(sayfasi);
-                    silinecek.sil(vari);
-                }
-            }
-            Models.KullaniciModel modeli = new Models.KullaniciModel();
-            modeli.veriCekKosut(silen);
-        }
-
         public void veriCek(Yonetici kime, long kimlik)
         {
             kullanan = kime;
@@ -186,12 +170,6 @@ namespace UniStaj.Models
         }
 
 
-        public void veriCekKosut(Yonetici kime)
-        {
-            kullanan = kime;
-            kartVerisi = new Kullanici();
-            dokumVerisi = KullaniciAYRINTI.ara();
-        }
 
 
     }

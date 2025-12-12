@@ -1,4 +1,6 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 
 namespace UniStaj.veri
 {
@@ -10,47 +12,59 @@ namespace UniStaj.veri
             _varSayilan();
         }
 
-        public static List<SelectListItem> doldur(Yonetici? kime)
-        {
-            List<KullaniciAYRINTI> bilesenler = KullaniciAYRINTI.ara();
-            return doldur2(bilesenler);
-        }
-
-        public static List<SelectListItem> doldur()
-        {
-            List<KullaniciAYRINTI> bilesenler = KullaniciAYRINTI.ara();
-            return doldur2(bilesenler);
-        }
 
         public void bicimlendir(veri.Varlik vari)
         {
 
+            if (string.IsNullOrEmpty(this.kodu))
+                this.kodu = Guid.NewGuid().ToString();
         }
 
-        public override void _icDenetim(int dilKimlik, veri.Varlik vari)
+        public void _icDenetim(int dilKimlik, veri.Varlik vari)
         {
             uyariVerString(kullaniciAdi, ".", dilKimlik);
             uyariVerString(kullaniciTuru, ".", dilKimlik);
         }
 
 
-        public override string _tanimi()
-        {
-            return kullaniciAdi.ToString();
-        }
 
 
-        public static KullaniciAYRINTI olustur(object deger)
+        [NotMapped]
+        public enumref_KullaniciTuru _Kullanicituru
         {
-            using (veri.Varlik vari = new veri.Varlik())
+            get
             {
-                return olustur(vari, deger);
+                return (enumref_KullaniciTuru)this.i_kullaniciTuruKimlik;
+            }
+            set
+            {
+                i_kullaniciTuruKimlik = (int)value;
+            }
+        }
+        [NotMapped]
+        public enumref_Dil _Dil
+        {
+            get
+            {
+                return (enumref_Dil)this.i_dilKimlik;
+            }
+            set
+            {
+                i_dilKimlik = (int)value;
             }
         }
 
-        public static KullaniciAYRINTI olustur(Varlik vari, object deger)
+
+        public override string _tanimi()
         {
-            Int32 kimlik = Convert.ToInt32(deger);
+            return bossaDoldur(kullaniciAdi);
+        }
+
+
+
+        public async static Task<KullaniciAYRINTI?> olusturKos(Varlik vari, object deger)
+        {
+            Int64 kimlik = Convert.ToInt64(deger);
             if (kimlik <= 0)
             {
                 KullaniciAYRINTI sonuc = new KullaniciAYRINTI();
@@ -59,9 +73,11 @@ namespace UniStaj.veri
             }
             else
             {
-                return veriTabani.KullaniciAYRINTICizelgesi.tekliCek(kimlik, vari);
+                return await vari.KullaniciAYRINTIs.FirstOrDefaultAsync(p => p.kullaniciKimlik == kimlik && p.varmi == true);
             }
         }
+
+
         public override void _kontrolEt(int dilKimlik, veri.Varlik vari)
         {
             _icDenetim(dilKimlik, vari);
@@ -70,43 +86,30 @@ namespace UniStaj.veri
 
         public override void _varSayilan()
         {
+            this.varmi = true;
         }
 
         #region bu_sinifina_bagli_siniflar
         public List<KullaniciRolu> _KullaniciRoluBilgileri()
         {
-            return veriTabani.KullaniciRoluCizelgesi.ara(p => p.i_kullaniciKimlik == kullaniciKimlik, p => p.varmi == true);
+            return veriTabani.KullaniciRoluCizelgesi.ara(p => p.i_kullaniciKimlik == this.kullaniciKimlik, p => p.varmi == true);
         }
 
 
         public List<KullaniciRoluAYRINTI> _KullaniciRoluAYRINTIBilgileri()
         {
-            return veriTabani.KullaniciRoluAYRINTICizelgesi.ara(p => p.i_kullaniciKimlik == kullaniciKimlik);
+            return veriTabani.KullaniciRoluAYRINTICizelgesi.ara(p => p.i_kullaniciKimlik == this.kullaniciKimlik);
         }
         #endregion bu_sinifina_bagli_siniflar
 
 
-
-        /// <summary>
-        /// Veri tabanından kayıtlı olan verisini çeker. Dolayısıyla yapılan bir değişikliği aktaran işlemi burada yeniden seçemeyiz.  
-        /// </summary>
-        /// <returns></returns>
-        public Kullanici _verisi()
+        public static async Task<List<KullaniciAYRINTI>> ara(params Expression<Func<KullaniciAYRINTI, bool>>[] kosullar)
         {
-            Kullanici sonuc = Kullanici.olustur(kullaniciKimlik);
-            return sonuc;
+            return await veriTabani.KullaniciAYRINTICizelgesi.ara(kosullar);
         }
-
-        protected KullaniciAYRINTI cek()
+        public static async Task<List<KullaniciAYRINTI>> ara(veri.Varlik vari, params Expression<Func<KullaniciAYRINTI, bool>>[] kosullar)
         {
-            using (veri.Varlik vari = new veri.Varlik())
-            {
-                return veriTabani.KullaniciAYRINTICizelgesi.tekliCek(kullaniciKimlik, vari);
-            }
-        }
-        public static List<KullaniciAYRINTI> ara(params Predicate<KullaniciAYRINTI>[] kosullar)
-        {
-            return veriTabani.KullaniciAYRINTICizelgesi.ara(kosullar);
+            return await veriTabani.KullaniciAYRINTICizelgesi.ara(vari, kosullar);
         }
 
 
@@ -121,7 +124,7 @@ namespace UniStaj.veri
 
         public override string _turkceAdi()
         {
-            return "Kullanıcı AYRINTI";
+            return "Kullanıcı";
         }
         public override string _birincilAnahtarAdi()
         {
@@ -131,7 +134,7 @@ namespace UniStaj.veri
 
         public override long _birincilAnahtar()
         {
-            return kullaniciKimlik;
+            return this.kullaniciKimlik;
         }
 
 

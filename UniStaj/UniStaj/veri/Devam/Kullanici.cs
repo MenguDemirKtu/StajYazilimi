@@ -30,16 +30,14 @@ namespace UniStaj.veri
                 return await vari.Kullanicis.FirstOrDefaultAsync(p => p.kullaniciKimlik == kimlik && p.varmi == true);
             }
         }
-        public static List<SelectListItem> doldur(Yonetici? kime)
-        {
-            List<KullaniciAYRINTI> bilesenler = KullaniciAYRINTI.ara();
-            return doldur2(bilesenler);
-        }
 
         public static List<SelectListItem> doldur()
         {
-            List<KullaniciAYRINTI> bilesenler = KullaniciAYRINTI.ara();
-            return doldur2(bilesenler);
+            using (veri.Varlik vari = new Varlik())
+            {
+                List<KullaniciAYRINTI> bilesenler = vari.KullaniciAYRINTIs.ToList();
+                return doldur2(bilesenler);
+            }
         }
 
         public void bicimlendir(veri.Varlik vari)
@@ -121,11 +119,6 @@ namespace UniStaj.veri
         #endregion bu_sinifina_bagli_siniflar
 
 
-        public KullaniciAYRINTI _ayrintisi()
-        {
-            KullaniciAYRINTI sonuc = KullaniciAYRINTI.olustur(kullaniciKimlik);
-            return sonuc;
-        }
 
         public void kaydet(params bool[] yedeklensinmi)
         {
