@@ -85,6 +85,19 @@ namespace UniStaj.Models
                     yeniKullanici.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Kurum_Staj_Yetkilisi;
                     yeniKullanici.gercekAdi = kartVerisi.stajKurumAdi;
                     yeniKullanici.kaydet(vari, true);
+
+
+                    // KULLANICI ROLÜ ARAMASI
+                    // ROLLER KULLANICI ÝLE BAÐLANTI EKLE
+
+                }
+                else
+                {
+                    // KULLANICI ROLÜ ARAMASI
+                    // KULLANICI ROLÜ VAR.SA
+                    // ROLLE ARASINDA BAÐLANTI VAR MI
+                    // YOKSA EKLE
+
                 }
                 await kartVerisi.kaydetKos(vari, true);
                 return kartVerisi;
