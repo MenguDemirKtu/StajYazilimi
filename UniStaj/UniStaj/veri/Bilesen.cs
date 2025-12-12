@@ -374,7 +374,7 @@ namespace UniStaj.veri
             if (string.IsNullOrEmpty(deger))
             {
 
-                hataBildir(gorunurAdi, " seçilmelidir!", dilKimlik);
+                hataBildir(gorunurAdi, " doldurulmalıdır!", dilKimlik);
             }
         }
         protected void uyariVerByte(byte? deger, string gorunurAdi, int dilKimlik)

@@ -20,6 +20,13 @@ namespace UniStaj.veri
         public void _icDenetim(int dilKimlik, veri.Varlik vari)
         {
             uyariVerInt32(i_stajBirimiKimlik, "Staj Birimi", dilKimlik);
+            uyariVerString(ogrenciNo, "Öðrenci Numarasý", dilKimlik);
+            uyariVerString(tcKimlikNo, "TC Kimlik", dilKimlik);
+            uyariVerString(stajyerAdi, "Öðrenci Adý", dilKimlik);
+            uyariVerString(stajyerSoyadi, "Öðrenci Soyadý", dilKimlik);
+            uyariVerInt32(sinifi, "Öðrenci Adý", dilKimlik);
+            uyariVerString(telefon, "Telefon", dilKimlik);
+            uyariVerString(ePosta, "E-posta", dilKimlik);
         }
 
 
