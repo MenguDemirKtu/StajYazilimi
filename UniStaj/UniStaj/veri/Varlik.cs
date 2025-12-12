@@ -152,7 +152,13 @@ public virtual DbSet<StajKurumTuruAYRINTI> StajKurumTuruAYRINTIs { get; set; }
 public virtual DbSet<StajKurumTuru> StajKurumTurus { get; set; }
 public virtual DbSet<StajKurumuAYRINTI> StajKurumuAYRINTIs { get; set; }
 public virtual DbSet<StajKurumu> StajKurumus { get; set; }
+public virtual DbSet<StajBirimYetkilisiAYRINTI> StajBirimYetkilisiAYRINTIs { get; set; }
+public virtual DbSet<StajBirimYetkilisi> StajBirimYetkilisis { get; set; }
+public virtual DbSet<StajBirimYetkilisiBirimiAYRINTI> StajBirimYetkilisiBirimiAYRINTIs { get; set; }
+public virtual DbSet<StajBirimYetkilisiBirimi> StajBirimYetkilisiBirimis { get; set; }
+public virtual DbSet<PersonelAYRINTI> PersonelAYRINTIs { get; set; }
+public virtual DbSet<Personel> Personels { get; set; }
 public virtual DbSet<YuklenenDosyalarAYRINTI> YuklenenDosyalarAYRINTIs { get; set; }
 #endregion
-    }
-}
+    }
+}

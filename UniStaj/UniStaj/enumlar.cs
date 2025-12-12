@@ -109,15 +109,19 @@ namespace UniStaj
     }
     public enum enumref_AsamaTuru
     {
-
         Asamali = 1,
         Asamasiz = 2
-
     }
     public enum enumref_KullaniciTuru
     {
         Sistem_Yoneticisi = 0,
-        Yazilimci = 1
+        Yazilimci = 1,
+        Personel = 2,
+        Birim_Staj_Sorumlusu = 6,
+        Birim_Staj_Alt_Sorumlusu = 7,
+        Universite_Staj_Sorumlusu = 8,
+        Stajyer = 9,
+        Kurum_Staj_Yetkilisi = 10
     }
     public enum enumref_SmsGonderimTuru
     {
@@ -185,12 +189,12 @@ namespace UniStaj
         Isten_Ayrilis = 2
 
     }
- public enum enumref_StajTipi
- {
-Gonullu = 2 , 
-Zorunlu = 1 
- 
- }
+    public enum enumref_StajTipi
+    {
+        Gonullu = 2,
+        Zorunlu = 1
+
+    }
     public enum enumref_BelgeDurumu
     {
         Onaylandi = 3,
