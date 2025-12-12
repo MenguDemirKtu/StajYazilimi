@@ -1,17 +1,18 @@
-using System; 
-using System.Collections.Generic; 
-using System.Linq; 
-using System.Web; 
+using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System; 
-using System.Threading; 
-using Microsoft.EntityFrameworkCore; 
-using System.Threading; 
+using System; 
 using System.Collections.Generic; 
+using System.Collections.Generic; 
+using System.Linq; 
+using System.Threading; 
+using System.Threading; 
 using System.Threading.Tasks; 
+using System.Web; 
+using UniStaj.GenelIslemler;
 using UniStaj.veri; 
 using UniStaj.veriTabani; 
-  using Microsoft.EntityFrameworkCore;
 namespace UniStaj.Models 
 { 
    public class StajyerModel : ModelTabani 
@@ -78,7 +79,30 @@ silinecek._sayfaAta(sayfasi);
      kullanan = sayfasi.mevcutKullanici();
      kartVerisi._kontrolEt(sayfasi.dilKimlik, vari );
      kartVerisi._sayfaAta(sayfasi);
-    await kartVerisi.kaydetKos(vari,true);
+                KullaniciAYRINTI? eslesenKullaniciAdi = vari.KullaniciAYRINTIs.FirstOrDefault(p => p.kullaniciAdi == kartVerisi.tcKimlikNo);
+                    if (eslesenKullaniciAdi != null)
+                {
+                    throw new Exception("Bu kullanýcý adýný taþýyan baþka bir kullanýcý var.");
+                }
+                KullaniciAYRINTIArama _kullaniciKosulu = new KullaniciAYRINTIArama();
+                _kullaniciKosulu.kullaniciAdi = kartVerisi.tcKimlikNo;
+                _kullaniciKosulu.varmi = true;
+                KullaniciAYRINTI? eskiKullanici = await _kullaniciKosulu.bul(vari);
+
+                if (eskiKullanici == null)
+                {
+
+                    Kullanici yeniKullanici = new Kullanici();
+                    yeniKullanici.kullaniciAdi = kartVerisi.tcKimlikNo;
+                    yeniKullanici.sifre = GuvenlikIslemi.sifrele(kartVerisi.tcKimlikNo.Substring(kartVerisi.tcKimlikNo.Length - 5));
+                    yeniKullanici.tcKimlikNo = kartVerisi.tcKimlikNo;
+                    yeniKullanici.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Stajyer;
+                    yeniKullanici.gercekAdi = kartVerisi.stajyerAdi + " " + kartVerisi.stajyerSoyadi;
+                    yeniKullanici.telefon = kartVerisi.telefon;
+                    yeniKullanici.ePostaAdresi = kartVerisi.ePosta;
+                    yeniKullanici.kaydet(vari, false);
+                }
+                await kartVerisi.kaydetKos(vari,true);
      return kartVerisi;
   }
   }
