@@ -139,22 +139,6 @@ namespace UniStaj.Models
                 }
             }
         }
-        public void veriCek(Yonetici kime, long kimlik)
-        {
-            kullanan = kime;
-            yenimiBelirle(kimlik);
-            kartVerisi = Rol.olustur(kimlik) ?? new Rol();
-            dokumVerisi = new List<RolAYRINTI>();
-        }
-
-
-        public void veriCekKosut(Yonetici kime)
-        {
-            kullanan = kime;
-            kartVerisi = new Rol();
-            dokumVerisi = RolAYRINTI.ara();
-        }
-
 
     }
 }

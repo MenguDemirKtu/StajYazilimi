@@ -152,7 +152,7 @@ namespace UniStaj.Controllers
 
             List<RolWebSayfasiIzni> oncekiler = await vari.RolWebSayfasiIznis.Where(p => p.i_webSayfasiKimlik == yeni.webSayfasiKimlik && p.varmi == true).ToListAsync();
             //RolWebSayfasiIzni.ara(p => p.i_webSayfasiKimlik == yeni.webSayfasiKimlik && p.varmi == true);
-            List<RolAYRINTI> roller = RolAYRINTI.ara();
+            List<RolAYRINTI> roller = await vari.RolAYRINTIs.ToListAsync();
 
             for (int i = 0; i < roller.Count; i++)
             {

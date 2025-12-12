@@ -11,21 +11,13 @@ namespace UniStaj.veri
             _varSayilan();
         }
 
-        public static List<SelectListItem> doldur(Yonetici? kime)
-        {
-            List<RolAYRINTI> bilesenler = RolAYRINTI.ara();
-            return doldur2(bilesenler);
-        }
-
-        public static List<SelectListItem> doldur()
-        {
-            List<RolAYRINTI> bilesenler = RolAYRINTI.ara();
-            return doldur2(bilesenler);
-        }
         public static List<SelectListItem> doldur(int[] secilenler)
         {
-            List<RolAYRINTI> bilesenler = RolAYRINTI.ara();
-            return doldur2(bilesenler, secilenler);
+            using (veri.Varlik vari = new Varlik())
+            {
+                List<RolAYRINTI> bilesenler = vari.RolAYRINTIs.ToList();
+                return doldur2(bilesenler, secilenler);
+            }
         }
 
         public void bicimlendir(veri.Varlik vari)
@@ -115,11 +107,6 @@ namespace UniStaj.veri
             i_rolIslemiKimlik = 0;
         }
 
-        public RolAYRINTI _ayrintisi()
-        {
-            RolAYRINTI sonuc = RolAYRINTI.olustur(rolKimlik);
-            return sonuc;
-        }
 
         public void kaydet(params bool[] yedeklensinmi)
         {

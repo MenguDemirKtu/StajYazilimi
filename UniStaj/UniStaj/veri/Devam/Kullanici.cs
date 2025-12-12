@@ -105,19 +105,6 @@ namespace UniStaj.veri
             e_sifreDegisecekmi = true;
         }
 
-        #region bu_sinifina_bagli_siniflar
-        public List<KullaniciRolu> _KullaniciRoluBilgileri()
-        {
-            return veriTabani.KullaniciRoluCizelgesi.ara(p => p.i_kullaniciKimlik == kullaniciKimlik, p => p.varmi == true);
-        }
-
-
-        public List<KullaniciRoluAYRINTI> _KullaniciRoluAYRINTIBilgileri()
-        {
-            return veriTabani.KullaniciRoluAYRINTICizelgesi.ara(p => p.i_kullaniciKimlik == kullaniciKimlik);
-        }
-        #endregion bu_sinifina_bagli_siniflar
-
 
 
         public void kaydet(params bool[] yedeklensinmi)

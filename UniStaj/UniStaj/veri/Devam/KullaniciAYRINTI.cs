@@ -89,18 +89,6 @@ namespace UniStaj.veri
             this.varmi = true;
         }
 
-        #region bu_sinifina_bagli_siniflar
-        public List<KullaniciRolu> _KullaniciRoluBilgileri()
-        {
-            return veriTabani.KullaniciRoluCizelgesi.ara(p => p.i_kullaniciKimlik == this.kullaniciKimlik, p => p.varmi == true);
-        }
-
-
-        public List<KullaniciRoluAYRINTI> _KullaniciRoluAYRINTIBilgileri()
-        {
-            return veriTabani.KullaniciRoluAYRINTICizelgesi.ara(p => p.i_kullaniciKimlik == this.kullaniciKimlik);
-        }
-        #endregion bu_sinifina_bagli_siniflar
 
 
         public static async Task<List<KullaniciAYRINTI>> ara(params Expression<Func<KullaniciAYRINTI, bool>>[] kosullar)

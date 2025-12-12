@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore; //;
 using LinqKit;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore; //;
 using UniStaj.veri;
 
 namespace UniStaj.veriTabani

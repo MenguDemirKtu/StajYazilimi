@@ -285,7 +285,7 @@ namespace UniStaj
                     else
                     {
                         yonetici.kisitliGosterimmi = true;
-                        List<KullaniciRoluAYRINTI> roller = KullaniciRoluAYRINTI.ara(p => p.i_kullaniciKimlik == yonetici.kullaniciKimlik).ToList();
+                        List<KullaniciRoluAYRINTI> roller = await vari.KullaniciRoluAYRINTIs.Where(p => p.i_kullaniciKimlik == yonetici.kullaniciKimlik).ToListAsync();
                         if (roller.Count == 0)
                         {
                             List<Rol> varsayilanlar = Rol.ara(p => p.e_gecerlimi == true
@@ -298,9 +298,9 @@ namespace UniStaj
                                 rolu.i_rolKimlik = siradaki.rolKimlik;
                                 rolu._varSayilan();
                                 rolu.e_gecerlimi = true;
-                                rolu.kaydet(false);
+                                await rolu.kaydetKos(vari, false);
                             }
-                            roller = KullaniciRoluAYRINTI.ara(p => p.i_kullaniciKimlik == yonetici.kullaniciKimlik).ToList();
+                            roller = await vari.KullaniciRoluAYRINTIs.Where(p => p.i_kullaniciKimlik == yonetici.kullaniciKimlik).ToListAsync();
                         }
 
                         List<int> sa = new List<int>();

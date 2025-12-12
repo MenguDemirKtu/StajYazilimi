@@ -1,7 +1,11 @@
+using LinqKit;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using UniStaj.veri;
 
 namespace UniStaj.veriTabani
 {
+
     public class KullaniciRoluAYRINTIArama
     {
         public Int64? kullaniciRoluKimlik { get; set; }
@@ -9,70 +13,116 @@ namespace UniStaj.veriTabani
         public Int32? i_rolKimlik { get; set; }
         public bool? e_gecerlimi { get; set; }
         public bool? varmi { get; set; }
-        public string rolAdi { get; set; }
-        public string kullaniciAdi { get; set; }
+        public string? rolAdi { get; set; }
+        public string? kullaniciAdi { get; set; }
+        public string? gercekAdi { get; set; }
+        public string? ePostaAdresi { get; set; }
+        public string? telefon { get; set; }
+        public string? unvan { get; set; }
+        public string? tcKimlikNo { get; set; }
+        public string? ustTur { get; set; }
+        public string? fotoBilgisi { get; set; }
+        public string? ekAciklama { get; set; }
         public KullaniciRoluAYRINTIArama()
         {
-            varmi = true;
+            this.varmi = true;
         }
-        public Predicate<KullaniciRoluAYRINTI> kosulu()
+
+        private ExpressionStarter<KullaniciRoluAYRINTI> kosulOlustur()
         {
-            List<Predicate<KullaniciRoluAYRINTI>> kosullar = new List<Predicate<KullaniciRoluAYRINTI>>();
-            kosullar.Add(c => c.varmi == true);
+            var predicate = PredicateBuilder.New<KullaniciRoluAYRINTI>(P => P.varmi == true);
             if (kullaniciRoluKimlik != null)
-                kosullar.Add(c => c.kullaniciRoluKimlik == kullaniciRoluKimlik);
+                predicate = predicate.And(x => x.kullaniciRoluKimlik == kullaniciRoluKimlik);
             if (i_kullaniciKimlik != null)
-                kosullar.Add(c => c.i_kullaniciKimlik == i_kullaniciKimlik);
+                predicate = predicate.And(x => x.i_kullaniciKimlik == i_kullaniciKimlik);
             if (i_rolKimlik != null)
-                kosullar.Add(c => c.i_rolKimlik == i_rolKimlik);
+                predicate = predicate.And(x => x.i_rolKimlik == i_rolKimlik);
             if (e_gecerlimi != null)
-                kosullar.Add(c => c.e_gecerlimi == e_gecerlimi);
+                predicate = predicate.And(x => x.e_gecerlimi == e_gecerlimi);
             if (varmi != null)
-                kosullar.Add(c => c.varmi == varmi);
+                predicate = predicate.And(x => x.varmi == varmi);
             if (rolAdi != null)
-                kosullar.Add(c => c.rolAdi == rolAdi);
+                predicate = predicate.And(x => x.rolAdi != null && x.rolAdi.Contains(rolAdi));
             if (kullaniciAdi != null)
-                kosullar.Add(c => c.kullaniciAdi == kullaniciAdi);
-            Predicate<KullaniciRoluAYRINTI> kosul = Vt.birlestir(kosullar.ToArray());
-            return kosul;
+                predicate = predicate.And(x => x.kullaniciAdi != null && x.kullaniciAdi.Contains(kullaniciAdi));
+            if (gercekAdi != null)
+                predicate = predicate.And(x => x.gercekAdi != null && x.gercekAdi.Contains(gercekAdi));
+            if (ePostaAdresi != null)
+                predicate = predicate.And(x => x.ePostaAdresi != null && x.ePostaAdresi.Contains(ePostaAdresi));
+            if (telefon != null)
+                predicate = predicate.And(x => x.telefon != null && x.telefon.Contains(telefon));
+            if (unvan != null)
+                predicate = predicate.And(x => x.unvan != null && x.unvan.Contains(unvan));
+            if (tcKimlikNo != null)
+                predicate = predicate.And(x => x.tcKimlikNo != null && x.tcKimlikNo.Contains(tcKimlikNo));
+            if (ustTur != null)
+                predicate = predicate.And(x => x.ustTur != null && x.ustTur.Contains(ustTur));
+            if (fotoBilgisi != null)
+                predicate = predicate.And(x => x.fotoBilgisi != null && x.fotoBilgisi.Contains(fotoBilgisi));
+            if (ekAciklama != null)
+                predicate = predicate.And(x => x.ekAciklama != null && x.ekAciklama.Contains(ekAciklama));
+            return predicate;
+
+        }
+        public async Task<List<KullaniciRoluAYRINTI>> cek(veri.Varlik vari)
+        {
+            List<KullaniciRoluAYRINTI> sonuc = await vari.KullaniciRoluAYRINTIs
+           .Where(kosulOlustur())
+           .ToListAsync();
+            return sonuc;
+        }
+        public async Task<KullaniciRoluAYRINTI?> bul(veri.Varlik vari)
+        {
+            var predicate = kosulOlustur();
+            KullaniciRoluAYRINTI? sonuc = await vari.KullaniciRoluAYRINTIs
+           .Where(predicate)
+           .FirstOrDefaultAsync();
+            return sonuc;
         }
     }
+
+
     public class KullaniciRoluAYRINTICizelgesi
     {
-        /// <summary>
-        /// Değeri boş olmayan değerlere göre verileri çeker.
-        /// </summary>
-        /// <param name="kosul"></param>
-        /// <returns></returns>
-        public static List<KullaniciRoluAYRINTI> ara(KullaniciRoluAYRINTIArama kosul)
+
+
+
+
+
+        /// <summary> 
+        /// Girilen koşullara göre veri çeker. 
+        /// </summary>  
+        /// <param name="kosullar"></param> 
+        /// <returns></returns> 
+        public static async Task<List<KullaniciRoluAYRINTI>> ara(params Expression<Func<KullaniciRoluAYRINTI, bool>>[] kosullar)
         {
-            using (veri.Varlik vari = new veri.Varlik()) { return vari.KullaniciRoluAYRINTIs.ToList().FindAll(kosul.kosulu()).OrderByDescending(p => p.kullaniciRoluKimlik).ToList(); }
+            using (var vari = new veri.Varlik())
+            {
+                return await ara(vari, kosullar);
+            }
         }
-        /// <summary>
-        /// Girilen koşullara göre veri çeker.
-        /// </summary>
-        /// <param name="kosullar"></param>
-        /// <returns></returns>
-        public static List<KullaniciRoluAYRINTI> ara(params Predicate<KullaniciRoluAYRINTI>[] kosullar)
+        public static async Task<List<KullaniciRoluAYRINTI>> ara(veri.Varlik vari, params Expression<Func<KullaniciRoluAYRINTI, bool>>[] kosullar)
         {
-            var kosul = Vt.birlestir(kosullar);
-            using (veri.Varlik vari = new veri.Varlik()) { return vari.KullaniciRoluAYRINTIs.ToList().FindAll(kosul).OrderByDescending(p => p.kullaniciRoluKimlik).ToList(); }
+            var kosul = Vt.Birlestir(kosullar);
+            return await vari.KullaniciRoluAYRINTIs
+                            .Where(kosul).OrderByDescending(p => p.kullaniciRoluKimlik)
+                   .ToListAsync();
         }
-        public static List<KullaniciRoluAYRINTI> tamami(Varlik kime)
+
+
+
+        public static async Task<KullaniciRoluAYRINTI?> tekliCekKos(Int64 kimlik, Varlik kime)
         {
-            return kime.KullaniciRoluAYRINTIs.Where(p => p.varmi == true).OrderByDescending(p => p.kullaniciRoluKimlik).ToList();
+            KullaniciRoluAYRINTI? kayit = await kime.KullaniciRoluAYRINTIs.FirstOrDefaultAsync(p => p.kullaniciRoluKimlik == kimlik && p.varmi == true);
+            return kayit;
         }
-        public static List<KullaniciRoluAYRINTI> cek(Varlik kime)
+
+
+
+
+        public static KullaniciRoluAYRINTI? tekliCek(Int64 kimlik, Varlik kime)
         {
-            return tamami(kime);
-        }
-        public static List<KullaniciRoluAYRINTI> cek()
-        {
-            using (veri.Varlik vari = new Varlik()) { return tamami(vari); }
-        }
-        public static KullaniciRoluAYRINTI tekliCek(Int64 kimlik, Varlik kime)
-        {
-            KullaniciRoluAYRINTI kayit = kime.KullaniciRoluAYRINTIs.FirstOrDefault(p => p.kullaniciRoluKimlik == kimlik);
+            KullaniciRoluAYRINTI? kayit = kime.KullaniciRoluAYRINTIs.FirstOrDefault(p => p.kullaniciRoluKimlik == kimlik);
             if (kayit != null)
                 if (kayit.varmi != true)
                     return null;
@@ -80,3 +130,4 @@ namespace UniStaj.veriTabani
         }
     }
 }
+

@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore; // 
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace UniStaj.veri
 {
@@ -11,29 +11,15 @@ namespace UniStaj.veri
             _varSayilan();
         }
 
-        public static List<SelectListItem> doldur(Yonetici? kime)
-        {
-            List<RolAYRINTI> bilesenler = RolAYRINTI.ara();
-            return doldur2(bilesenler);
-        }
-
-        public static List<SelectListItem> doldur()
-        {
-            List<RolAYRINTI> bilesenler = RolAYRINTI.ara();
-            return doldur2(bilesenler);
-        }
-        public static List<SelectListItem> doldur(int[] secilenler)
-        {
-            List<RolAYRINTI> bilesenler = RolAYRINTI.ara();
-            return doldur2(bilesenler, secilenler);
-        }
 
         public void bicimlendir(veri.Varlik vari)
         {
 
+            if (string.IsNullOrEmpty(this.kodu))
+                this.kodu = Guid.NewGuid().ToString();
         }
 
-        public override void _icDenetim(int dilKimlik, veri.Varlik vari)
+        public void _icDenetim(int dilKimlik, veri.Varlik vari)
         {
             uyariVerBool(e_gecerlimi, ".", dilKimlik);
         }
@@ -41,17 +27,9 @@ namespace UniStaj.veri
 
         public override string _tanimi()
         {
-            return rolAdi.ToString();
+            return bossaDoldur(rolAdi);
         }
 
-
-        public static RolAYRINTI olustur(object deger)
-        {
-            using (veri.Varlik vari = new veri.Varlik())
-            {
-                return olustur(vari, deger);
-            }
-        }
 
 
         public async static Task<RolAYRINTI?> olusturKos(Varlik vari, object deger)
@@ -70,20 +48,6 @@ namespace UniStaj.veri
         }
 
 
-        public static RolAYRINTI olustur(Varlik vari, object deger)
-        {
-            Int32 kimlik = Convert.ToInt32(deger);
-            if (kimlik <= 0)
-            {
-                RolAYRINTI sonuc = new RolAYRINTI();
-                sonuc._varSayilan();
-                return sonuc;
-            }
-            else
-            {
-                return veriTabani.RolAYRINTICizelgesi.tekliCek(kimlik, vari);
-            }
-        }
         public override void _kontrolEt(int dilKimlik, veri.Varlik vari)
         {
             _icDenetim(dilKimlik, vari);
@@ -92,18 +56,16 @@ namespace UniStaj.veri
 
         public override void _varSayilan()
         {
+            this.varmi = true;
         }
 
-        protected RolAYRINTI cek()
+        public static async Task<List<RolAYRINTI>> ara(params Expression<Func<RolAYRINTI, bool>>[] kosullar)
         {
-            using (veri.Varlik vari = new veri.Varlik())
-            {
-                return veriTabani.RolAYRINTICizelgesi.tekliCek(rolKimlik, vari);
-            }
+            return await veriTabani.RolAYRINTICizelgesi.ara(kosullar);
         }
-        public static List<RolAYRINTI> ara(params Predicate<RolAYRINTI>[] kosullar)
+        public static async Task<List<RolAYRINTI>> ara(veri.Varlik vari, params Expression<Func<RolAYRINTI, bool>>[] kosullar)
         {
-            return veriTabani.RolAYRINTICizelgesi.ara(kosullar);
+            return await veriTabani.RolAYRINTICizelgesi.ara(vari, kosullar);
         }
 
 
@@ -118,7 +80,7 @@ namespace UniStaj.veri
 
         public override string _turkceAdi()
         {
-            return "RolAYRINTI";
+            return "RolA";
         }
         public override string _birincilAnahtarAdi()
         {
@@ -128,7 +90,7 @@ namespace UniStaj.veri
 
         public override long _birincilAnahtar()
         {
-            return rolKimlik;
+            return this.rolKimlik;
         }
 
 

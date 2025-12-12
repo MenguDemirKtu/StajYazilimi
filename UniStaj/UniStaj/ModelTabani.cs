@@ -150,14 +150,17 @@ namespace UniStaj
 
         public List<SelectListItem> _RolAYRINTIler()
         {
-            List<SelectListItem> sonuc = new List<SelectListItem>();
-            List<RolAYRINTI> hepsi = RolAYRINTI.ara();
-            for (int i = 0; i < hepsi.Count; i++)
+            using (veri.Varlik vari = new Varlik())
             {
-                var yeni = eleman(hepsi[i]._tanimi(), hepsi[i]._birincilAnahtar());
-                sonuc.Add(yeni);
+                List<SelectListItem> sonuc = new List<SelectListItem>();
+                List<RolAYRINTI> hepsi = vari.RolAYRINTIs.ToList();
+                for (int i = 0; i < hepsi.Count; i++)
+                {
+                    var yeni = eleman(hepsi[i]._tanimi(), hepsi[i]._birincilAnahtar());
+                    sonuc.Add(yeni);
+                }
+                return sonuc;
             }
-            return sonuc;
         }
         /// <summary>
         /// Rol çizelgesi içindeki bütün kayıtları çeker
@@ -165,14 +168,17 @@ namespace UniStaj
         /// <returns></returns>
         public List<SelectListItem> _Roller()
         {
-            List<SelectListItem> sonuc = new List<SelectListItem>();
-            List<RolAYRINTI> hepsi = RolAYRINTI.ara(p => p.varmi == true);
-            for (int i = 0; i < hepsi.Count; i++)
+            using (veri.Varlik vari = new Varlik())
             {
-                var yeni = eleman(hepsi[i]._tanimi(), hepsi[i]._birincilAnahtar());
-                sonuc.Add(yeni);
+                List<SelectListItem> sonuc = new List<SelectListItem>();
+                List<RolAYRINTI> hepsi = vari.RolAYRINTIs.ToList();
+                for (int i = 0; i < hepsi.Count; i++)
+                {
+                    var yeni = eleman(hepsi[i]._tanimi(), hepsi[i]._birincilAnahtar());
+                    sonuc.Add(yeni);
+                }
+                return sonuc;
             }
-            return sonuc;
         }
         /// <summary>
         /// KullaniciAYRINTI çizelgesi içindeki bütün kayıtları çeker

@@ -1,34 +1,41 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
-using UniStaj.veriTabani;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace UniStaj.veri
 {
     public partial class KullaniciRoluAYRINTI : Bilesen
     {
-        public static List<SelectListItem> doldur(Yonetici? kime)
+
+        public KullaniciRoluAYRINTI()
         {
-            List<KullaniciRoluAYRINTI> bilesenler = KullaniciRoluAYRINTI.ara();
-            return doldur2(bilesenler);
+            _varSayilan();
         }
-        public static List<SelectListItem> doldur()
+
+
+        public void bicimlendir(veri.Varlik vari)
         {
-            List<KullaniciRoluAYRINTI> bilesenler = KullaniciRoluAYRINTI.ara();
-            return doldur2(bilesenler);
+
         }
-        public override void _icDenetim(int dilKimlik, veri.Varlik vari)
+
+        public void _icDenetim(int dilKimlik, veri.Varlik vari)
         {
-            uyariVerInt32(i_kullaniciKimlik, "", dilKimlik);
-            uyariVerInt32(i_rolKimlik, "", dilKimlik);
-            uyariVerBool(e_gecerlimi, "", dilKimlik);
-            uyariVerString(kullaniciAdi, "", dilKimlik);
+            uyariVerInt32(i_kullaniciKimlik, ".", dilKimlik);
+            uyariVerInt32(i_rolKimlik, ".", dilKimlik);
+            uyariVerBool(e_gecerlimi, ".", dilKimlik);
+            uyariVerString(kullaniciAdi, ".", dilKimlik);
         }
+
+
         public override string _tanimi()
         {
-            return i_kullaniciKimlik.ToString();
+            return bossaDoldur(i_kullaniciKimlik);
         }
-        public static KullaniciRoluAYRINTI olustur(object deger)
+
+
+
+        public async static Task<KullaniciRoluAYRINTI?> olusturKos(Varlik vari, object deger)
         {
-            long kimlik = Convert.ToInt64(deger);
+            Int64 kimlik = Convert.ToInt64(deger);
             if (kimlik <= 0)
             {
                 KullaniciRoluAYRINTI sonuc = new KullaniciRoluAYRINTI();
@@ -37,60 +44,68 @@ namespace UniStaj.veri
             }
             else
             {
-                using (veri.Varlik vari = new veri.Varlik()) { return veriTabani.KullaniciRoluAYRINTICizelgesi.tekliCek(kimlik, vari); }
+                return await vari.KullaniciRoluAYRINTIs.FirstOrDefaultAsync(p => p.kullaniciRoluKimlik == kimlik && p.varmi == true);
             }
         }
+
+
         public override void _kontrolEt(int dilKimlik, veri.Varlik vari)
         {
             _icDenetim(dilKimlik, vari);
         }
+
+
         public override void _varSayilan()
         {
+            this.varmi = true;
         }
+
         #region bu_sinifin_bagli_oldugu_sinif
         public Kullanici _KullaniciBilgisi()
         {
-            return Kullanici.olustur(i_kullaniciKimlik);
+            return Kullanici.olustur(this.i_kullaniciKimlik);
         }
+
         #endregion bu_sinifin_bagli_oldugu_sinif
-        /// <summary>
-        /// Veri tabanından kayıtlı olan verisini çeker. Dolayısıyla yapılan bir değişikliği aktaran işlemi burada yeniden seçemeyiz.
-        /// </summary>
-        /// <returns></returns>
-        public KullaniciRolu _verisi()
+
+        public static async Task<List<KullaniciRoluAYRINTI>> ara(params Expression<Func<KullaniciRoluAYRINTI, bool>>[] kosullar)
         {
-            KullaniciRolu sonuc = KullaniciRolu.olustur(kullaniciRoluKimlik);
-            return sonuc;
+            return await veriTabani.KullaniciRoluAYRINTICizelgesi.ara(kosullar);
         }
-        protected KullaniciRoluAYRINTI cek()
+        public static async Task<List<KullaniciRoluAYRINTI>> ara(veri.Varlik vari, params Expression<Func<KullaniciRoluAYRINTI, bool>>[] kosullar)
         {
-            using (veri.Varlik vari = new veri.Varlik()) { return veriTabani.KullaniciRoluAYRINTICizelgesi.tekliCek(kullaniciRoluKimlik, vari); }
+            return await veriTabani.KullaniciRoluAYRINTICizelgesi.ara(vari, kosullar);
         }
-        public static List<KullaniciRoluAYRINTI> ara(KullaniciRoluAYRINTIArama kosul)
-        {
-            return veriTabani.KullaniciRoluAYRINTICizelgesi.ara(kosul);
-        }
-        public static List<KullaniciRoluAYRINTI> ara(params Predicate<KullaniciRoluAYRINTI>[] kosullar)
-        {
-            return veriTabani.KullaniciRoluAYRINTICizelgesi.ara(kosullar);
-        }
+
+
         #region ozluk
+
+
         public override string _cizelgeAdi()
         {
             return "KullaniciRoluAYRINTI";
         }
+
+
         public override string _turkceAdi()
         {
-            return "";
+            return "KullaniciRoluA";
         }
         public override string _birincilAnahtarAdi()
         {
             return "kullaniciRoluKimlik";
         }
+
+
         public override long _birincilAnahtar()
         {
-            return kullaniciRoluKimlik;
+            return this.kullaniciRoluKimlik;
         }
+
+
         #endregion
+
+
     }
 }
+
