@@ -1,71 +1,90 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+      using System;
+    using System.Threading; 
+   using Microsoft.EntityFrameworkCore; 
+ using System.Threading;
+ using System.Collections.Generic; 
+  using System.Threading.Tasks;
+using System.Linq;
 using UniStaj.veri;
-
 namespace UniStaj.Controllers
 {
-    public class KullaniciRoluController : Sayfa
+ public class KullaniciRoluController : Sayfa
     {
-        public async Task<IActionResult> Index()
+public async Task<ActionResult> Cek( Models.KullaniciRoluModel modeli)
+                            {
+                                var nedir = await modeli.ayrintiliAraKos(this);
+                                return basariBildirimi("/KullaniciRolu?id=" + nedir.kodu);
+                            }
+    public async Task<ActionResult> Index(string id)
         {
-
-            string tanitim = await Genel.dokumKisaAciklamaKos(this, "KullaniciRolu");
-            gorunumAyari("", "", "Ana Sayfa", "/", "/KullaniciRolu/", tanitim);
+try{
+            string tanitim = "...";
+   tanitim = await Genel.dokumKisaAciklamaKos(this, "KullaniciRolu"); 
+ gorunumAyari("", "", "Ana Sayfa", "/", "/KullaniciRolu/", tanitim); 
             if (!oturumAcildimi())
                 return OturumAcilmadi();
             if (await yetkiVarmiKos())
             {
-                Models.KullaniciRoluModel modeli = new Models.KullaniciRoluModel();
-                modeli.veriCekKosut(mevcutKullanici());
+   Models.KullaniciRoluModel modeli = new Models.KullaniciRoluModel();
+                if (string.IsNullOrEmpty(id))
+  	await	   modeli.veriCekKos(mevcutKullanici());
+	 else
+    	await	 modeli.kosulaGoreCek(mevcutKullanici(), id);
                 return View(modeli);
             }
             else
             {
                 return YetkiYok();
             }
+}
+catch(Exception ex)
+{
+return await HataSayfasiKosut(ex);
+}
         }
-        public async Task<ActionResult> Kart(long id)
+public async Task<ActionResult> Kart(long id)
         {
+try{
             if (!oturumAcildimi())
                 return OturumAcilmadi();
-
-            string tanitim = await Genel.dokumKisaAciklamaKos(this, "KullaniciRolu");
-            gorunumAyari("Kullanıcı Rolü Kartı", "Kullanıcı Rolü Kartı", "Ana Sayfa", "/", "/KullaniciRolu/", tanitim);
-            enumref_YetkiTuru yetkiTuru = enumref_YetkiTuru.Gorme;
-            if (id > 0)
-                yetkiTuru = enumref_YetkiTuru.Ekleme;
-            else
-                yetkiTuru = enumref_YetkiTuru.Guncelleme;
-            if (await yetkiVarmiKos("KullaniciRolu", yetkiTuru))
+            string tanitim = "....";
+   tanitim = await Genel.dokumKisaAciklamaKos(this, "KullaniciRolu"); 
+ gorunumAyari("Kartı", "Kartı", "Ana Sayfa", "/", "/KullaniciRolu/", tanitim); 
+            enumref_YetkiTuru yetkiTuru = yetkiTuruBelirle(id);
+if (await yetkiVarmiKos("KullaniciRolu", yetkiTuru))
             {
-                Models.KullaniciRoluModel modeli = new Models.KullaniciRoluModel();
-                modeli.veriCek(mevcutKullanici(), id);
+  Models.KullaniciRoluModel modeli = new Models.KullaniciRoluModel(); 
+                  await   modeli.veriCekKos(mevcutKullanici(), id);
                 return View(modeli);
             }
             else
             {
                 return YetkiYok();
             }
+ }
+ catch (Exception ex )
+ {
+     return await HataSayfasiKosut(ex);
+ }
         }
         [HttpPost]
-        public async Task<ActionResult> Sil(string id)
+public async Task<ActionResult> Sil(string id)
         {
-            try
+                 try
             {
                 if (!oturumAcildimi())
-                    return OturumAcilmadi();
+         return OturumAcilmadi();
                 if (id == null)
-                    uyariVer("Hiç kayıt seçilmemiş");
-                List<string> kayitlar = id.Split(',').ToList();
-                if (await yetkiVarmiKos("KullaniciRolu", enumref_YetkiTuru.Silme))
+                    uyariVer(Ikazlar.hicKayitSecilmemis(dilKimlik));
+                if (await yetkiVarmiKos("Ogrenci", enumref_YetkiTuru.Silme))
                 {
-                    for (int i = 0; i < kayitlar.Count; i++)
-                    {
-                        KullaniciRolu silinecek = KullaniciRolu.olustur(kayitlar[i]);
-                        silinecek.sil();
-                    }
-                    Models.KullaniciRoluModel modeli = new Models.KullaniciRoluModel();
-                    modeli.veriCekKosut(mevcutKullanici());
-                    return silindiBildirimi();
+Models.KullaniciRoluModel modeli = new Models.KullaniciRoluModel();
+              await       modeli.silKos(this, id??"", mevcutKullanici());
+                 await       modeli.veriCekKos(mevcutKullanici()); 
+                    return basariBildirimi(Ikazlar.basariylaSilindi(dilKimlik));
                 }
                 else
                 {
@@ -78,25 +97,15 @@ namespace UniStaj.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult> Kaydet(Models.KullaniciRoluModel gelen)
+   public async Task<ActionResult> Kaydet(Models.KullaniciRoluModel gelen)
         {
             try
-            {
-                if (!oturumAcildimi())
-                    return OturumAcilmadi();
-                var kaydedilecek = gelen.kartVerisi;
-                enumref_YetkiTuru yetkiTuru = enumref_YetkiTuru.Ekleme;
-                if (kaydedilecek._birincilAnahtar() > 0)
-                    yetkiTuru = enumref_YetkiTuru.Guncelleme;
-                if (await yetkiVarmiKos(kaydedilecek, yetkiTuru) == false)
-                    throw new Exception("Bu işlemi yapmaya yetkiniz yok");
-
-                using (veri.Varlik vari = new Varlik())
-                {
-                    kaydedilecek._kontrolEt(dilKimlik, vari);
-                    kaydedilecek.kaydet();
-                }
-                return kaydedildiBildirimi(kaydedilecek);
+            { 
+               if (!oturumAcildimi())
+                    return OturumAcilmadi(); 
+               await gelen.yetkiKontrolu(this);
+               await gelen.kaydetKos(this);
+               return basariBildirimi(gelen.kartVerisi, dilKimlik);
             }
             catch (Exception istisna)
             {

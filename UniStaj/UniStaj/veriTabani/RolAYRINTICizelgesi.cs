@@ -1,9 +1,11 @@
 using LinqKit;
-using Microsoft.EntityFrameworkCore; // 
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using UniStaj.veri;
 
 namespace UniStaj.veriTabani
 {
+
     public class RolAYRINTIArama
     {
         public Int32? rolKimlik { get; set; }
@@ -19,22 +21,22 @@ namespace UniStaj.veriTabani
         public string? kodu { get; set; }
         public RolAYRINTIArama()
         {
-            varmi = true;
+            this.varmi = true;
         }
 
-        public async Task<List<RolAYRINTI>> cek(veri.Varlik vari)
+        private ExpressionStarter<RolAYRINTI> kosulOlustur()
         {
             var predicate = PredicateBuilder.New<RolAYRINTI>(P => P.varmi == true);
             if (rolKimlik != null)
                 predicate = predicate.And(x => x.rolKimlik == rolKimlik);
             if (rolAdi != null)
-                predicate = predicate.And(x => x.rolAdi.Contains(rolAdi));
+                predicate = predicate.And(x => x.rolAdi != null && x.rolAdi.Contains(rolAdi));
             if (tanitim != null)
-                predicate = predicate.And(x => x.tanitim.Contains(tanitim));
+                predicate = predicate.And(x => x.tanitim != null && x.tanitim.Contains(tanitim));
             if (e_gecerlimi != null)
                 predicate = predicate.And(x => x.e_gecerlimi == e_gecerlimi);
             if (gecerlimi != null)
-                predicate = predicate.And(x => x.gecerlimi.Contains(gecerlimi));
+                predicate = predicate.And(x => x.gecerlimi != null && x.gecerlimi.Contains(gecerlimi));
             if (varmi != null)
                 predicate = predicate.And(x => x.varmi == varmi);
             if (e_varsayilanmi != null)
@@ -46,14 +48,25 @@ namespace UniStaj.veriTabani
             if (i_rolIslemiKimlik != null)
                 predicate = predicate.And(x => x.i_rolIslemiKimlik == i_rolIslemiKimlik);
             if (kodu != null)
-                predicate = predicate.And(x => x.kodu.Contains(kodu));
-            List<RolAYRINTI> sonuc = new List<RolAYRINTI>();
-            sonuc = await vari.RolAYRINTIs
-            .Where(predicate)
-            .ToListAsync();
+                predicate = predicate.And(x => x.kodu != null && x.kodu.Contains(kodu));
+            return predicate;
+
+        }
+        public async Task<List<RolAYRINTI>> cek(veri.Varlik vari)
+        {
+            List<RolAYRINTI> sonuc = await vari.RolAYRINTIs
+           .Where(kosulOlustur())
+           .ToListAsync();
             return sonuc;
         }
-
+        public async Task<RolAYRINTI?> bul(veri.Varlik vari)
+        {
+            var predicate = kosulOlustur();
+            RolAYRINTI? sonuc = await vari.RolAYRINTIs
+           .Where(predicate)
+           .FirstOrDefaultAsync();
+            return sonuc;
+        }
     }
 
 
@@ -63,25 +76,29 @@ namespace UniStaj.veriTabani
 
 
 
-        /// <summary>
-        /// Girilen koşullara göre veri çeker.
-        /// </summary>
-        /// <param name="kosullar"></param>
-        /// <returns></returns>
-        public static List<RolAYRINTI> ara(params Predicate<RolAYRINTI>[] kosullar)
+
+        /// <summary> 
+        /// Girilen koşullara göre veri çeker. 
+        /// </summary>  
+        /// <param name="kosullar"></param> 
+        /// <returns></returns> 
+        public static async Task<List<RolAYRINTI>> ara(params Expression<Func<RolAYRINTI, bool>>[] kosullar)
         {
-            using (veri.Varlik vari = new veri.Varlik())
+            using (var vari = new veri.Varlik())
             {
-                var kosul = Vt.birlestir(kosullar);
-                return vari.RolAYRINTIs.ToList().FindAll(kosul).OrderByDescending(p => p.rolKimlik).ToList();
+                return await ara(vari, kosullar);
             }
         }
-
-
-        public static List<RolAYRINTI> tamami(Varlik kime)
+        public static async Task<List<RolAYRINTI>> ara(veri.Varlik vari, params Expression<Func<RolAYRINTI, bool>>[] kosullar)
         {
-            return kime.RolAYRINTIs.Where(p => p.varmi == true).OrderByDescending(p => p.rolKimlik).ToList();
+            var kosul = Vt.Birlestir(kosullar);
+            return await vari.RolAYRINTIs
+                            .Where(kosul).OrderByDescending(p => p.rolKimlik)
+                   .ToListAsync();
         }
+
+
+
         public static async Task<RolAYRINTI?> tekliCekKos(Int32 kimlik, Varlik kime)
         {
             RolAYRINTI? kayit = await kime.RolAYRINTIs.FirstOrDefaultAsync(p => p.rolKimlik == kimlik && p.varmi == true);
@@ -91,9 +108,9 @@ namespace UniStaj.veriTabani
 
 
 
-        public static RolAYRINTI tekliCek(Int32 kimlik, Varlik kime)
+        public static RolAYRINTI? tekliCek(Int32 kimlik, Varlik kime)
         {
-            RolAYRINTI kayit = kime.RolAYRINTIs.FirstOrDefault(p => p.rolKimlik == kimlik);
+            RolAYRINTI? kayit = kime.RolAYRINTIs.FirstOrDefault(p => p.rolKimlik == kimlik);
             if (kayit != null)
                 if (kayit.varmi != true)
                     return null;
