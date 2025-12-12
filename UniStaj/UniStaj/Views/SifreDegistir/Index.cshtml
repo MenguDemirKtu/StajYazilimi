@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri;
+@model UniStaj.Models.SifreDegistirModel
+
+
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    @{
+        int dilKimlik = Model.gecerliDil();
+    }
+    <div class="@Ayar.tamGenislik">
+        <div class="row">
+            
+            @Html.HiddenFor(model => model.kartVerisi.sifreDegisikligiKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.varmi)
+            @Html.HiddenFor(model => model.kartVerisi.i_kullaniciKimlik)
+     
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Eski Şifre", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.eskiSifre, new { @class = @Ayar.textBoxBicim(), maxlength = "256", type = "password", placeholder = @Ayar.sozcuk("Eski Şifre", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Yeni Şifre", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.yeniSifre, new { @class = @Ayar.textBoxBicim(), maxlength = "256", type = "password", placeholder = @Ayar.sozcuk("Yeni Şifre", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Yeni Şifre (Tekrar)", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.yeniSifreTekrar, new { @class = @Ayar.textBoxBicim(), maxlength = "256", type = "password", placeholder = @Ayar.sozcuk("Yeni Şifre (Tekrar)", dilKimlik) })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.yenimi)
+        </div>
+        <hr />
+        <button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+            @Ayar.sozcuk("Kaydet", dilKimlik)
+        </button>
+    </div>
+</form>
+
+<script>
+    function ekle() {
+
+    var valdata = $("#formKayit").serialize();
+    console.table(valdata);
+    $.ajax({
+    url: "/SifreDegistir/Kaydet/",
+    type: "Post",
+    data: valdata,
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    dataType: "json",
+    success: function (response) {
+    if (!response.success) {
+    Swal.fire(
+    '@Ayar.sozcuk("Hata", dilKimlik)',
+    response.message,
+    'error'        );
+    return false;
+    }
+    else {
+    Swal.fire(	'@Ayar.sozcuk("Başarılı", dilKimlik)',   response.message,
+    'success'                    ).then(function () {
+    var deger = "True";
+    if (deger == "True") {
+    window.location.href="/cikis";
+    }
+    })
+    }
+    }
+    });
+    }
+
+</script>
+

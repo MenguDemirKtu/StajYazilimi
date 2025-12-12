@@ -1,0 +1,72 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+ 
+@using UniStaj
+@model UniStaj.Models.KullaniciModel
+ <h4>
+     Kullanıcı Bilgileriniz
+ </h4>
+
+
+ <table>
+     <thead>
+        <tr>
+            <td>  </td>
+            <td>  </td>
+
+         </tr>
+
+     </thead>
+     <tbody>
+
+        <tr>
+            <td> Ad Soyad   </td>
+            <td>:</td>
+            <td>  @Model.kartVerisi.gercekAdi</td>
+        </tr>
+        <tr>
+            <td> Unvan </td>
+            <td>:</td>
+            <td>  @Model.kartVerisi.unvan</td>
+        </tr>
+        <tr>
+            <td> Telefon </td>
+            <td>:</td>
+            <td> @Model.kartVerisi.telefon </td>
+        </tr>
+        <tr>
+            <td> E-Posta Adresi </td>
+            <td>:</td>
+            <td> @Model.kartVerisi.ePostaAdresi </td>
+        </tr>
+        <tr>
+            <td> Kullanıcı Adı </td>
+            <td>:</td>
+            <td>  @Model.kartVerisi.kullaniciAdi</td>
+        </tr>
+
+        <tr>
+            <td> Kayıtlı Rolleriniz  </td>
+            <td>:</td>
+            <td>  
+                @{
+                    foreach(var siradaki in Model.kayitliRoller)
+                    {
+                        @siradaki.rolAdi 
+                        <br />
+                    }
+                }
+            </td>
+        </tr>
+
+
+    </tbody>
+
+ </table>
+
+ 
+ 
+ 
+ 
+ 

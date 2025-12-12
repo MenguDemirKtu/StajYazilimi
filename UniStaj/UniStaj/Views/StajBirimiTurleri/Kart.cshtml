@@ -1,0 +1,113 @@
+﻿@{
+ViewBag.Title = "Kart";
+Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.StajBirimiTurleriModel
+<script src="~/assets/js/jquery.dataTables.min.js"></script>
+<form id="formKayit" name="formKayit" autocomplete="off">
+@{
+int   dilKimlik = Model.gecerliDil();
+}
+<div class="@Ayar.tamGenislik">
+<div class="row">
+@Html.HiddenFor(model => model.fotoKonumu)
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Staj Birimi", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_stajBirimiKimlik, Bilesen.doldur(Model._ayStajBirimiAYRINTI) ,  @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+       @Html.HiddenFor(model => model.kartVerisi.stajBirimiTurlerikimlik)
+       @Html.HiddenFor(model => model.kartVerisi.stajBirimiTurlerikimlik)
+       @Html.HiddenFor(model => model.kartVerisi.varmi)
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Staj Türü", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_stajTuruKimlik, Bilesen.doldur(Model._ayStajTuruAYRINTI) ,  @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Günü", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.gunu, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Günü", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Sınıfları", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.siniflari, new { @class = @Ayar.textBoxBicim(), maxlength = "20" ,   placeholder = @Ayar.sozcuk("Sınıfları", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Ek Açıklama", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.ekAciklama, new { @class = @Ayar.textBoxBicim(), maxlength = "200" ,   placeholder = @Ayar.sozcuk("Ek Açıklama", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Geçerli mi", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_gecerlimi, Model.evetHayirCek() ,  @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Başlangıç", dilKimlik)  </label>
+				 @Html.TextBoxFor(m => m.kartVerisi.baslangic, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Bitiş", dilKimlik)  </label>
+				 @Html.TextBoxFor(m => m.kartVerisi.bitis, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                </div>
+            </div>
+@Html.HiddenFor(model => model.yenimi)
+</div>
+<hr />
+<button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+@Ayar.sozcuk("Kaydet", dilKimlik)
+</button>
+</div>
+</form>
+
+<script>
+function ekle() {
+
+var valdata = $("#formKayit").serialize();
+console.table(valdata);
+$.ajax({
+url: "/StajBirimiTurleri/Kaydet/",
+type: "Post",
+data: valdata,
+contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+dataType: "json",
+success: function (response) {
+if (!response.success) {
+Swal.fire(
+'@Ayar.sozcuk("Hata", dilKimlik)',
+response.message,
+'error'        );
+return false;
+}
+else {
+Swal.fire(	'@Ayar.sozcuk("Başarılı", dilKimlik)',   response.message,
+'success'                    ).then(function () {
+if(response.yonlensinmi == true)
+{
+window.location.href= response.yonlenmeAdresi;
+}
+var deger = String(document.getElementById("yenimi").value);
+if (deger == "True") {
+window.location.reload();
+}
+})
+}
+}
+});
+}
+
+</script>
+

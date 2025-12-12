@@ -1,0 +1,176 @@
+﻿@model UniStaj.Models.RolWebSayfasiIzniModel
+@using UniStaj.Models;
+@using UniStaj.veri;
+@using System;
+@{
+    List<RolWebSayfasiIzniAYRINTI> liste = Model.dokumVerisi;
+}
+<style>
+
+    .modulBaslimBicim {
+        text-transform: uppercase;
+        font-weight: 500;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    .koyu {
+        background-color: #dcedfc;
+        font-weight: bold;
+    }
+
+    .acik {
+        background-color: #b4dcff;
+        font-weight: bold;
+    }
+</style>
+
+<input type="hidden" id="hdnKullaniciKimlik" name="custId" value="@liste[0].i_rolKimlik"> 
+<table class="table table-nowrap align-middle mb-0">
+    <tr> 
+        <th>
+            Tam İzin 
+        </th> 
+        <th>
+            Sayfa Adı
+        </th>
+        <th>
+            Görme İzni
+        </th>
+        <th>
+            Ekleme İzni
+        </th>
+        <th>
+            Silme İzni
+        </th>
+        <th>
+            Güncelleme İzni
+        </th>
+        <th>
+        </th>
+    </tr> 
+    @{ 
+        int oncekiModulKimlik = -1;
+        string bicim = "koyu";
+        string ad = ""; 
+        int kullaniciKimlik = (int)liste[0].i_rolKimlik;
+        for (int i = 0; i < liste.Count; i++)
+        { 
+            if (liste[i].i_modulKimlik != oncekiModulKimlik)
+            {
+                oncekiModulKimlik = liste[i].i_modulKimlik;
+                ad = liste[i].modulAdi;
+                if (bicim == "koyu")
+                {
+                    bicim = "acik";
+                }
+                else
+                {
+                    bicim = "koyu";
+                } 
+                <tr data-id="1" style="background-color: white !important;">
+                    <td class="modulBaslimBicim">
+                        @ad
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr> 
+            }
+
+            <tr data-id="1" class="@bicim">
+                <td>
+                    @liste[i].sayfaBasligi 
+                    @Html.HiddenFor(p=>liste[i].rolWebSayfasiIzniKimlik)
+                </td>
+
+                <td>
+                    <button onclick="sec(@liste[i].rolWebSayfasiIzniKimlik); return false;"> Tam İzin Ver  </button>
+
+                <td>
+                    <input type="checkbox" id='@String.Format("gorme{0}",liste[i].rolWebSayfasiIzniKimlik)' name="checkbox0" class="checkBox0" value="@liste[i].rolWebSayfasiIzniKimlik" checked="@liste[i].e_gormeIzniVarmi" />
+                </td>
+                <td>
+                    <input type="checkbox" id='@String.Format("ekleme{0}",liste[i].rolWebSayfasiIzniKimlik)' name="checkbox1" class="checkBox1" value="@liste[i].rolWebSayfasiIzniKimlik" checked="@liste[i].e_eklemeIzniVarmi" />
+                </td>
+                <td>
+                    <input type="checkbox" id='@String.Format("silme{0}",liste[i].rolWebSayfasiIzniKimlik)' name="checkBox2" class="checkBox2" value="@liste[i].rolWebSayfasiIzniKimlik" checked="@liste[i].e_silmeIzniVarmi" />
+                </td>
+                <td>
+                    <input type="checkbox" id='@String.Format("guncelleme{0}",liste[i].rolWebSayfasiIzniKimlik)' name="checkBox3" class="checkBox3" value="@liste[i].rolWebSayfasiIzniKimlik" checked="@liste[i].e_guncellemeIzniVarmi" />
+                </td>
+                <td>
+                    <button onclick="kaldir(@liste[i].rolWebSayfasiIzniKimlik); return false;">İzni Sil </button>
+                </td>
+            </tr>
+        }
+    } 
+</table> 
+<button onclick="sil(); return false;" class="btn btn-warning waves-effect waves-light"> Yetkileri Güncelle </button>
+ 
+<script>
+
+
+    function sec(deger) {
+
+        $("#gorme" + deger).prop('checked', true);
+        $("#ekleme" + deger).prop('checked', true);
+        $("#silme" + deger).prop('checked', true);
+        $("#guncelleme" + deger).prop('checked', true);
+    }
+    function kaldir(deger) {
+
+        $("#gorme" + deger).prop('checked', false);
+        $("#ekleme" + deger).prop('checked', false);
+        $("#silme" + deger).prop('checked', false);
+        $("#guncelleme" + deger).prop('checked', false);
+    }
+
+    function sil() {
+       var kullaniciKimlik = $("#hdnKullaniciKimlik").val();
+
+    var izinler = [];
+
+    $("input[type=checkbox].checkBox0").each(function () {
+        var id = $(this).val();
+
+        izinler.push({
+            rolWebSayfasiIzniKimlik: parseInt(id),
+            e_gormeIzniVarmi: $("#gorme" + id).prop("checked"),
+            e_eklemeIzniVarmi: $("#ekleme" + id).prop("checked"),
+            e_silmeIzniVarmi: $("#silme" + id).prop("checked"),
+            e_guncellemeIzniVarmi: $("#guncelleme" + id).prop("checked")
+        });
+    });
+
+    var data = {
+        kullaniciKimlik: parseInt(kullaniciKimlik),
+        izinler: izinler
+    };
+
+    $.ajax({
+        url: "/RolWebSayfasiIzni/Guncelle",
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            if (response.success)
+                Swal.fire("Başarılı", response.message, "success");
+            else
+                Swal.fire("Hata", response.message, "error");
+        },
+        error: function () {
+            Swal.fire("Hata", "Sunucu hatası oluştu.", "error");
+        }
+    });
+    }
+</script>
+
+
+

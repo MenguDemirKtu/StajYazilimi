@@ -1,0 +1,115 @@
+﻿@{ 
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj.veri;
+@model UniStaj.Models.FederasyonBildirimGondermeAyariModel
+    
+    <form id="formKayit" name="formKayit" autocomplete="off">
+        @{
+            bool eklemeIzniVarmi = (bool)ViewBag.eklemeIznivar;
+            bool silmeIzniVarmi = (bool)ViewBag.silmeIznivar;
+            <i style="float: left; width: 50%; color: white; ">
+                @if (eklemeIzniVarmi)
+                {
+                    <button type="button" class="btn btn-success btn-rounded waves-effect waves-light " onclick="kartAc(0);return false;">
+                        <i class="mdi mdi-plus me-1"></i>
+  Yeni Federasyon Bildirim Gönderme Ayarı Ekle
+                    </button>
+                }
+                else
+                {
+                    string y = "ekleme izniniz yok";
+                    @y
+                }
+            </i>
+            <i style="float: right; width: 50%; text-align: right; color: white; ">
+                @if (silmeIzniVarmi)
+                {
+                    <button type="button" class="btn btn-danger btn-rounded waves-effect waves-light" onclick="sil(); return fals;">
+                        <i class="mdi mdi-minus me-1"></i>
+                        Seçilen Kayıtları Sil
+                    </button>
+                }
+                else
+                {
+                    string y = "silme izniniz yok";
+                    @y
+                }
+            </i>
+            <div style="float: left; width: 100%; height:30px;  "></div>
+            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                <thead>
+                    <tr>
+                        <th> </th>
+    <th>Kullanıcı</th>
+    <th>Federasyon Bilidirim Türü</th>
+    <th>Geçerli mi?</th>
+                        <th>
+                            Güncelle
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+  @{    List<FederasyonBildirimGondermeAyariAYRINTI> veri = Model.dokumVerisi;
+                        foreach (var satir in veri)
+                        {
+                            <tr row_id="@satir._birincilAnahtar().ToString()">
+                                <td>
+                                    <input type="checkbox" class="checkBox"
+                                           value="@satir._birincilAnahtar()" />
+                                </td>
+<td>@satir.i_kullaniciKimlik</td>
+<td>@satir.i_federasyonBildirimTuruKimlik</td>
+<td>@satir.e_gecerlimi</td>
+                                <td>
+                                    <a class="@UniStaj.Ayar.btnGridGuncelle" onclick="kartAc(@satir._birincilAnahtar()); return false;" style="color: #ffffff !important; background-color: #ffae00; border-color: #ffae00; " title="Edit">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        } }
+                </tbody>
+            </table> }
+    </form>
+    <script>
+        function kartAc(id) {
+window.location.href = "/FederasyonBildirimGondermeAyari/Kart/"+id;
+        }
+        function sil() {
+            var selectedIDs = new Array();
+            $('input:checkbox.checkBox').each(function () {
+                if ($(this).prop('checked')) {
+                    selectedIDs.push($(this).val());
+                }
+            });
+            if (selectedIDs.length == 0) {
+                alert('Lütfen silmek istediğiniz kayıtları seçiniz ')
+                return;
+            }
+            var options = {};
+options.url = "/FederasyonBildirimGondermeAyari/Sil?id=" + selectedIDs;
+            options.type = "POST";
+            options.data = JSON.stringify(selectedIDs);
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (msg) {  
+                Swal.fire({
+                    position: "center-center", icon: "success",
+                    title: "Silme İşlemi Başarılı", showConfirmButton: !1, timer: 1750,
+                });
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 1750);  //
+            };
+            options.error = function () {
+                Swal.fire(
+                    'Hata',
+                    msg,
+                    'error'
+                ); 
+            };
+            $.ajax(options);         
+            return false;
+        }
+    </script>
+

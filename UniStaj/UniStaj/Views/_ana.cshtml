@@ -1,0 +1,581 @@
+﻿<!doctype html>
+
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <style>
+
+        input.form-control {
+            background-color: #f9f9f9;
+            color: black;
+            border-radius: 0px !important;
+        }
+
+        .koyucan {
+            color: dimgrey;
+            font-weight: bold !important;
+        }
+
+        button.btn-rounded {
+            border-radius: 3px !important;
+            filter: drop-shadow(-2px 9px 3px #d9d9d9);
+        }
+
+
+        input.form-control:hover {
+            background-color: #f9f9f9;
+            color: #3e3e65;
+            font-weight: bold !important;
+            border-radius: 0px !important;
+        }
+
+
+        input.form-control:focus {
+            background-color: #f9f9f9;
+            color: #3e3e65;
+            border-radius: 0px !important;
+            font-weight: bold bold !important;
+        }
+
+        /* Select2 dropdown arka plan rengini değiştirme */
+        .select2-dropdown {
+            background-color: #f9f9f9 !important; /* Yeni arka plan rengi */
+            border-color: #ccc !important; /* Çerçeve rengi */
+        }
+
+        /* Select2 seçim kutusunun arka plan rengini değiştirme */
+        .select2-selection {
+            background-color: #f9f9f9 !important; /* Yeni arka plan rengi */
+            border-radius: 0px !important;
+        }
+
+        /* Select2'nin aktif durumundaki dropdown */
+        .select2-dropdown.select2-dropdown--above {
+            border-radius: 0px !important;
+        }
+
+
+        .golge {
+            /* border-style: dashed;
+                    border-color: #b1d6f5 !important;
+                    border-radius: 5px !important;
+                    border-width: 2px !important;
+
+
+                           filter: drop-shadow(-2px 5px 2px #d9d9d9);
+                           */
+
+
+            border-style: dashed;
+            border-color: #b1d6f5 !important;
+            border-width: 2px !important;
+            background-color: white;
+        }
+
+        .golge2 {
+            background-color: #ffc600 !important;
+            color: #333548 !important;
+            border-radius: 3px !important;
+        }
+
+        .altGolge {
+            border-bottom-style: dashed;
+            border-bottom-color: #b1d6f5 !important;
+            border-bottom-width: 2px !important;
+        }
+
+        .kalin {
+        }
+
+        .yuvarlak {
+            border-radius: 6px !important;
+            margin-top: 1px; /* başlıktan ayırmak için */
+            border-radius: 6px; /* köşeleri yuvarla (opsiyonel) */
+        }
+
+        .alert-right {
+            color: #977603; /* istediğin renk */
+            background-color: #ffe898;
+        }
+
+        resim-container {
+            width: 42px; /* Resmin boyutuna göre 5px dış çerçeve ekledik */
+            height: 42px;
+            border: 1px dashed black; /* 1px kesik çizgili çerçeve */
+            border-radius: 50%; /* Yuvarlak görünüm */
+            padding: 5px; /* Çerçeve ile resim arasında 5px boşluk */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .yuvarlak-resim {
+            width: 32px; /* Resmin boyutu */
+            height: 32px;
+            border-radius: 50%; /* Yuvarlak resim */
+        }
+
+
+
+        /*        #datatable-buttons tbody tr:first-child {
+
+            }
+
+                #datatable-buttons tbody tr:first-child {
+                }
+
+                    #datatable-buttons tbody tr:first-child:hover {
+                        background-color: #ff0101 !important;
+                    } */
+
+        #datatable-buttons thead tr:first-child {
+            font-weight: 200;
+            background-color: #f4f6fb !important;
+            color: #ff8100 !important;
+            box-shadow: 0 5px 10px #e1e5ee;
+            border-radius: 15px !important;
+            height: 50px;
+        }
+
+        /* Tek satırları değiştirmek */
+        table.dataTable tbody tr.odd {
+            background-color: #f0f0f0; /* istediğin renk */
+            font-weight: 500;
+            border-radius: 8px !important;
+        }
+
+        /* Çift satırları değiştirmek */
+        table.dataTable tbody tr.even {
+            background-color: #ebf5fb; /* istediğin renk */
+            font-weight: 500;
+            border-radius: 8px !important;
+        }
+            /* Çift satırları değiştirmek */
+            table.dataTable tbody tr.even:hover {
+                background-color: #ebf5fb; /* istediğin renk */
+                color: black !important;
+                border-radius: 8px !important;
+            }
+        /* Çift satırları değiştirmek */
+        table.dataTable tbody tr.odd:hover {
+            color: black !important;
+            border-radius: 8px !important;
+        }
+
+        .bg-blue {
+            background-color: #EBF5FB;
+            border-radius: 8px !important;
+            font-weight: bold;
+        }
+
+        .fa-check,
+        .fa-minus {
+            color: blue
+        }
+
+        .bg-blue:hover {
+            background-color: #3e64ff;
+            color: #eee;
+            cursor: pointer;
+            border-radius: 8px !important;
+        }
+
+            .bg-blue:hover .fa-check,
+            .bg-blue:hover .fa-minus {
+                background-color: #3e64ff;
+                color: #eee;
+                border-radius: 8px !important;
+            }
+
+
+        .table thead th,
+        .table td {
+            border: none
+        }
+
+        .table tbody td:first-child {
+            border-bottom-left-radius: 10px;
+            border-top-left-radius: 10px
+        }
+
+        .table tbody td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+
+
+        /* Genel container */
+        .satir-alert {
+            border-left: 4px solid #ff8120; /* Sol taraftaki turuncu şerit */
+        }
+
+        /* Sol blok */
+        .satir-sol {
+            background: #ffc600; /* Sol blok arka plan */
+            padding: 8px 12px;
+            min-width: 250px; /* İstersen daraltabiliriz */
+        }
+
+        /* Sol başlık */
+        .satir-baslik {
+            font-weight: 600;
+            font-size: 14px;
+            font-family: Roboto, Arial, sans-serif;
+        }
+
+        /* Sağ blok */
+        .satir-sag {
+            background: #ffe898; /* Sağ blok arka plan */
+            padding: 8px 12px;
+            flex-grow: 1; /* Geri kalan alanı kaplasın */
+            font-size: 14px;
+            color: #333;
+        }
+
+
+    </style>
+    <title>@ViewBag.SayfaGorunurAdi</title>
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <meta charset="UTF-8">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400&display=swap" rel="stylesheet">
+
+
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/js/pages/sweet-alerts.init.js"></script>
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+    <link href="~/assets/css/anaSayfaBicim.css" id="app-style" rel="stylesheet" type="text/css" />
+    <script src="~/lib/tinymce/tinymce.min.js" referrerpolicy="original"></script>
+    <script src="~/assets/libs/moment/min/moment.min.js"></script>
+
+    <style>
+
+        .temelYazi {
+            font-family: 'PT Sans', sans-serif;
+            font-size: 14px;
+        }
+
+    </style>
+
+
+
+</head>
+
+<body data-sidebar="dark" class="temelYazi">
+
+    @using UniStaj
+    @using UniStaj.veri
+    @using UniStaj.veriTabani
+
+    <script>
+
+        //</script>
+
+    <div id="layout-wrapper">
+
+        <script>
+            function hataBildir(bir, iki) {
+                var param = bir + "," + iki;
+                window.location.replace("/HataBildirimi/Ariza/" + param);
+            }
+        </script>
+
+
+        @{
+            @using System.Web;
+
+            Yonetici kim = (Yonetici)ViewBag.mevcut;
+
+
+            // string renk = "#ade5ff";
+            // var turu = kim._turu();
+            // if (turu == enumref_KullaniciTuru.Yazilimci)
+            //     renk = "#ffc600";
+            // if (turu == enumref_KullaniciTuru.Sistem_Yoneticisi)
+            //     renk = "#ffc600";
+
+
+            int dilKimlik = 1;
+
+            try
+            {
+                dilKimlik = Convert.ToInt32(ViewBag.dil);
+
+            }
+            catch
+            {
+
+            }
+            int dil = dilKimlik;
+
+
+
+
+
+            <div class="vertical-menu" style="background-color: #333548 !important; color: white !important;">
+                <div data-simplebar class="h-100">
+                    <div id="sidebar-menu">
+                        @{
+                            if (kim.kisitliGosterimmi == false)
+                            {
+                                if (kim.i_kullaniciTuruKimlik == (int)enumref_KullaniciTuru.Yazilimci || kim.i_kullaniciTuruKimlik == (int)enumref_KullaniciTuru.Yazilimci)
+                                {
+                                    <ul class="metismenu list-unstyled" id="side-menu">
+                                        <li class="menu-title" key="t-menu">Menü</li>
+                                        @Html.Raw(Sayfa.tamMenuOlustur().Result)
+                                    </ul>
+                                }
+                            }
+                            else
+                            {
+                                @Html.Raw(Sayfa.menuOlustur(kim.kullaniciKimlik, kim.i_rolKimlik, kim).Result)
+                            }
+                        }
+                    </div>
+
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="page-content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-sm-flex align-items-center justify-content-between p-0"
+                                     style="min-height: 32px;">
+
+                                    <h4 class="mb-0 mt-0 font-size-12" style="font-size: 13px; line-height: 1;">
+                                        @*@ViewBag.SayfaGorunurAdi*@
+                                    </h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0 py-0" style="font-size: 11px;">
+                                            <li class="breadcrumb-item">
+                                                <a href="@ViewBag.UstSayfaAdresi">
+                                                    @Ayar.sozcuk(ViewBag.UstSayfaAdi, dilKimlik)
+                                                </a>
+                                            </li>
+                                            <li class="breadcrumb-item active">
+                                                <a href="@ViewBag.SayfaAdresi">
+                                                    @Ayar.sozcuk(ViewBag.UstSayfaGorunurAdi, dilKimlik)
+                                                </a>
+                                            </li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- end page title -->
+                        @{
+
+                            if (ViewBag.SayfaTuru == 4)
+                            {
+                                @RenderBody()
+                            }
+                            else
+                            {
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body golge">
+
+                                                <div class="row">
+
+                                                    @{
+
+                                                        if (ViewBag.SayfaTuru != 4)
+                                                        {
+
+                                                        }
+
+                                                    }
+
+
+
+
+                                                    <div class="col-md-3">
+                                                        <div class="row">
+
+                                                            @{
+                                                                if (ViewBag.SayfaTuru != 4)
+                                                                {
+
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <br />
+                                                @{
+                                                    if (ViewBag.SayfaTuru == 1 || ViewBag.SayfaTuru == 2)
+                                                    {
+
+                                                        <div class="satir-alert d-flex w-100">
+
+                                                            <!-- SOL TARAF -->
+                                                            <div class="satir-sol d-flex align-items-center gap-2">
+                                                                <img src='@ViewBag.SayfaGoruntusu' width="32" height="32" class="yuvarlak" />
+
+                                                                <span class="satir-baslik">
+                                                                    @Ayar.sozcuk(ViewBag.SayfaGorunurAdi, dilKimlik)
+                                                                </span>
+                                                            </div>
+
+                                                            <!-- SAĞ TARAF -->
+                                                            <div class="satir-sag d-flex align-items-center">
+                                                                @Html.Raw(Ayar.sozcuk(ViewBag.SayfaAciklamasi, dilKimlik))
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <br />
+                                                    }
+                                                }
+                                                <br />
+                                                @RenderBody()
+                                                <ejs-scripts></ejs-scripts>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © @Genel.yazilimAyari.yazilimAdi
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    Yazılım : Gelincik Yazılım
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <header id="page-topbar">
+                <div class="navbar-header" style="background-color: #ececf1;">
+                    <div class="d-flex">
+                        <div class="navbar-brand-box">
+                            <a href="/" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="~/assets/images/logo.svg" alt="" height="58">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="~/assets/images/logo-dark.png" alt="" height="58">
+                                </span>
+                            </a>
+                            <a href="/" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="~/assets/images/logo-light.svg" alt="" height="58">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="~/assets/images/logo-light.png" alt="" height="58">
+                                </span>
+                            </a>
+                        </div>
+                        <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="mdi mdi-magnify"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                                 aria-labelledby="page-header-search-dropdown">
+
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src='@kim.fotosu'
+                                     alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1" key="t-henry"> @kim.gercekAdi </span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="/KullaniciBilgileri"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">@Ayar.sozcuk("Kullanıcı Bilgileri", dil)</span></a>
+                                <a class="dropdown-item d-block" href="/SifreDegistir">@*<span class="badge bg-success float-end">11</span>*@<i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings"> @Ayar.sozcuk("Şifre Değiştir", dil) </span></a>
+                                <a class="dropdown-item" href="/YetkiDegistir"><i class="bx bx-user font-size-16 transfer-alt"></i> <span key="t-profile">@Ayar.sozcuk("Yetki Değiştir", dil)</span></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="/Cikis"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">   @Ayar.sozcuk("Güvenli Çıkış", dil)</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        }
+
+    </div>
+    <div class="rightbar-overlay"></div>
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/assets/libs/node-waves/waves.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/assets/js/pages/form-editor.init.js"></script>
+    <script src="~/assets/js/pages/form-editor.init.js"></script>
+    <script src="~/assets/js/pages/datatables.init.js"></script>
+    <script src="~/assets/js/app.js"></script>
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script src="~/assets/js/pages/form-advanced.init.js"></script>
+</body>
+</html>

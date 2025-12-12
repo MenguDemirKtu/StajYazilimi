@@ -1,0 +1,197 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.WebSayfasiModel
+<script src="~/assets/js/jquery.dataTables.min.js"></script>
+<form id="formKayit" name="formKayit" autocomplete="off" >
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="row">
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">Ham Adresi</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.hamAdresi, new { @class = "form-control", maxlength = "200", placeholder = "Ham Adresi" })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.kartVerisi.webSayfasiKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.webSayfasiKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.varmi)
+            @Html.HiddenFor(model => model.kartVerisi.i_fotoKimlik)
+            @Html.HiddenFor(model=>model.kartVerisi.kartAciklamasi)
+            @Html.HiddenFor(model=>model.kartVerisi.tanitim)
+            @Html.HiddenFor(model=>model.kartVerisi.aciklama)
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">Sayfa Başlığı</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.sayfaBasligi, new { @class = "form-control", maxlength = "200", placeholder = "Sayfa Başlığı" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Modül</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_modulKimlik, Model._ModulAYRINTIler(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Sayfa Türü</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_sayfaTuruKimlik, Model._ref_sayfaTuruler(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">Sayfa Üstü Metin</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.dokumAciklamasi, new { @class = "form-control", maxlength = "1500", placeholder = "Döküm Açıklaması" })
+                </div>
+            </div>
+             
+             
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">İzin Sayfasında Görünsün mü?</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_izinSayfasindaGorunsunmu, Model._evetHayir(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Varsayılan Ekleme Açık mı?</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_varsayilanEklemeAcikmi, Model._evetHayir(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Varsayılan Görünme Açık mı?</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_varsayilanGorunmeAcikmi, Model._evetHayir(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Varsayılan Güncelleme Açık mı?</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_varsayilanGuncellemeAcikmi, Model._evetHayir(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Varsayılan Silme Açık mı?</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_varsayilanSilmeAcikmi, Model._evetHayir(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.yenimi)
+        </div>
+        <hr />
+        <h3>Rol İlişkileri </h3>
+        <table class="@Ayar.tabloBicim1" >
+    <thead>
+        <tr>
+                    <th> Rol   </th>
+                    <th> Gör.   </th>
+                    <th> Ekle.   </th>
+                    <th> Sil.   </th>
+                    <th> Gün.   </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            for(int i=0; i<Model.izinler.Count; i++)
+            {
+                <tr>
+                            <td>@Model.izinler[i].rolAdi 
+                            @Html.HiddenFor(p=>Model.izinler[i].rolWebSayfasiIzniKimlik)
+                            </td>
+                            <td>@Html.CheckBoxFor(p => Model.izinler[i].e_gormeIzniVarmi)  </td>
+                            <td>@Html.CheckBoxFor(p => Model.izinler[i].e_eklemeIzniVarmi)  </td>
+                            <td>@Html.CheckBoxFor(p => Model.izinler[i].e_silmeIzniVarmi)  </td>
+                            <td>@Html.CheckBoxFor(p => Model.izinler[i].e_guncellemeIzniVarmi)  </td>
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+
+        <hr />
+        <h4>Menüler</h4>
+        <table class="@Ayar.tabloBicim1" >
+    <thead>
+        <tr>
+                    <th> Menü Adı   </th>
+                    <th> Üst Menü   </th>
+                    <th> Sırası   </th>
+                    <th> Ana Kullanıcı   </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            for(int i=0; i<Model.menuleri.Count; i++)
+            {
+                var siradaki = Model.menuleri[i];
+                <tr>
+                            <td>
+                                @Html.HiddenFor(p => Model.menuleri[i].bysMenuKimlik)
+                                @Html.TextBoxFor(m => Model.menuleri[i].bysMenuAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "500", placeholder = @Ayar.sozcuk("", 1) })
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(m => Model.menuleri[i].i_ustMenuKimlik, Model.doldur(Model.ay_BYSMenuAYRINTI), @Ayar.sozcuk("Lütfen Seçiniz", 1), new { @class = "form-control select2" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => Model.menuleri[i].sirasi, new { @class = @Ayar.textBoxBicim(), maxlength = "500", placeholder = @Ayar.sozcuk("", 1) })
+                            </td>
+
+                            <td>
+                                @Html.CheckBoxFor(m => Model.menuleri[i].e_anaKullaniciGorsunmu )
+                            </td>
+
+
+                    <td> </td>
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+<br />
+        <button type="button" onclick="ekle()" id="btnKaydet" class="@Ayar.kayitBicimi(Model.yenimi)" data-bs-toggle="modal">
+            @Ayar.kayitIfadesi(Model.yenimi)
+        </button>
+    </div>
+</form>
+<script>
+    function ekle() { 
+
+        var valdata = $("#formKayit").serialize();
+        console.table(valdata);
+        $.ajax({
+            url: "/WebSayfasi/Kaydet/",
+            type: "Post",
+            data: valdata,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success: function (response) {
+                if (!response.success) {
+                    Swal.fire(
+                        'Hata',
+                        response.message,
+                        'error'
+                    );
+                    return false;
+                }
+                else {
+                    Swal.fire(
+                        'Başarılı',
+                        response.message,
+                        'success'
+                    ).then(function () {
+                        var deger = String(document.getElementById("yenimi").value);
+                        if (deger == "True") {
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+</script>
+

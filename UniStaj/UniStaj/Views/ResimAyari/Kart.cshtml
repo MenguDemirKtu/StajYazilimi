@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.ResimAyariModel
+<script src="~/assets/js/jquery.dataTables.min.js"></script>
+<form id="formKayit" name="formKayit" autocomplete="off">
+    @{
+        int dilKimlik = Model.gecerliDil();
+    }
+    <div class="@Ayar.tamGenislik">
+        <div class="row">
+            @Html.HiddenFor(model => model.fotoKonumu)
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("İlgili Çizelge", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.ilgiliCizelge, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("İlgili Çizelge", dilKimlik) })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.kartVerisi.resimAyariKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.varmi)
+            <br />
+            <hr />    
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    @Html.CheckBoxFor(m => m.kartVerisi.e_genislik1Varmi)
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("1. Genişlik Var mı", dilKimlik)  </label>
+                </div>
+            </div>
+
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Genişlik", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.genislik, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Genişlik", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Yükseklik ", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.yukseklik, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Yükseklik 2", dilKimlik) })
+                </div>
+            </div>
+
+
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    @Html.CheckBoxFor(m => m.kartVerisi.e_genislik2Varmi)
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("2. Genişlik Var mı", dilKimlik)  </label>
+                </div>
+            </div>
+
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Genişlik 2", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.genislik2, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Genişlik 2", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Yükseklik 2", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.yukseklik2, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Yükseklik 2", dilKimlik) })
+                </div>
+            </div>
+
+
+
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    @Html.CheckBoxFor(m => m.kartVerisi.e_genislik3Varmi)
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("3. Genişlik var mı", dilKimlik)  </label>
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Genişlik 3", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.genislik3, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Genişlik 3", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Yükseklik 3", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.yukseklik3, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Yükseklik 3", dilKimlik) })
+                </div>
+            </div>
+
+
+
+
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    @Html.CheckBoxFor(m => m.kartVerisi.e_genislik4Varmi)
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("4. Genişlik var mı", dilKimlik)  </label>
+                </div>
+            </div>
+
+             <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Genişlik 4", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.genislik4, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Genişlik 4", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Yükseklik 4", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.yukseklik4, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Yükseklik 4", dilKimlik) })
+                </div>
+            </div>
+
+
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Genişlik Sütun Adı 2", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.genislikSutunAdi2, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Genişlik Sütun Adı 2", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Genüşlük Sutuyn Adı 3", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.genislikSutunAdi3, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Genüşlük Sutuyn Adı 3", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Genüşlik Sütun Adı 4", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.genislikSutunAdi4, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Genüşlik Sütun Adı 4", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Dizin Adı", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.dizinAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "500", placeholder = @Ayar.sozcuk("Dizin Adı", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.ucteBirGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Kalite", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.kalite, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Kalite", dilKimlik) })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.yenimi)
+        </div>
+        <hr />
+        <button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+            @Ayar.sozcuk("Kaydet", dilKimlik)
+        </button>
+    </div>
+</form>
+
+<script>
+    function ekle() {
+
+    var valdata = $("#formKayit").serialize();
+    console.table(valdata);
+    $.ajax({
+    url: "/ResimAyari/Kaydet/",
+    type: "Post",
+    data: valdata,
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    dataType: "json",
+    success: function (response) {
+    if (!response.success) {
+    Swal.fire(
+    '@Ayar.sozcuk("Hata", dilKimlik)',
+    response.message,
+    'error'        );
+    return false;
+    }
+    else {
+    Swal.fire(	'@Ayar.sozcuk("Başarılı", dilKimlik)',   response.message,
+    'success'                    ).then(function () {
+    var deger = String(document.getElementById("yenimi").value);
+    if (deger == "True") {
+    window.location.reload();
+    }
+    })
+    }
+    }
+    });
+    }
+
+</script>
+

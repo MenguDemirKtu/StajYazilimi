@@ -1,0 +1,67 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri;
+@model UniStaj.Models.YetkiDegistirModel 
+
+
+
+
+
+<table class="@Ayar.tabloBicim1" >
+    <thead>
+        <tr>
+            <th></th>
+            <th> Kullanıcı Adı   </th>
+            <th> Unvan   </th> 
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            for(int i=0; i<Model.yetkileri.Count; i++)
+            {
+                <tr>
+                <td> 
+                <button class="@Ayar.btnGridGuncelle"  onclick="ekle('@Model.yetkileri[i].kullaniciKimlik'); return false;" > Bu Yetkiyi Kullan</button>
+                </td>
+                    <td>@Model.yetkileri[i].kullaniciAdi </td>
+                    <td>@Model.yetkileri[i].unvan </td>
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+
+<script>
+
+ function ekle(deger)
+	{ 
+		$.ajax(
+		{
+           url: "/YetkiDegistir/yetkiDegistir?id="+deger,
+			type: "Post", 
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			dataType: "json",
+			success: function (response)
+			{
+				if (!response.success)
+				{
+					Swal.fire(
+						'@Ayar.sozcuk("Hata", 1)',
+						response.message,
+						'error');
+					return false;
+				}
+				else
+				{
+					Swal.fire('@Ayar.sozcuk("Başarılı", 1)', response.message, 'success').then(function ()
+					{
+						 window.location.href="/";
+					})
+				}
+			}
+		});
+	}
+
+</script>

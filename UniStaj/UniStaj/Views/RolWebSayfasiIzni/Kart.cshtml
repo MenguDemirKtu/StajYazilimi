@@ -1,0 +1,68 @@
+﻿@{ ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml"; }
+@using UniStaj
+@model UniStaj.Models.RolWebSayfasiIzniModel
+<script>
+
+    window.onload = function script() {
+        $("#izinAlani").hide();
+        kullaniciSec();
+    }
+
+    function degistir() {
+        var deger = $("#kartVerisi_i_rolKimlik").val();
+        $("#izinAlani").show();
+    }
+
+</script>
+
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="row">
+       
+            @Html.HiddenFor(model => model.kartVerisi.varmi)
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Rol</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_rolKimlik, Model._Roller(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <hr style="color: white; background-color: white;" />
+        <div class="form-group">
+            <button type="button" class="btn btn-success waves-effect waves-light" onclick="kullaniciSec(); return false;">
+                Web Sayfalarını Göster
+            </button>
+        </div>
+        <div id="placeHolderDiv">
+        </div>
+    </div>
+</form>
+<script>
+
+
+    function kullaniciSec()
+    { 
+        $("body").css("cursor", "progress");
+         
+        var deger = $("#kartVerisi_i_rolKimlik").val();
+         
+        if (deger == null || deger == '') {
+            alert('Lütfen Rol seçiniz');
+            return;
+        }
+         $.ajax({
+            url: '@Url.Action("Goster", "RolWebSayfasiIzni")',
+            data: { deger},
+            type: "POST",
+            success: function(data) {
+                $('#placeHolderDiv').html(data);
+            }
+         });
+         $("body").css("cursor", "default");
+
+    }
+</script>
+

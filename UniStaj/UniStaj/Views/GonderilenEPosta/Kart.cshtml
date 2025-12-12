@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.GonderilenEPostaModel
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="row">
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">Adres</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.adres, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = "Adres" })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.kartVerisi.gonderilenEPostaKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.gonderilenEPostaKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.varmi)
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">Başlık</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.baslik, new { @class = @Ayar.textBoxBicim(), maxlength = "500" ,   placeholder = "Başlık" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">E-Posta Türü</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_ePostaTuruKimlik, ref_EPostaTuru.doldur(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Gönderim Tarihi</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.gonderimTarihi, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                </div>
+            </div>
+            <div class=@Ayar.tamGenislik>
+                <br />
+                <div class="card table-card">
+                    <div class="card-header pb-0">
+                        <h4> Metin </h4>
+                    </div>
+                    @Html.TextAreaFor(m => m.kartVerisi.metin, new { @id = "elm1", name = "elm1" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">.</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.y_topluGonderimKimlik, new { @class = @Ayar.textBoxBicim(),   placeholder = "." })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">TC Kimlik No</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.tcKimlikNo, new { @class = @Ayar.textBoxBicim(), maxlength = "11" ,   placeholder = "TC Kimlik No" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="member-name" class="col-form-label">.</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.kisiAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "300" ,   placeholder = "." })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.yenimi)
+        </div>
+        <hr />
+        <button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+            Kaydet
+        </button>
+    </div>
+</form>
+<script>
+    @Html.Raw(Ayar.yukleyiciIfadesi())
+</script>
+<script>
+    function ekle() {
+        tinyMCE.triggerSave();
+        var valdata = $("#formKayit").serialize();
+        console.table(valdata);
+        $.ajax({
+            url: "/GonderilenEPosta/Kaydet/",
+            type: "Post",
+            data: valdata,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success: function (response) {
+                if (!response.success) {
+                    Swal.fire(
+                        'Hata',
+                        response.message,
+                        'error'
+                    );
+                    return false;
+                }
+                else {
+                    Swal.fire(
+                        'Başarılı',
+                        response.message,
+                        'success'
+                    ).then(function () {
+                        var deger = String(document.getElementById("yenimi").value);
+                        if (deger == "True") {
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+</script>
+

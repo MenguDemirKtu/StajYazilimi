@@ -1,0 +1,129 @@
+﻿@{
+ViewBag.Title = "Kart";
+Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.TopluSmsGonderimModel
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+@{
+int   dilKimlik = Model.gecerliDil();
+}
+<div class="@Ayar.tamGenislik">
+<div class="row">
+@Html.HiddenFor(model => model.fotoKonumu)
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Metin", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.metin, new { @class = @Ayar.textBoxBicim(), maxlength = "250" ,   placeholder = @Ayar.sozcuk("Metin", dilKimlik) }) 
+                </div>
+            </div>
+       @Html.HiddenFor(model => model.kartVerisi.topluSMSGonderimKimlik) 
+       @Html.HiddenFor(model => model.kartVerisi.varmi)
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Tarih", dilKimlik)  </label>
+				 @Html.TextBoxFor(m => m.kartVerisi.tarih, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Açıklama", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.aciklama, new { @class = @Ayar.textBoxBicim(), maxlength = "1000" ,   placeholder = @Ayar.sozcuk("Açıklama", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Kodu", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.kodu, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = @Ayar.sozcuk("Kodu", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("SMS Atılacak mı", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_smsGonderilecekmi, Model.evetHayirCek() ,  @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("E-Posta Gönerilecek mi", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_epostaGonderilecekmi, Model.evetHayirCek() ,  @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+            
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("E-Posta Konusu", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.ePostaKonusu, new { @class = @Ayar.textBoxBicim(), maxlength = "100" ,   placeholder = @Ayar.sozcuk("Açıklama", dilKimlik) }) 
+                </div>
+            </div>
+
+<div class=@Ayar.tamGenislik>
+                <br />
+                <div class="card table-card">
+                    <div class="card-header pb-0">
+                        <h4> 
+              @Ayar.sozcuk("E-Posta Metin", dilKimlik)  
+</h4>
+                    </div> 
+                    @Html.TextAreaFor(m => m.kartVerisi.ePostaMetin, new { @id = "elm1", name = "elm1" })
+                </div>
+            </div>
+        <div class=@Ayar.yariGenislik>
+                        <div class="@Ayar.formGrup">
+                            <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Gönderilen SMS", dilKimlik)  </label>
+                            @Html.TextBoxFor(m => m.kartVerisi.gonderilenSMSSayisi, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Gönderilen SMS", dilKimlik) }) 
+                        </div>
+                    </div>
+        <div class=@Ayar.yariGenislik>
+                        <div class="@Ayar.formGrup">
+                            <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Gönderilen E-Posta", dilKimlik)  </label>
+                            @Html.TextBoxFor(m => m.kartVerisi.gonderilenEPostaSayisi, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Gönderilen E-Posta", dilKimlik) }) 
+                        </div>
+                    </div>
+@Html.HiddenFor(model => model.yenimi)
+</div>
+<hr />
+<button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+@Ayar.sozcuk("Kaydet", dilKimlik)
+</button>
+</div>
+</form>
+<script>
+    @Html.Raw(Ayar.yukleyiciIfadesi())
+</script>
+<script>
+function ekle() {
+tinyMCE.triggerSave();
+var valdata = $("#formKayit").serialize();
+console.table(valdata);
+$.ajax({
+url: "/TopluSmsGonderim/Kaydet/",
+type: "Post",
+data: valdata,
+contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+dataType: "json",
+success: function (response) {
+if (!response.success) {
+Swal.fire(
+'@Ayar.sozcuk("Hata", dilKimlik)',
+response.message,
+'error'        );
+return false;
+}
+else {
+Swal.fire(	'@Ayar.sozcuk("Başarılı", dilKimlik)',   response.message,
+'success'                    ).then(function () {
+var deger = String(document.getElementById("yenimi").value);
+if (deger == "True") {
+window.location.reload();
+}
+})
+}
+}
+});
+}
+
+</script>
+

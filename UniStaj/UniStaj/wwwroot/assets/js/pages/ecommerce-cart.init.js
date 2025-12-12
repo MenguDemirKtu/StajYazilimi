@@ -1,0 +1,1 @@
+$("input[name='EgitimKentSablon_vertical']").TouchSpin({verticalbuttons:!0});

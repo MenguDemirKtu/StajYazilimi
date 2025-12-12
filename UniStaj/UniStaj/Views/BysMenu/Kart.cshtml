@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.BysMenuModel
+<style>
+    .kirmizi 
+    {
+    background-color: orangered !important;
+    color: red !important;
+    }
+    .beyaz
+    {
+    background-color: white;
+    }
+
+</style>
+
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    @{
+        int dilKimlik = Model.gecerliDil();
+    }
+    <div class="@Ayar.tamGenislik">
+        <div class="row">
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Menü Adı", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.bysMenuAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Menü Adı", dilKimlik) })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.kartVerisi.bysMenuKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.varmi)
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Menü Biçim", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.bysMenuBicim, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Menü Biçim", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Üst Menü", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_ustMenuKimlik, Bilesen.doldur(Model._ustMenuler), @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Web Sayfası", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_webSayfasiKimlik, Bilesen.doldur(Model._ayWebSayfasiAYRINTI) , @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("URL", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.bysMenuUrl, new { @class = @Ayar.textBoxBicim(), maxlength = "400", placeholder = @Ayar.sozcuk("URL", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Sırası", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.sirasi, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Sırası", dilKimlik) })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Modül Sayfası mı", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_modulSayfasimi, Model.evetHayirCek(), @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Modül", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_modulKimlik, Modul.doldur(), @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+            
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Ana Kullanıcı Görsün mü", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_anaKullaniciGorsunmu, Model.evetHayirCek(), @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.yenimi)
+        </div>
+        <hr />
+
+
+        <table style="width: 100% !important;" >
+            <thead>
+                <tr>
+                    <th> Sırası </th>
+                    <th> Menü Adı </th>
+                    <th> Yenü Üst Menü</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    for (int i = 0; i < Model.baglilar.Count; i++)
+                    {
+                        string bicim = "beyaz";
+
+                        if(Model.baglilar[i].sirasi == -1 )
+                        {
+                            bicim = "kirmizi";
+                        }
+
+                        <tr style="@bicim">
+                            <td style="width: 10% !important;" >
+                                @Html.HiddenFor(p => Model.baglilar[i].bysMenuKimlik)
+                                @Html.HiddenFor(p => Model.baglilar[i].i_webSayfasiKimlik)
+                                @Html.TextBoxFor(m => Model.baglilar[i].sirasi, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Sırası", dilKimlik) })
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(p => Model.baglilar[i].e_anaKullaniciGorsunmu)
+                            </td>
+                            <td style="width: 45% !important;">
+                                @Html.TextBoxFor(m => Model.baglilar[i].bysMenuAdi, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Menü Adı", dilKimlik) })
+
+                            </td>
+                            <td style="width: 45% !important;">
+                                @Html.DropDownListFor(m => m.baglilar[i].i_ustMenuKimlik, Bilesen.doldur(Model._ustMenuler) , @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+
+                             </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+
+        <button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+            @Ayar.sozcuk("Kaydet", dilKimlik)
+        </button>
+    </div>
+</form>
+
+<script>
+    function ekle() { 
+        var valdata = $("#formKayit").serialize();
+        console.table(valdata);
+        $.ajax({
+            url: "/BysMenu/Kaydet/",
+            type: "Post",
+            data: valdata,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success: function (response) {
+                if (!response.success) {
+                    Swal.fire(
+                        '@Ayar.sozcuk("Hata", dilKimlik)',
+                        response.message,
+                        'error'
+                    );
+                    return false;
+                }
+                else {
+                    Swal.fire(
+                        '@Ayar.sozcuk("Başarılı", dilKimlik)',
+                        response.message,
+                        'success'
+                    ).then(function () {
+                        var deger = String(document.getElementById("yenimi").value);
+                        deger = "True";
+                        if (deger == "True") {
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+</script>
+

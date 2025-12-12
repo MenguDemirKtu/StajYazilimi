@@ -1,0 +1,128 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace UniStaj.veri
+{
+    public partial class DuyuruAYRINTI : Bilesen
+    {
+
+        public DuyuruAYRINTI()
+        {
+            _varSayilan();
+        }
+
+        public static List<SelectListItem> doldur(Yonetici? kime)
+        {
+            List<DuyuruAYRINTI> bilesenler = DuyuruAYRINTI.ara();
+            return doldur2(bilesenler);
+        }
+
+        public static List<SelectListItem> doldur()
+        {
+            List<DuyuruAYRINTI> bilesenler = DuyuruAYRINTI.ara();
+            return doldur2(bilesenler);
+        }
+
+        public void bicimlendir(veri.Varlik vari)
+        {
+
+        }
+
+        public override void _icDenetim(int dilKimlik, veri.Varlik vari)
+        {
+            uyariVerInt32(sirasi, ".", dilKimlik);
+        }
+
+
+        public override string _tanimi()
+        {
+            return baslik.ToString();
+        }
+
+
+        public static DuyuruAYRINTI olustur(object deger)
+        {
+            using (veri.Varlik vari = new veri.Varlik())
+            {
+                return olustur(vari, deger);
+            }
+        }
+
+        public static DuyuruAYRINTI olustur(Varlik vari, object deger)
+        {
+            Int32 kimlik = Convert.ToInt32(deger);
+            if (kimlik <= 0)
+            {
+                DuyuruAYRINTI sonuc = new DuyuruAYRINTI();
+                sonuc._varSayilan();
+                return sonuc;
+            }
+            else
+            {
+                return veriTabani.DuyuruAYRINTICizelgesi.tekliCek(kimlik, vari);
+            }
+        }
+        public override void _kontrolEt(int dilKimlik, veri.Varlik vari)
+        {
+            _icDenetim(dilKimlik, vari);
+        }
+
+
+        public override void _varSayilan()
+        {
+        }
+
+
+        /// <summary>
+        /// Veri tabanından kayıtlı olan verisini çeker. Dolayısıyla yapılan bir değişikliği aktaran işlemi burada yeniden seçemeyiz.  
+        /// </summary>
+        /// <returns></returns>
+        public Duyuru _verisi()
+        {
+            Duyuru sonuc = Duyuru.olustur(duyurukimlik);
+            return sonuc;
+        }
+
+        protected DuyuruAYRINTI cek()
+        {
+            using (veri.Varlik vari = new veri.Varlik())
+            {
+                return veriTabani.DuyuruAYRINTICizelgesi.tekliCek(duyurukimlik, vari);
+            }
+        }
+        public static List<DuyuruAYRINTI> ara(params Predicate<DuyuruAYRINTI>[] kosullar)
+        {
+            return veriTabani.DuyuruAYRINTICizelgesi.ara(kosullar);
+        }
+
+
+        #region ozluk
+
+
+        public override string _cizelgeAdi()
+        {
+            return "DuyuruAYRINTI";
+        }
+
+
+        public override string _turkceAdi()
+        {
+            return "Duyuru AYRINTI";
+        }
+        public override string _birincilAnahtarAdi()
+        {
+            return "duyurukimlik";
+        }
+
+
+        public override long _birincilAnahtar()
+        {
+            return duyurukimlik;
+        }
+
+
+        #endregion
+
+
+    }
+}
+

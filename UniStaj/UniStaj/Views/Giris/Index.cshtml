@@ -1,0 +1,208 @@
+﻿
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="tr">
+
+
+<head> 
+    <meta charset="utf-8" />
+    <title> @Genel.yazilimAyari.yazilimAdi </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="İŞLE KOLAY" name="description" />
+    <link rel="shortcut icon" href="~/assets/images/favicon.png">
+    <meta name="robots" content="noindex" />
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/assets/js/pages/sweet-alerts.init.js"></script>
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+
+        .temel {
+        background: url("../assets/images/bg-auth-overlay.png") !important;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100% !important;
+        font-family: 'PT Sans', sans-serif;
+        font-size: 14px;
+        }
+
+        input.form-control {
+        background-color: #f9f9f9;
+        color: black;
+        border-radius: 0px !important;
+        }
+
+
+        .temelYazi {
+        font-family: 'PT Sans', sans-serif;
+        font-size: 14px;
+        }
+    </style>
+</head>
+
+@using UniStaj
+@model UniStaj.Models.GirisModel
+
+
+
+<body class="auth-body-bg temel"> 
+    <form id="formKayit" name="formKayit" autocomplete="off">
+        <div class="account-pages my-5 pt-sm-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+                        <div class="card overflow-hidden">
+                            <div class="bg-primary-subtle">
+                                <div class="auth-logo">
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="text-primary p-7"> 
+                                             
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="card-body pt-0">
+                                <br />
+                     
+
+                                <div style="  display: flex;  justify-content: center;   ">
+
+                                    <img src="~/images/serit.png" width="100%" height="80" />
+                                </div>
+                                <br />
+                                <br />           <div class="auth-logo">
+                                    <h5 class="text-primary">    @Genel.yazilimAyari.yazilimAdi   </h5>
+                                </div>
+                                <br />
+                                <br />
+                            
+                                <div class="p-2"> 
+
+                                        <div class="mb-3">
+                                            <label for="username" class="form-label">TC Kimlik No</label>
+                                            @Html.TextBoxFor(p => p.kullaniciAdi, new { @class = "form-control", placeholder = " " })
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Şifre</label>
+                                            <div class="input-group auth-pass-inputgroup">
+                                            @Html.TextBoxFor(p => p.sifre, new { @class = "form-control", type = "password", placeholder = " " })
+                                                <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                            </div>
+                                        </div> 
+
+                                        <div class="mt-3 d-grid">
+                                        <button class="btn btn-primary waves-effect waves-light" id="btnGiris" onclick="izinAl(); return false;" type="submit">Giriş</button>
+                                        </div>
+
+                                        <br />
+                                    <a href="/SifremiUnuttum/Animsat/"> Şifremi Unuttum</a>
+                                    
+                                </div>
+
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <h6> Sürüm : 
+                                    @Genel.yazilimAyari.surumNumarasi
+                                    Yazılım : <a href="https://gelincikyazilim.com/" target="_blank" > Gelincik Yazılım</a> 
+                                </h6>
+                                <br />
+
+
+
+                            </div>
+                        </div> 
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+         
+
+    </form>
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/assets/libs/node-waves/waves.min.js"></script>
+    <script src="~/assets/libs/owl.carousel/owl.carousel.min.js"></script>
+    <script src="~/assets/js/pages/auth-2-carousel.init.js"></script>
+    <script src="~/assets/js/app.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+    <script>
+        function izinAl() {
+            var valdata = $("#formKayit").serialize();
+            console.table(valdata);
+            $.ajax({
+                url: "/Giris/izinAl/",
+                type: "Post",
+                data: valdata,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "json",
+                success: function (response) {
+                    if (!response.success) {
+                        Swal.fire(
+                            'Hata',
+                            response.message,
+                            'error'
+                        );
+                        return false;
+                    }
+                    else {
+
+                        if(response.otuzSaniyeVarmi == true)
+                        {
+                            var $btn = $('#btnGiris');
+                            var originalText = $btn.text();
+                            var counter = 30; 
+                            $btn.prop('disabled', true).text(counter + ' saniye'); 
+                            var interval = setInterval(function () {
+                                counter--;
+                                $btn.text(counter + ' saniye');
+
+                                if (counter <= 0) {
+                                    clearInterval(interval);
+                                    $btn.prop('disabled', false).text(originalText);
+                                }
+                            }, 1000);
+                        }
+                        else 
+                        {
+                        }
+
+                        var deger = response.izinVarmi;
+                        if (deger == true) {
+                            window.location.href = response.adres;
+                        }
+                        else {
+                            Swal.fire(
+                                'HATA',
+                                response.message,
+                                'error'
+                            )
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

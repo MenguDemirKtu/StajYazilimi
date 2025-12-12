@@ -1,0 +1,25 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace UniStaj.veri
+{
+    public partial class TopluEPostaAlicisi : Bilesen
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        [Required]
+        public Int64 topluEPostaAlicisiKimlik { get; set; }
+
+        [Required]
+        public Int32 i_topluSMSGonderimKimlik { get; set; }
+
+        [Column(TypeName = "nvarchar(500)")]
+        public string? aliciTanimi { get; set; }
+
+        public bool? varmi { get; set; }
+
+        [Column(TypeName = "nvarchar(150)")]
+        public string? ePostaAdresi { get; set; }
+
+    }
+}

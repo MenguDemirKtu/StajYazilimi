@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@model UniStaj.Models.ResimAyariModel
+<h2> Resim Ayarı Düzenle </h2>
+
+<hr />
+
+<h5> 1. Foto @Model.kartVerisi.genislik x @Model.kartVerisi.yukseklik px </h5>
+<br />
+<img src="@Model.temelDosyaKonumu" id="fotoKonumu1" width="100" height="75" />
+<br />
+<input id="files1" name="files" type="file" size="1" class="@Ayar.dosyaYukleyiciBicim()" multiple onchange="fotoYukle('files1', '1' ,'@Model.fotosu.fotografKimlik');" />
+<hr />
+
+
+<h5> 2. Foto @Model.kartVerisi.genislik2 x @Model.kartVerisi.yukseklik2 px </h5>
+<br />
+<input id="files2" name="files" type="file" size="1" class="@Ayar.dosyaYukleyiciBicim()" multiple onchange="fotoYukle('files2', '2' ,'@Model.fotosu.fotografKimlik');" />
+<img src="@Model.ortaDosyaKonumu" width="100" height="75" id="fotoKonumu2" />
+<hr />
+
+
+<h5> 3. Foto @Model.kartVerisi.genislik3 x @Model.kartVerisi.yukseklik3 px </h5>
+<br />
+<input id="files3" name="files" type="file" size="1" class="@Ayar.dosyaYukleyiciBicim()" multiple onchange="fotoYukle('files3', '3' ,'@Model.fotosu.fotografKimlik');" />
+<img src="@Model.kucukDosyaKonumu" width="100" height="75" id="fotoKonumu3" />
+<hr />
+
+
+<h5> 4. Foto @Model.kartVerisi.genislik4 x @Model.kartVerisi.yukseklik4 px </h5>
+<br />
+<input id="files4" name="files" type="file" size="1" class="@Ayar.dosyaYukleyiciBicim()" multiple onchange="fotoYukle('files4', '4' ,'@Model.fotosu.fotografKimlik');" />
+<img src="@Model.enkucukDosyaKonumu" width="100" height="75" id="fotoKonumu4" />
+<hr />
+
+<script>
+
+
+    function fotoYukle(inputId,  yer, kimlik) {
+        var input = document.getElementById(inputId);
+        var files = input.files;
+        var formData = new FormData();
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        formData.append("yer",  yer);
+        formData.append("fotoKimlik", kimlik);
+
+        $.ajax(
+            {
+                url: "/GeciciDosya/CokluYukle2",
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function (response) {
+                    var deger = response.message.split('>');
+                    window.location.reload();
+                }
+            }
+        );
+    }
+</script>

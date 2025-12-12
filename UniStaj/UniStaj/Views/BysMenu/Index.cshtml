@@ -1,0 +1,175 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri;
+@model UniStaj.Models.BysMenuModel
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    @{
+        int dilKimlik = Model.gecerliDil();
+        <div class="card-body border-bottom" style="background-color: @Ayar.aramaKutusuArkaPlan;">
+            <div class="row g-3">
+                <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.bysMenuAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Menü Adı", dilKimlik) })</div>
+                <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.bysMenuBicim, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Menü Biçim", dilKimlik) })</div>
+                 <div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.i_webSayfasiKimlik, Bilesen.doldur(Model._ayWebSayfasiAYRINTI), @Ayar.sozcuk("Web Sayfası", dilKimlik), new { @class = "form-control select2" })</div>
+                <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.bysMenuUrl, new { @class = @Ayar.textBoxBicim(), maxlength = "400", placeholder = @Ayar.sozcuk("URL", dilKimlik) })</div>
+                <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.sirasi, new { @class = @Ayar.textBoxBicim(), placeholder = @Ayar.sozcuk("Sırası", dilKimlik) })</div>
+                <div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.e_modulSayfasimi, Model.evetHayirCek(), @Ayar.sozcuk("Modül Sayfası mı", dilKimlik), new { @class = "form-control select2" })</div>
+                <div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.i_modulKimlik, Bilesen.doldur(Model._ayModulAYRINTI), @Ayar.sozcuk("Modül", dilKimlik), new { @class = "form-control select2" })</div>
+                <div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.e_gosterilsimmi, Model.evetHayirCek(), @Ayar.sozcuk("Gösterilsin mi", dilKimlik), new { @class = "form-control select2" })</div>
+                <div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.e_anaKullaniciGorsunmu, Model.evetHayirCek(), @Ayar.sozcuk("Ana Kullanıcı Görsün mü?", dilKimlik), new { @class = "form-control select2" })</div>
+                <div class="col-xxl-2 col-lg-4">
+                    <button type="button" class="btn btn-soft-secondary w-100" style="background-color:#e5f4ff;" onclick="cek(); return false;"><i class="mdi mdi-filter-outline align-middle"></i>@Ayar.sozcuk("Ayrıntılı Ara", dilKimlik)  </button>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <br />
+        bool eklemeIzniVarmi = (bool)ViewBag.eklemeIznivar;
+        bool silmeIzniVarmi = (bool)ViewBag.silmeIznivar;
+        <i style="float: left; width: 50%; color: white; ">
+            @if (eklemeIzniVarmi)
+            {
+                <button type="button" class="btn btn-success btn-rounded waves-effect waves-light " onclick="kartAc(0);return false;">
+                    <i class="mdi mdi-plus me-1"></i>
+                    @Ikazlar.yeniKayitEkle("BYS Menü", dilKimlik)
+                </button>
+            }
+            else
+            {
+                string y = "ekleme izniniz yok";
+                @y
+            }
+        </i>
+        <i style="float: right; width: 50%; text-align: right; color: white; ">
+            @if (silmeIzniVarmi)
+            {
+                <button type="button" class="btn btn-danger btn-rounded waves-effect waves-light" onclick="sil(); return fals;">
+                    <i class="mdi mdi-minus me-1"></i>
+                    @Ayar.sozcuk("Seçilen Kayıtları Sil", dilKimlik)
+                </button>
+            }
+            else
+            {
+                string y = "silme izniniz yok";
+                @y
+            }
+        </i>
+        <div style="float: left; width: 100%; height:30px;  "></div>
+        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+            <thead>
+                <tr>
+                    <th> </th>
+                    <th> @Ayar.sozcuk("Menü Adı", dilKimlik)</th>
+                    <th> @Ayar.sozcuk("Biçimi", dilKimlik)</th>
+                    <th> @Ayar.sozcuk("Üst Menü", dilKimlik)</th>
+                    <th> @Ayar.sozcuk("Web Sayfası", dilKimlik)</th>
+                    <th> @Ayar.sozcuk("Menü URL", dilKimlik)</th>
+                    <th> @Ayar.sozcuk("Sırası", dilKimlik)</th> 
+                    <th> @Ayar.sozcuk("Modül", dilKimlik)</th>
+                    <th>
+                        @Ayar.sozcuk("Güncelle", dilKimlik)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    List<BysMenuAYRINTI> veri = Model.dokumVerisi;
+                    foreach (var satir in veri)
+                    {
+                        <tr row_id="@satir._birincilAnahtar().ToString()">
+                            <td>
+                                <input type="checkbox" class="checkBox"
+                                       value="@satir._birincilAnahtar()" />
+                            </td>
+                            <td>@satir.bysMenuAdi</td>
+                            <td><i class="@satir.bysMenuBicim"></i>
+                            @satir.bysMenuBicim</td> 
+                            <td>@satir.i_ustMenuKimlik</td>
+                            <td>@satir.i_webSayfasiKimlik</td>
+                            <td>@satir.bysMenuUrl</td>
+                            <td>@satir.sirasi</td> 
+                            <td>@satir.i_modulKimlik</td>
+                            <td>
+                                <a class="@UniStaj.Ayar.btnGridGuncelle" onclick="kartAc(@satir._birincilAnahtar()); return false;" style="color: #ffffff !important; background-color: #ffae00; border-color: #ffae00; " title="Edit">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+</form>
+<script>
+    function kartAc(id) {
+        window.location.href = "/BysMenu/Kart/" + id;
+    }
+    function sil() {
+        var selectedIDs = new Array();
+        $('input:checkbox.checkBox').each(function () {
+            if ($(this).prop('checked')) {
+                selectedIDs.push($(this).val());
+            }
+        });
+        if (selectedIDs.length == 0) {
+            alert('Lütfen silmek istediğiniz kayıtları seçiniz');
+            return;
+        }
+        var options = {};
+        options.url = "/BysMenu/Sil?id=" + selectedIDs;
+        options.type = "POST";
+        options.data = JSON.stringify(selectedIDs);
+        options.contentType = "application/json";
+        options.dataType = "json";
+        options.success = function (msg) {
+            Swal.fire({
+                position: "center-center", icon: "success",
+                title: '@Ikazlar.basariylaSilindi(dilKimlik)', showConfirmButton: !1, timer: 1750,
+            });
+            setTimeout(function () {
+                window.location.reload(1);
+            }, 1750);  //
+        };
+        options.error = function () {
+            Swal.fire(
+                'Hata',
+                msg,
+                'error'
+            );
+        };
+        $.ajax(options);
+        return false;
+    }
+
+
+
+        function cek() {
+            var valdata = $("#formKayit").serialize();
+            console.table(valdata);
+            $.ajax({
+                url: "/BysMenu/Cek/",
+                type: "Post",
+                data: valdata,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "json",
+                success: function (response) {
+                    if (!response.success) {
+                        Swal.fire(
+                            '@Ayar.sozcuk("Hata", dilKimlik)',
+                            response.message,
+                            'error'
+                        );
+                        return false;
+                    }
+                    else {
+                        window.location.href = response.message;
+                    }
+                }
+            });
+        }
+</script>
+

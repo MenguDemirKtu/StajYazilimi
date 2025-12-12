@@ -1,0 +1,473 @@
+﻿@using UniStaj.veri;
+@using UniStaj;
+@using UniStaj.Models;
+@using UniStaj.veriTabani;
+@using System.Collections.Generic;
+@using System.Collections;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/_ana.cshtml";
+    Yonetici kim = (Yonetici)ViewBag.mevcut;
+}
+
+@model AnaSayfaModel
+<style>
+
+
+    .bcmGosterge {
+        font-weight: bold !important;
+        background-color: #e5f4ff !important;
+        border-bottom-color: #c4e6ff;
+        border-bottom-width: 5px;
+        border-bottom-style: solid;
+    }
+
+        .bcmGosterge:hover {
+            font-weight: bold !important;
+            background-color: #c4e6ff !important;
+            border-bottom-color: #e5f4ff;
+            border-bottom-width: 5px;
+            border-bottom-style: solid;
+        }
+
+
+
+    .bcmGosterge2 {
+        font-weight: bold !important;
+        background-color: #fff0d9 !important;
+        border-bottom-color: #ffd28e;
+        border-bottom-width: 5px;
+        border-bottom-style: solid;
+    }
+
+        .bcmGosterge2:hover {
+            font-weight: bold !important;
+            background-color: #ffd28e !important;
+            border-bottom-color: #fff0d9;
+            border-bottom-width: 5px;
+            border-bottom-style: solid;
+        }
+
+
+
+    .bcmGosterge3 {
+        font-weight: bold !important;
+        background-color: #fdd9f5 !important;
+        border-bottom-color: #f000b9;
+        border-bottom-width: 5px;
+        border-bottom-style: solid;
+    }
+
+        .bcmGosterge3:hover {
+            font-weight: bold !important;
+            background-color: #f000b9 !important;
+            border-bottom-color: #fdd9f5;
+            border-bottom-width: 5px;
+            border-bottom-style: solid;
+            color: white !important;
+        }
+
+
+    .bcmGosterge4 {
+        font-weight: bold !important;
+        background-color: #dbf5ec !important;
+        border-bottom-color: #10b981;
+        border-bottom-width: 5px;
+        border-bottom-style: solid;
+    }
+
+        .bcmGosterge4:hover {
+            font-weight: bold !important;
+            background-color: #10b981 !important;
+            border-bottom-color: #dbf5ec;
+            border-bottom-width: 5px;
+            border-bottom-style: solid;
+            color: white !important;
+        }
+
+
+
+
+    .bcmCiddiUyari {
+        font-weight: bold !important;
+        background-color: #ffe4a9 !important;
+        border-bottom-color: #ffc851;
+        border-bottom-width: 5px;
+        border-bottom-style: solid;
+        color: darkred;
+    }
+
+
+
+    .koyu {
+        background-color: #f8f9fa !important;
+        min-height: 40px;
+    }
+
+
+    .renkGecisi1 {
+        background: linear-gradient(to right, #684fca, #a293de);
+        color: white !important;
+    }
+
+    .renkGecisi2 {
+        background: linear-gradient(to right, #fa571f, #f6a600);
+        color: white !important;
+    }
+
+
+    .renkGecisi3 {
+        background: linear-gradient(to right, #1d996c, #2ed089);
+        color: white !important;
+    }
+
+    .renkGecisi4 {
+        background: linear-gradient(to right, #5a75e8, #45c3fa);
+        color: white !important;
+    }
+
+
+    .acik {
+        background-color: white !important;
+        min-height: 40px;
+    }
+
+    .anaSayfaIkaz {
+        background-color: #eff2f7 !important;
+        font-weight: bold;
+        min-height: 60px !important;
+        color: red !important;
+        font-size: 20px !important;
+    }
+
+    a {
+        color: inherit;
+    }
+</style>
+
+
+
+@{
+    int dil = 1;
+
+    try
+    {
+        dil = Convert.ToInt32(ViewBag.dil);
+    }
+    catch
+    {
+    }
+
+}
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <div class="d-flex align-items-center">
+            <img src="@Model.fotosu" alt="" class="avatar-sm rounded">
+            <div class="ms-3 flex-grow-1">
+                <h5 class="mb-2 card-title">@Model.kisiAdi, @Model.kisiUnvani</h5>
+                <p class="text-muted mb-0">@Model.yazilimAdi</p>
+            </div>
+        </div>
+    </div><!--end col-->
+</div><!--end row-->
+
+<div class="row" style="background-color: #fbfbfb !important;">
+    <div class="@Ayar.ceyrekGenislik">
+        <div class="card mini-stats-wid shadow-sm p-3 mb-3 bg-white rounded bcmGosterge">
+
+            <div class="d-flex">
+                <div class="flex-grow-1" style="text-align: center !important;">
+                    <img src="@Model.simge1.fotosu" width="32" height="32" />
+                    <h4 class="mb-0">@Model.deger1</h4>
+                    <p class="text-muted fw-small">@Model.baslik1</p>
+                </div>
+            </div>
+        </div>
+    </div><!--end col-->
+    <div class="@Ayar.ceyrekGenislik">
+        <div class="card mini-stats-wid shadow-sm p-3 mb-3 bg-white rounded bcmGosterge2">
+
+
+            <div class="d-flex">
+                <div class="flex-grow-1" style="text-align: center !important;">
+                    <img src="@Model.simge2.fotosu" width="32" height="32" />
+                    <h4 class="mb-0">@Model.deger2</h4>
+                    <p class="text-muted fw-small">@Model.baslik2</p>
+                </div>
+            </div>
+        </div>
+    </div><!--end col-->
+    <div class="@Ayar.ceyrekGenislik">
+        <div class="card mini-stats-wid shadow-sm p-3 mb-3 bg-white rounded bcmGosterge3">
+            <div class="d-flex">
+                <div class="flex-grow-1" style="text-align: center !important;">
+                    <img src="@Model.simge3.fotosu" width="32" height="32" />
+                    <h4 class="mb-0">@Model.deger3</h4>
+                    <p class="text-muted fw-small">@Model.baslik3</p>
+                </div>
+            </div>
+        </div>
+    </div><!--end col-->
+    <div class="@Ayar.ceyrekGenislik">
+        <div class="card mini-stats-wid shadow-sm p-3 mb-3 bg-white rounded bcmGosterge4">
+            <div class="d-flex">
+                <div class="flex-grow-1" style="text-align: center !important;">
+                    <img src="@Model.simge4.fotosu" width="32" height="32" />
+                    <h4 class="mb-0">@Model.deger4</h4>
+                    <p class="text-muted fw-small">@Model.baslik4</p>
+                </div>
+            </div>
+        </div>
+    </div><!--end col-->
+</div><!--end row-->
+@{
+    if (Model.duyurular != null)
+    {
+        if (Model.duyurular.Count > 0)
+        {
+
+            <div class="card">
+                <div class="alert alert-success" role="alert">
+                    <br />
+                    <h4 class="alert-heading">Dikkat 2</h4>
+                    <p>
+                        Aşağıdaki duyuruları dikkatle takip etmeniz tavsiye edilir.  Bu duyurularda bir eksiklik olduğunu düşünüyorsanız sistem yöneticinizle iletişime geçiniz.
+                    </p>
+                </div>
+                <div class="card-body">
+
+
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <tr>
+                                <th scope="col">Başlık</th>
+                                <th> Açıklama</th>
+                            </tr>
+                            <tbody>
+                                @{
+
+                                    if (Model.duyurular != null)
+                                    {
+                                        for (int i = 0; i < Model.duyurular.Count; i++)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    <h5 class="font-size-13 text-truncate mb-1"><a href="@String.Format("{0}", Model.duyurular[i].baglanti)" class="text-dark"> @Model.duyurular[i].baslik</a></h5>
+                                                    <p class="text-muted mb-0">
+                                                        <a href="@String.Format("{0}", Model.duyurular[i].baglanti)">
+                                                            @{
+                                                                if (Model.duyurular[i] != null)
+                                                                {
+                                                                    @Model.duyurular[i].baslangic.ToShortDateString()
+
+                                                                }
+                                                            }
+                                                        </a>
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <i class="bx bx-like align-middle me-1"></i>
+
+                                                    <a href="@String.Format("{0}", Model.duyurular[i].baglanti)">
+                                                        @Model.duyurular[i].tanitim
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    }
+                                }
+
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+
+@* @{
+
+    if (Model.toplamGorevSonuclari.Count > 0)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex">
+                    <h4 class="card-title mb-4 flex-grow-1">  Tamamlanan Görev Sonuçları    </h4>
+
+                </div>
+            </div>
+            @{
+                foreach (var siradaki in Model.toplamGorevSonuclari)
+                {
+                    <div class="col-lg-2">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <div class="text-center mb-3">
+                                    <img src="@siradaki.fotosu" alt="" class="avatar-sm">
+                                    <a href="job-details.html" class="text-body">
+                                        <h5 class="mt-4 mb-2 font-size-15" style="font-weight: bold;"> @siradaki.toplam</h5>
+                                    </a>
+                                    <p class="mb-0 text-muted"> @siradaki.olcuBirimAdi</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+} *@
+
+
+<div class="@Ayar.tamGenislik">
+    @{
+        if (Model.baglantilar.Count > 0)
+        {
+            <h4 style="color: red !important;">  Dikkat! </h4>
+
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sırası</th>
+                            <th>Başlık  </th>
+                            <th>Açıklama  </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{
+
+                            foreach (var siradaki in Model.baglantilar)
+                            {
+                                <tr>
+                                    <th scope="row">@siradaki.sirasi</th>
+                                    <td scope="row">@siradaki.baslik  </td>
+                                    <td scope="row">@siradaki.aciklama  </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    }
+
+    @{
+        if (kim._KullaniciTuru == enumref_KullaniciTuru.Yazilimci
+        || kim._KullaniciTuru == enumref_KullaniciTuru.Sistem_Yoneticisi)
+        {
+            <div class="row">
+                <div class="col-xl-8">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table align-middle table-nowrap mb-0">
+                                <tr>
+                                    <th scope="col" colspan="2">Süreç</th>
+                                    <th scope="col">Durum</th>
+                                    <th scope="col">Tamamlanma Oranı</th>
+                                    <th scope="col">Ayrıntılar</th>
+                                </tr>
+                                <tbody>
+
+
+                                    @{
+                                        // for (int i = 0; i < Model.surecler.Count; i++)
+                                        // {
+                                        //     var siradaki = Model.surecler[i];
+                                        //     int oran = siradaki.tamamlanmaOrani ?? 0;
+                                        //     <tr>
+                                        //         <td style="width: 40px; height: 30px !important; "><img src="@siradaki.fotosu" alt="" width="40" height="30" style="height:30px !important;"></td>
+                                        //         <td>
+                                        //             <h5 class="font-size-13 text-truncate mb-1" style="font-weight: bold !important;">
+                                        //                 @siradaki.baslik
+                                        //             </h5>
+                                        //             @siradaki.gorevAdi
+                                        //         </td>
+                                        //         <td>
+                                        //             <i class="@siradaki._Icon"></i>
+                                        //             @siradaki.SurecDurumuAdi
+                                        //         </td>
+                                        //         <td>
+                                        //             <div class="progress animated-progess progress-sm">
+                                        //                 <div class="progress-bar bg-warning" role="progressbar" style="width: @oran%" aria-valuenow="@oran" aria-valuemin="0" aria-valuemax="100"></div>
+                                        //             </div>
+
+                                        //             @siradaki.tamamlanmaOrani
+                                        //         </td>
+                                        //         <td>
+                                        //             <a href="@String.Format("/Surec/Kart/{0}", siradaki.sureckimlik)">
+                                        //                 Sayfası
+                                        //             </a>
+                                        //         </td>
+                                        //     </tr>
+                                        // }
+                                    }
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-start">
+                                <div class="me-2">
+                                    @{
+                                        // if (kim._KullaniciTuru == enumref_KullaniciTuru.Calisma_Birim_Gorevlisi)
+                                        // {
+                                        //     <h5 class="card-title mb-4">Son 10 Çalışan İşlemi</h5>
+                                        // }
+                                        // else
+                                        // {
+                                        //     <h5 class="card-title mb-4">Son 10 Araç İşlemi</h5>
+                                        // }
+                                    }
+                                </div>
+
+                            </div>
+                            <div data-simplebar class="mt-2" ">
+                                <ul class="verti-timeline list-unstyled">
+
+                                    @{
+                                   
+                                    }
+
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+
+            </div>
+        }
+    }
+</div>
+
+<script>
+
+    function yonlendir(adres)
+    {
+        alert('bvaşladı');
+        window.location.href= adres;
+    }
+</script>
+
+
+<script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+

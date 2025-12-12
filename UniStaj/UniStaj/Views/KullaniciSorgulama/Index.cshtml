@@ -1,0 +1,176 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri;
+@model UniStaj.Models.KullaniciModel
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    @{
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="row">
+                <div class=@Ayar.yariGenislik>
+                    <div class="form-group">
+                        <label for="member-name" class="col-form-label">Ad, soyad, e-posta, tc kimlik no, Kullanıcı Adı</label>
+                      </div>
+                </div>
+
+
+                <div class=@Ayar.yariGenislik>
+                    <div class="form-group">
+                        <label for="member-name" class="col-form-label">.</label>
+                        .
+                    </div>
+                </div>
+
+                <div class=@Ayar.yariGenislik>
+                    <div class="form-group">
+                        <label for="member-name" class="col-form-label">   .  </label>
+
+                        <button type="button" onclick="sorgula(); return false;" id="btnKaydet" class="@Ayar.kayitBicimi(Model.yenimi)" data-bs-toggle="modal">
+
+                            Koşula Uyan Kullanıcıları Bul
+
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+        bool eklemeIzniVarmi = (bool)ViewBag.eklemeIznivar;
+        bool silmeIzniVarmi = (bool)ViewBag.silmeIznivar;
+        <i style="float: left; width: 50%; color: white; ">
+            @if (eklemeIzniVarmi)
+            {
+                <button type="button" class="btn btn-success btn-rounded waves-effect waves-light " onclick="kartAc(0);return false;">
+                    <i class="mdi mdi-plus me-1"></i>
+                    Yeni Kullanıcı Ekle
+                </button>
+            }
+            else
+            {
+                string y = "ekleme izniniz yok";
+                @y
+            }
+        </i>
+        <i style="float: right; width: 50%; text-align: right; color: white; ">
+            @if (silmeIzniVarmi)
+            {
+                <button type="button" class="btn btn-danger btn-rounded waves-effect waves-light" onclick="sil(); return fals;">
+                    <i class="mdi mdi-minus me-1"></i>
+                    Seçilen Kayıtları Sil
+                </button>
+            }
+            else
+            {
+                string y = "silme izniniz yok";
+                @y
+            }
+        </i>
+        <div style="float: left; width: 100%; height:30px;  "></div>
+        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+            <thead>
+                <tr>
+                    <th> </th>
+                    <th>Kullanıcı</th> 
+                    <th>Kullanıcı</th>
+                    <th>Gerçek Adı</th>
+                    <th>Eposta Adresi</th>
+                    <th>Telefon</th>
+                    <th>Ünvan</th>
+                    <th>Rol Tabanlı mı?</th>
+
+                    <th>TC Kimlik No</th>
+                    <th>Eposta Onaylandı mı?</th>
+                    <th>Telefon Onaylandı mı?</th>
+                    <th>Sözleşme Onaylandı mı?</th>
+                    <th>Doğum Tarihi</th>
+                    <th>TC Doğrulandı mı?</th>
+                    <th>
+                        Güncelle
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    List<KullaniciAYRINTI> veri = Model.dokumVerisi;
+                    foreach (var satir in veri)
+                    {
+                        <tr row_id="@satir._birincilAnahtar().ToString()">
+                            <td>
+                                <input type="checkbox" class="checkBox"
+                                       value="@satir._birincilAnahtar()" />
+                            </td>
+                            <td>@satir.kullaniciAdi</td>
+                            <td>@satir.kullaniciTuru</td>
+                            <td>@satir.gercekAdi</td>
+                            <td>@satir.ePostaAdresi</td>
+                            <td>@satir.telefon</td>
+                            <td>@satir.unvan</td>
+                            <td>@Genel.evetHayirIfadesi(satir.e_rolTabanlimi)</td> 
+                            <td>@satir.tcKimlikNo</td> 
+                            <td>@Genel.tarihIfadesi(satir.dogumTarihi)</td> 
+                            <td>
+                                <a class="@UniStaj.Ayar.btnGridGuncelle" onclick="kartAc(@satir._birincilAnahtar()); return false;" style="color: #ffffff !important; background-color: #ffae00; border-color: #ffae00; " title="Edit">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+</form>
+<script>
+
+    
+
+    function sorgula( ) {
+        metin  = $("#txtSorgu").val();
+        window.location.href = "/KullaniciSorgulama/?id=" + metin  
+    }
+
+    function kartAc(id) {
+        window.location.href = "/Kullanici/Kart/" + id;
+    }
+    function sil() {
+        var selectedIDs = new Array();
+        $('input:checkbox.checkBox').each(function () {
+            if ($(this).prop('checked')) {
+                selectedIDs.push($(this).val());
+            }
+        });
+        if (selectedIDs.length == 0) {
+            alert('Lütfen silmek istediğiniz kayıtları seçiniz ')
+            return;
+        }
+        var options = {};
+        options.url = "/Kullanici/Sil?id=" + selectedIDs;
+        options.type = "POST";
+        options.data = JSON.stringify(selectedIDs);
+        options.contentType = "application/json";
+        options.dataType = "json";
+        options.success = function (msg) {
+            Swal.fire({
+                position: "center-center", icon: "success",
+                title: "Silme İşlemi Başarılı", showConfirmButton: !1, timer: 1750,
+            });
+            setTimeout(function () {
+                window.location.reload(1);
+            }, 1750);  //
+        };
+        options.error = function () {
+            Swal.fire(
+                'Hata',
+                msg,
+                'error'
+            );
+        };
+        $.ajax(options);
+        return false;
+    }
+</script>
+

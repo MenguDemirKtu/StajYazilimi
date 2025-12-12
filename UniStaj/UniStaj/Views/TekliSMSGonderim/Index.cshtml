@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.TekliSMSGonderimModel
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    @{
+        int dilKimlik = 1;
+    }
+    @Html.HiddenFor(prop=>prop.yenimi)
+    <div class="@Ayar.tamGenislik">
+        <div class="row"> 
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Telefon Numaraları", dilKimlik)  </label>
+                    @Html.TextAreaFor(m => m.telNolar, new { @class = @Ayar.textBoxBicim(), maxlength = "20000", placeholder = @Ayar.sozcuk("Numaralar", dilKimlik) })
+                </div>
+            </div> 
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Metin", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.metin, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("Metin", dilKimlik) })
+                </div>
+            </div>
+        
+        </div>
+        <hr />
+        <button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+            @Ayar.sozcuk("Gönder", dilKimlik)
+        </button>
+    </div>
+</form>
+
+<script>
+    function ekle() {
+
+    var valdata = $("#formKayit").serialize();
+    console.table(valdata);
+    $.ajax({
+    url: "/TekliSMSGonderim/Gonder/",
+    type: "Post",
+    data: valdata,
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    dataType: "json",
+    success: function (response) {
+    if (!response.success) {
+    Swal.fire(
+    '@Ayar.sozcuk("Hata", dilKimlik)',
+    response.message,
+    'error'        );
+    return false;
+    }
+    else {
+    Swal.fire(	'@Ayar.sozcuk("Başarılı", dilKimlik)',   response.message,
+    'success'                    ).then(function () {
+    var deger = String(document.getElementById("yenimi").value);
+    if (deger == "True") {
+    window.location.reload();
+    }
+    })
+    }
+    }
+    });
+    }
+
+</script>
+

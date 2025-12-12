@@ -1,0 +1,167 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri;
+@model UniStaj.Models.HataBildirimlerimModel
+
+
+<style>
+
+    .sol {
+        float: left;
+        width: 75%;
+        background-color: #d9fdd3;
+        border-radius: 5px !important;
+    }
+
+    .sag {
+        float: right;
+        width: 75%;
+        background-color: #abe6ff;
+        border-radius: 5px !important;
+    }
+    .ic
+    { 
+    }
+</style>
+
+
+<form id="formKayit" name="formKayit" autocomplete="off" style="background-color: #efeae2 !important; ">
+    @{
+        @Html.HiddenFor(p=>p.i_hataBildirimiKimlik)
+        string bicim = "";
+        foreach (var siradaki in Model.yazismalari)
+        {
+            if (siradaki.i_yoneticiKimlik == Model.kullanan.kullaniciKimlik)
+            {
+                bicim = "sag";
+            }
+            else
+            {
+                bicim = "sol";
+            }
+            <div class="@bicim">
+
+            <div class="ic">
+                <strong>
+                    @siradaki.gercekAdi
+                </strong>
+                <strong>
+                    @siradaki.unvan
+                </strong>
+                <br />
+                <strong>
+                    Tarih : @siradaki.tarih
+                </strong>
+                <br />
+                <strong>
+                    Metin
+                </strong>
+                <br />
+                @Html.Raw(siradaki.metin)
+
+                    <br />
+                </div>
+            </div>
+
+            <br />
+        }
+
+        <div style="float: left;  width:100% !important; background-color: darkgray !important;  height: 1px !important;   ">
+        ..
+        </div>
+         
+
+
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="row">
+
+                <div class=@Ayar.tamGenislik>
+                    <br />
+                    <div class="card table-card">
+                        <div class="card-header pb-0">
+                            <h4> Yeni Bildirim </h4>
+                        </div>
+                        @Html.TextAreaFor(m => m.aciklama, new { @id = "elm1", name = "elm1" })
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+
+        <button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+            Yanıtla
+        </button>
+
+
+
+    }
+</form>
+<script>
+    function kartAc(id) {
+        window.location.href = "/Odeme/Kart/" + id;
+    }
+
+
+    function dekontYukle(id) {
+        var options = {};
+        options.url = "/OdemeDekontGirisi/Olustur?id=" + id;
+        options.type = "POST";
+        options.contentType = "application/json";
+        options.dataType = "json";
+        options.success = function (msg) {
+            alert(msg.satirID);
+            window.location.href = "/OdemeDekontGirisi/Kart/" + msg.satirID;
+
+
+
+        };
+        options.error = function () {
+            Swal.fire(
+                'Hata',
+                msg,
+                'error'
+            );
+        };
+        $.ajax(options);
+
+        return false;
+    }
+
+    function ekle() {
+        tinyMCE.triggerSave();
+        var valdata = $("#formKayit").serialize();
+        console.table(valdata);
+        $.ajax({
+            url: "/HataBildirimlerim/Kaydet/",
+            type: "Post",
+            data: valdata,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success: function (response) {
+                if (!response.success) {
+                    Swal.fire(
+                        'Hata',
+                        response.message,
+                        'error'
+                    );
+                    return false;
+                }
+                else {
+                    Swal.fire(
+                        'Başarılı',
+                        response.message,
+                        'success'
+                    ).then(function () {
+                        var deger = String(document.getElementById("yenimi").value);
+                        if (deger == "True") {
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+</script>
+

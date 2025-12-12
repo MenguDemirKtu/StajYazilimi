@@ -1,0 +1,211 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri;
+@model UniStaj.Models.GaleriModel
+<script src="~/assets/js/jquery.dataTables.min.js"></script> 
+<form id="formKayit" name="formKayit" autocomplete="off">
+
+
+
+
+<div class="row">
+    @Html.HiddenFor(p=>Model.kartVerisi.kodu)
+    <div class=@Ayar.yariGenislik>
+    <div class="@Ayar.formGrup">
+
+        <label class="@Ayar.labelBicim"> @Ayar.sozcuk(Model._fotoTanimi(), 1)  </label>
+        <input id="files" name="files" type="file" size="1" class="@Ayar.dosyaYukleyiciBicim()" multiple onchange="fotoYukle('files');" />
+        <img id="imYuklenen" src="@Model.fotoKonumu" width="0" height="0" />
+    </div>
+
+
+        <div class=@Ayar.ceyrekGenislik>
+
+            <button id="btnOnayla" class="btn btn-success" onclick="ekle(); return false;" > Yüklediğim Fotoğrafları Galeriye Ekle </button>
+            </div>
+</div>
+
+<br />
+<br />
+
+
+<hr />
+
+
+    @{
+        int i = -1;
+        foreach(var siradaki in Model.fotolari )
+        {
+            i++;
+            <div class="col-lg-2">
+            <div class="card">
+                <div class="card-body p-4">
+                    <div class="text-center mb-3">
+                        <img src="@siradaki.fotosu" alt="" class="avatar-sm" width="120" height="90">
+                      
+                                @Html.HiddenFor(m => Model.fotolari[i].galeriFotosuKimlik)
+                        <p class="mb-0 text-muted">
+                                @Html.TextBoxFor(m => Model.fotolari[i].baslik, new { @class = @Ayar.textBoxBicim(), maxlength = "300", placeholder = @Ayar.sozcuk("Başlık", 1) }) 
+                            </p>
+                    </div>
+
+                    <div class="d-flex">
+                        <p class="mb-0 flex-grow-1 text-muted">
+
+                                @Html.TextBoxFor(m => Model.fotolari[i].sirasi, new { @class = @Ayar.textBoxBicim(), maxlength = "300",   placeholder = @Ayar.sozcuk("Başlık", 1) })
+                        </p>
+                        <p class="mb-0 text-muted">
+                        <button id="btnSil" onclick="fotoSil('@Model.fotolari[i].galeriFotosuKimlik'); return false;" class="@Ayar.btnSil" > sil</button>
+                        </p>
+                    </div>
+                </div>
+            </div><!--end card-->
+        </div>
+
+        <!--end col-->
+        }
+    }
+    </div>
+    <br />
+
+
+    <div class=@Ayar.ceyrekGenislik>
+
+        <button id="btnSiraBelirle" class="btn btn-success" onclick="siraBelirle(); return false;"> Değişiklikleri Onayla </button>
+    </div>
+         </form>
+
+
+
+<script>
+
+    function fotoSil(kimlik)
+    {
+    var valdata = $("#formKayit").serialize();
+    console.table(valdata);
+    $.ajax({
+    url: "/Galeri/fotoSil?kimlik="+kimlik,
+    type: "Post", 
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    dataType: "json",
+    success: function (response) {
+    if (!response.success) {
+    Swal.fire(
+    '@Ayar.sozcuk("Hata", 1)',
+    response.message,
+    'error'        );
+    return false;
+    }
+    else {
+    Swal.fire(	'@Ayar.sozcuk("Başarılı", 1)',   response.message,
+    'success'                    ).then(function () {
+    if(response.yonlensinmi == true)
+    {
+    window.location.href= response.yonlenmeAdresi;
+    }
+    var deger = "True";
+    if (deger == "True") {
+    window.location.reload();
+    }
+    })
+    }
+    }
+    });
+    }
+
+    function ekle() {
+
+    var valdata = $("#formKayit").serialize();
+    console.table(valdata);
+    $.ajax({
+    url: "/Galeri/fotoOnayla/",
+    type: "Post",
+    data: valdata,
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    dataType: "json",
+    success: function (response) {
+    if (!response.success) {
+    Swal.fire(
+    '@Ayar.sozcuk("Hata", 1)',
+    response.message,
+    'error'        );
+    return false;
+    }
+    else {
+    Swal.fire(	'@Ayar.sozcuk("Başarılı", 1)',   response.message,
+    'success'                    ).then(function () {
+    if(response.yonlensinmi == true)
+    {
+    window.location.href= response.yonlenmeAdresi;
+    }
+    var deger = String(document.getElementById("yenimi").value);
+    if (deger == "True") {
+    window.location.reload();
+    }
+    })
+    }
+    }
+    });
+    }
+                    function fotoYukle(inputId) {
+                        var kod = $('#kartVerisi_kodu').val();
+                        var input = document.getElementById(inputId);
+                        var files = input.files;
+                        var formData = new FormData();
+                        for (var i = 0; i != files.length; i++) {
+                            formData.append("files", files[i]);
+                        }
+                        formData.append("kod", kod )
+                        $.ajax(
+                            {
+                                url: "/GeciciDosya/GaleriyeYukle",
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                type: "POST",
+                                success: function (response) { 
+                                    window.location.reload();
+                                }
+                            }
+                        );
+                    }
+
+
+                        function siraBelirle() {
+
+    var valdata = $("#formKayit").serialize();
+    console.table(valdata);
+    $.ajax({
+    url: "/Galeri/SiraBelirle/",
+    type: "Post",
+    data: valdata,
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    dataType: "json",
+    success: function (response) {
+    if (!response.success) {
+    Swal.fire(
+    '@Ayar.sozcuk("Hata", 1)',
+    response.message,
+    'error'        );
+    return false;
+    }
+    else {
+    Swal.fire(	'@Ayar.sozcuk("Başarılı", 1)',   response.message,
+    'success'                    ).then(function () {
+    if(response.yonlensinmi == true)
+    {
+    window.location.href= response.yonlenmeAdresi;
+    }
+    var deger = "True"; 
+    if (deger == "True") {
+    window.location.reload();
+    }
+    })
+    }
+    }
+    });
+    }
+
+                                </script>

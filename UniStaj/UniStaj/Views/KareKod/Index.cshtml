@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri  
+@model UniStaj.Models.KareKodModel 
+<h2>
+    <strong> 
+    DİKKAT !! . Bu sayfa her açıldığında kod değişecektir.  Yemek rezervasyonunuz olmasa bile kod sayfada yer alır. 
+    </strong>
+</h2>
+<img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.qrCodeImage)" class="img-fluid" alt="Resim" />

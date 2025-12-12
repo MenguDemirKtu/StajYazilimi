@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Kart";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@model UniStaj.Models.KullaniciRoluModel
+
+<form id="formKayit" name="formKayit" autocomplete="off">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="row">
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Kullanıcı</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_kullaniciKimlik, Model._KullaniciAYRINTIler(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.kartVerisi.kullaniciRoluKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.kullaniciRoluKimlik)
+            @Html.HiddenFor(model => model.kartVerisi.varmi)
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Rol</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_rolKimlik, Model._RolAYRINTIler(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="form-group">
+                    <label for="city" class="col-form-label">Geçerli mi?</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.e_gecerlimi, Model._evetHayir(), "Lütfen Seçiniz", new { @class = "form-control select2" })
+                </div>
+            </div>
+            @Html.HiddenFor(model => model.yenimi)
+        </div>
+        <hr />
+        <button type="button" onclick="ekle()" id="btnKaydet" class="@Ayar.kayitBicimi(Model.yenimi)" data-bs-toggle="modal">
+            @Ayar.kayitIfadesi(Model.yenimi)
+        </button>
+    </div>
+</form>
+<script>
+    function ekle() {
+        var valdata = $("#formKayit").serialize();
+        console.table(valdata);
+        $.ajax({
+            url: "/KullaniciRolu/Kaydet/",
+            type: "Post",
+            data: valdata,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success: function (response) {
+                if (!response.success) {
+                    Swal.fire(
+                        'Hata',
+                        response.message,
+                        'error'
+                    );
+                    return false;
+                }
+                else {
+                    Swal.fire(
+                        'Başarılı',
+                        response.message,
+                        'success'
+                    ).then(function () {
+                        var deger = String(document.getElementById("yenimi").value);
+                        if (deger == "True") {
+                            window.location.reload();
+                        }
+                    })
+                }
+            }
+        });
+    }
+</script>
+

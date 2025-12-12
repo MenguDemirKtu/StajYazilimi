@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj;
+@model UniStaj.Models.HataEkraniModel
+@{
+    int dil = 1;
+    try
+    {
+        dil = Convert.ToInt32(ViewBag.dil);
+    }
+    catch
+    {
+    }
+}
+<h2>
+    @UniStaj.Ayar.sozcuk("HATA", dil) 
+</h2> 
+<h5>
+    @Model.aciklama
+</h5>
+

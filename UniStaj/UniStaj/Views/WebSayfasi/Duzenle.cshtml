@@ -1,0 +1,137 @@
+﻿@{
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj;
+@using UniStaj.veri;
+@model UniStaj.Models.WebSayfasiModel
+<script src="~/assets/js/jquery.dataTables.min.js"></script>
+<form id="formKayit" name="formKayit" autocomplete="off">
+    @{
+        bool eklemeIzniVarmi = (bool)ViewBag.eklemeIznivar;
+        bool silmeIzniVarmi = (bool)ViewBag.silmeIznivar;
+        <i style="float: left; width: 50%; color: white; ">
+            @if (eklemeIzniVarmi)
+            {
+                <button type="button" class="btn btn-success btn-rounded waves-effect waves-light " onclick="kartAc(0);return false;">
+                    <i class="mdi mdi-plus me-1"></i>
+                    Yeni Web Sayfası Ekle
+                </button>
+            }
+            else
+            {
+                string y = "ekleme izniniz yok";
+                @y
+            }
+        </i>
+        <i style="float: right; width: 50%; text-align: right; color: white; ">
+            @if (silmeIzniVarmi)
+            {
+                <button type="button" class="btn btn-danger btn-rounded waves-effect waves-light" onclick="sil(); return fals;">
+                    <i class="mdi mdi-minus me-1"></i>
+                    Seçilen Kayıtları Sil
+                </button>
+            }
+            else
+            {
+                string y = "silme izniniz yok";
+                @y
+            }
+        </i>
+        <div style="float: left; width: 100%; height:30px;  "></div>
+
+        <div class="">
+            <div class="" >
+                <table id="tech-companies-1" class="table table-striped">
+
+            <thead>
+                <tr> 
+                    <th>Ham Adresi</th>
+                    <th>Sayfa Başlığı</th>
+                    <th>Modül</th>
+                    <th>Sayfa Türü</th>
+
+
+
+                    <th>
+                        Güncelle
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    List<WebSayfasiAYRINTI> veri = Model.dokumVerisi;
+                 for(int i=0;i <veri.Count; i++)
+                    {
+                        <tr row_id="@veri[i]._birincilAnahtar().ToString()">
+
+                                    <td>@veri[i].hamAdresi</td>
+                                    <td style="width: 40% !important;" >
+
+
+                                        @Html.TextBoxFor(m => veri[i].sayfaBasligi, new { @class = @Ayar.textBoxBicim(), maxlength = "200", placeholder = @Ayar.sozcuk("", 1) })
+
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(m => veri[i].i_modulKimlik, ModulAYRINTI.doldur(), @Ayar.sozcuk("Lütfen Seçiniz", 1), new { @class = "form-control select2" })
+                                    </td>
+                                 
+                                    <td>@veri[i].sayfaTuru</td>
+
+
+
+                            <td>
+                                        <a class="@UniStaj.Ayar.btnGridGuncelle" onclick="kartAc(@veri[i]._birincilAnahtar()); return false;" style="color: #ffffff !important; background-color: #ffae00; border-color: #ffae00; " title="Edit">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+            </div>
+        </div>
+    }
+</form>
+<script>
+    function kartAc(id) {
+        window.location.href = "/WebSayfasi/Kart/" + id;
+    }
+    function sil() {
+        var selectedIDs = new Array();
+        $('input:checkbox.checkBox').each(function () {
+            if ($(this).prop('checked')) {
+                selectedIDs.push($(this).val());
+            }
+        });
+        if (selectedIDs.length == 0) {
+            alert('Lütfen silmek istediğiniz kayıtları seçiniz ')
+            return;
+        }
+        var options = {};
+        options.url = "/WebSayfasi/Sil?id=" + selectedIDs;
+        options.type = "POST";
+        options.data = JSON.stringify(selectedIDs);
+        options.contentType = "application/json";
+        options.dataType = "json";
+        options.success = function (msg) {
+            Swal.fire({
+                position: "center-center", icon: "success",
+                title: "Silme İşlemi Başarılı", showConfirmButton: !1, timer: 1750,
+            });
+            setTimeout(function () {
+                window.location.reload(1);
+            }, 1750);  //
+        };
+        options.error = function () {
+            Swal.fire(
+                'Hata',
+                msg,
+                'error'
+            );
+        };
+        $.ajax(options);
+        return false;
+    }
+</script>
+

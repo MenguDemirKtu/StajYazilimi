@@ -1,0 +1,199 @@
+﻿@{ 
+    Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj 
+@using UniStaj.veri;
+@model UniStaj.Models.YazilimAyariModel
+    <script src="~/assets/js/jquery.dataTables.min.js"></script>
+    <form id="formKayit" name="formKayit" autocomplete="off">
+        @{
+        int dilKimlik = Model.gecerliDil();
+            bool eklemeIzniVarmi = (bool)ViewBag.eklemeIznivar;
+            bool silmeIzniVarmi = (bool)ViewBag.silmeIznivar;
+            <i style="float: left; width: 50%; color: white; ">
+                @if (eklemeIzniVarmi)
+                {
+                    <button type="button" class="btn btn-success btn-rounded waves-effect waves-light " onclick="kartAc(0);return false;">
+                        <i class="mdi mdi-plus me-1"></i>
+   @Ikazlar.yeniKayitEkle("Yazılım Ayarı", dilKimlik) 
+                    </button>
+                }
+                else
+                {
+                    string y = "ekleme izniniz yok";
+                    @y
+                }
+            </i>
+            <i style="float: right; width: 50%; text-align: right; color: white; ">
+                @if (silmeIzniVarmi)
+                {
+                    <button type="button" class="btn btn-danger btn-rounded waves-effect waves-light" onclick="sil(); return fals;">
+                        <i class="mdi mdi-minus me-1"></i>
+                       @Ayar.sozcuk("Seçilen Kayıtları Sil", dilKimlik)
+                    </button>
+                }
+                else
+                {
+                    string y = "silme izniniz yok";
+                    @y
+                }
+            </i>
+            <div style="float: left; width: 100%; height:30px;  "></div>
+            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                <thead>
+                    <tr>
+                        <th> </th>
+    <th> @Ayar.sozcuk( "Ayar Adı", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Yazılım Adı", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Hesap E-Posta Adresi", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Hesap E-Posta Şifresi", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Hesap E-Posta Porta", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Hesap E-Posta Host", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Yazılım Adresi", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Geçerli mi", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "SMS Şifre", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "SMS API", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "SMS Kullanıcı Adı", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "SMS Başlık", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Yönetim Paneli Konumu", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Dosya Paylaşım Konum", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Resim Paylaşım Konumu", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Yeni Dosya Paylaşım Konumu", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Yeni Resim Paylaşım Konumu", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Dosya Paylaşım Konumu 2", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Reism Paylaşım Konumu 2", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Yeni Dosya Paylaşım Konumu 2", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Yeni Resim Paylaşım Konumu 2", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Son Güncelleme Tarihi", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Menü Güncellenecek mi", dilKimlik)</th>
+    <th> @Ayar.sozcuk( ".", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "SMS Gönderim Sistesi", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Şifre Değiştirme Gün Sayısı", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Sürüm Numarası", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Oturum Açma Türü", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Günlük Oturum Sınırı", dilKimlik)</th>
+    <th> @Ayar.sozcuk( "Güvenlik İhlal E-Posta", dilKimlik)</th>
+                        <th>
+                             @Ayar.sozcuk("Güncelle", dilKimlik)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+  @{    List<YazilimAyariAYRINTI> veri = Model.dokumVerisi;
+                        foreach (var satir in veri)
+                        {
+                            <tr row_id="@satir._birincilAnahtar().ToString()">
+                                <td>
+                                    <input type="checkbox" class="checkBox"
+                                           value="@satir._birincilAnahtar()" />
+                                </td>
+<td>@satir.ayarAdi</td>
+<td>@satir.yazilimAdi</td>
+<td>@satir.hesapEPostaAdresi</td>
+<td>@satir.hesapEPostaSifresi</td>
+<td>@satir.hesapEPostaPort</td>
+<td>@satir.hesapEPostaHost</td>
+<td>@satir.yazilimAdresi</td>
+<td>@satir.e_gecerlimi</td>
+<td>@satir.smsSifre</td>
+<td>@satir.smsApi</td>
+<td>@satir.smsKullaniciAdi</td>
+<td>@satir.smsBaslik</td>
+<td>@satir.yonetimPaneliKonumu</td>
+<td>@satir.dosyaPaylasimKonumu</td>
+<td>@satir.resimPaylasimKonumu</td>
+<td>@satir.yeniDosyaPaylasimKonumu</td>
+<td>@satir.yeniResimPaylasimKonumu</td>
+<td>@satir.dosyaPaylasimKonumu2</td>
+<td>@satir.resimPaylasimKonumu2</td>
+<td>@satir.yeniDosyaPaylasimKonumu2</td>
+<td>@satir.yeniResimPaylasimKonumu2</td>
+<td>@satir.sonGuncellemeTarihi</td>
+<td>@satir.e_menuGuncellenecekmi</td>
+<td>   
+<a href="@String.Format("/ResimAyari/Duzenle?id={0}",  satir.i_fotoKimlik)"> 
+   <img  src="@satir.fotosu" width="60" height="45" />
+   </a>
+</td>
+<td>@satir.i_smsGonderimSitesiKimlik</td>
+<td>@satir.sifreDegistirmeGunSayisi</td>
+<td>@satir.surumNumarasi</td>
+<td>@satir.i_oturumAcmaTuruKimlik</td>
+<td>@satir.gunlukOturumSiniri</td>
+<td>@satir.guvenlikIhlalEPosta</td>
+                                <td>
+                                    <a class="btn btn-outline-secondary btn-sm edit" onclick="kartAc(@satir._birincilAnahtar()); return false;" style="color: #ffffff !important; background-color: #ffae00; border-color: #ffae00; " title="Edit">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        } }
+                </tbody>
+            </table> }
+    </form>
+    <script>
+        function kartAc(id) {
+window.location.href = "/YazilimAyari/Kart/"+id;
+        }
+        function sil() {
+            var selectedIDs = new Array();
+            $('input:checkbox.checkBox').each(function () {
+                if ($(this).prop('checked')) {
+                    selectedIDs.push($(this).val());
+                }
+            });
+            if (selectedIDs.length == 0) {
+                alert('@Ayar.sozcuk("Lütfen silmek istediğiniz kayıtları seçiniz",dilKimlik)')
+                return;
+            }
+            var options = {};
+options.url = "/YazilimAyari/Sil?id=" + selectedIDs;
+            options.type = "POST";
+            options.data = JSON.stringify(selectedIDs);
+            options.contentType = "application/json";
+            options.dataType = "json";
+            options.success = function (msg) {  
+                Swal.fire({
+                    position: "center-center", icon: "success",
+                     title:  '@Ikazlar.basariylaSilindi(dilKimlik)', showConfirmButton: !1, timer: 1750,
+                });
+                setTimeout(function () {
+                    window.location.reload(1);
+                }, 1750);  //
+            };
+            options.error = function () {
+                Swal.fire(
+                    'Hata',
+                    msg,
+                    'error'
+                ); 
+            };
+            $.ajax(options);         
+            return false;
+        }
+    function cek() {
+        var valdata = $("#formKayit").serialize();
+        console.table(valdata);
+        $.ajax({
+ url: "/YazilimAyari/Cek/", 
+            type: "Post",
+            data: valdata,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            dataType: "json",
+            success: function (response) {
+                if (!response.success) {
+                    Swal.fire(
+                        '@Ayar.sozcuk("Hata", dilKimlik)',
+                        response.message,
+                        'error'
+                    );
+                    return false;
+                }
+                else {
+                    window.location.href = response.message;
+                }
+            }
+        });
+    }
+    </script>
+
