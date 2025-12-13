@@ -71,8 +71,26 @@
 <td>@satir.stajyerAdi</td>
 <td>@satir.stajyerSoyadi</td>
 <td>@satir.sinifi</td>
-<td>@satir.telefon</td>
-<td>@satir.ePosta</td>
+                            <td>
+                                <a href="tel:@satir.telefon" style="color: black; text-decoration: none;">
+                                    @{
+                                        string tel = satir.telefon.ToString();
+                                        if (tel.Length == 10)
+                                        {
+                                            <text>0 (@tel.Substring(0, 3)) @tel.Substring(3, 3) @tel.Substring(6, 2) @tel.Substring(8, 2)</text>
+                                        }
+                                        else
+                                        {
+                                            @tel
+                                        }
+                                    }
+                                </a>
+                            </td>
+                            <td>
+                                <a href="mailto:@satir.ePosta" style="color: blue; text-decoration: underline;">
+                                    @satir.ePosta
+                                </a>
+                            </td>
                                 <td>
                                     <a class="btn btn-outline-secondary btn-sm edit" onclick="kartAc(@satir._birincilAnahtar()); return false;" style="color: #ffffff !important; background-color: #ffae00; border-color: #ffae00; " title="Edit">
                                         <i class="fas fa-pencil-alt"></i>
