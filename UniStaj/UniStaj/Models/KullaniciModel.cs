@@ -79,6 +79,14 @@ namespace UniStaj.Models
                     if (kart.sifre == null)
                         throw new Exception("Þifre bulunamadý");
                     kart.sifre = GenelIslemler.GuvenlikIslemi.sifreCoz(kart.sifre);
+
+                    KullaniciRoluAYRINTIArama _kosul = new KullaniciRoluAYRINTIArama();
+                    _kosul.i_kullaniciKimlik = Convert.ToInt16(kimlik);
+                    var liste = await _kosul.cek(vari);
+
+                    this.roller = liste.Select(p => p.i_rolKimlik).ToArray();
+
+
                 }
                 catch
                 {

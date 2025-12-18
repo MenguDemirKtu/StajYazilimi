@@ -19,6 +19,46 @@ namespace UniStaj.Models
         }
 
 
+        public static async Task<bool> stajyerinYukumlulukleriniOlustur(veri.Varlik vari, Stajyer ogrenci)
+        {
+
+            StajBirimiTurleriAYRINTIArama _kosul = new StajBirimiTurleriAYRINTIArama();
+            _kosul.i_stajBirimiKimlik = ogrenci.i_stajBirimiKimlik;
+
+            List<StajBirimiTurleriAYRINTI> olmasiGerekenler = await _kosul.cek(vari);
+
+
+            StajyerYukumlulukAYRINTIArama _mevcutKosul = new StajyerYukumlulukAYRINTIArama();
+            _mevcutKosul.i_stajyerKimlik = ogrenci.stajyerkimlik;
+
+            List<StajyerYukumlulukAYRINTI> olanlar = await _mevcutKosul.cek(vari);
+
+
+            for (int i = 0; i < olmasiGerekenler.Count; i++)
+            {
+                int yer = olanlar.FindIndex(p => p.i_stajTuruKimlik == olmasiGerekenler[i].i_stajTuruKimlik);
+
+                if (yer == -1)
+                {
+                    StajyerYukumluluk yeni = new StajyerYukumluluk();
+                    yeni.i_stajTuruKimlik = olmasiGerekenler[i].i_stajTuruKimlik;
+                    yeni.i_stajyerKimlik = ogrenci.stajyerkimlik;
+                    yeni.gunSayisi = olmasiGerekenler[i].gunu;
+                    yeni.yaptigiGunSayis = 0;
+                    yeni.kabulEdilenGunSayisi = 0;
+                    yeni.siniflar = olmasiGerekenler[i].siniflari;
+                    yeni.aciklama = "";
+                    await yeni.kaydetKos(vari, false);
+                }
+
+            }
+
+
+
+            return true;
+
+        }
+
         public async Task<AramaTalebi> ayrintiliAraKos(Sayfa sayfasi)
         {
             using (veri.Varlik vari = new veri.Varlik())
@@ -70,11 +110,13 @@ namespace UniStaj.Models
                 kartVerisi._sayfaAta(sayfasi);
                 await kartVerisi.kaydetKos(vari, true);
 
-                KullaniciAYRINTI? eslesenKullaniciAdi = vari.KullaniciAYRINTIs.FirstOrDefault(p => p.kullaniciAdi == kartVerisi.tcKimlikNo);
-                if (eslesenKullaniciAdi != null)
-                {
-                    throw new Exception("Bu kullanýcý adýný taþýyan baþka bir kullanýcý var.");
-                }
+
+                await stajyerinYukumlulukleriniOlustur(vari, kartVerisi);
+
+                KullaniciAYRINTI? eslesenKullaniciAdi = vari.KullaniciAYRINTIs.FirstOrDefault(p => p.kullaniciAdi == kartVerisi.tcKimlikNo
+                                 && p.i_kullaniciTuruKimlik == (int)enumref_KullaniciTuru.Stajyer
+                );
+
                 KullaniciAYRINTIArama _kullaniciKosulu = new KullaniciAYRINTIArama();
                 _kullaniciKosulu.kullaniciAdi = kartVerisi.tcKimlikNo;
                 _kullaniciKosulu.varmi = true;
@@ -91,6 +133,7 @@ namespace UniStaj.Models
                     yeniKullanici.gercekAdi = kartVerisi.stajyerAdi + " " + kartVerisi.stajyerSoyadi;
                     yeniKullanici.telefon = kartVerisi.telefon;
                     yeniKullanici.ePostaAdresi = kartVerisi.ePosta;
+                    yeniKullanici.y_stajyerKimlik = kartVerisi.stajyerkimlik;
                     yeniKullanici.kaydet(vari, false);
 
                     // KULLANICI YETKÝSÝ VER.
@@ -114,6 +157,32 @@ namespace UniStaj.Models
                 else
                 {
                     // ESKÝ KULLANICI VAR ANCAK ROLLE BAÐLANTISI YOKSA BÝR ÞEYLER YAP.
+
+                    RolAYRINTIArama _kosul = new RolAYRINTIArama();
+                    _kosul.e_varsayilanmi = true;
+                    _kosul.e_gecerlimi = true;
+                    _kosul.i_varsayilanOlduguKullaniciTuruKimlik = (int)enumref_KullaniciTuru.Stajyer;
+
+
+                    RolAYRINTI? rolu = await _kosul.bul(vari);
+                    if (rolu != null)
+                    {
+                        KullaniciRoluArama _bagKosulu = new KullaniciRoluArama();
+                        _bagKosulu.i_kullaniciKimlik = eskiKullanici.kullaniciKimlik;
+                        _bagKosulu.i_rolKimlik = rolu.rolKimlik;
+                        _bagKosulu.varmi = true;
+                        KullaniciRolu? baglanti = await _bagKosulu.bul(vari);
+
+                        if (baglanti == null)
+                        {
+                            baglanti = new KullaniciRolu();
+                            baglanti.i_kullaniciKimlik = eskiKullanici.kullaniciKimlik;
+                            baglanti.i_rolKimlik = rolu.rolKimlik;
+                            await baglanti.kaydetKos(vari, false);
+                        }
+
+                    }
+
                 }
 
 

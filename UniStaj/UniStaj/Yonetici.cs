@@ -18,6 +18,9 @@ namespace UniStaj
         public string epostaAdresi { get; set; }
         public List<veri.KullaniciBildirimi> _bildirimler { get; set; }
 
+
+        public int i_stajyerKimlik { get; set; }
+
         public enumref_KullaniciTuru _KullaniciTuru
         {
             get
@@ -72,6 +75,7 @@ namespace UniStaj
             e_sozlesmeOnaylandimi = false;
             e_kodOnaylandimi = false;
             ekKullaniciSayisi = 0;
+            i_stajyerKimlik = 0;
         }
 
 

@@ -238,6 +238,7 @@ namespace UniStaj
                     yonetici.ogrenciNo = mevcut.ogrenciNo ?? "";
                     yonetici.yoneticiTuru = "Kullanıcı";
                     yonetici.fotosu = mevcut.fotosu ?? "";
+                    yonetici.i_stajyerKimlik = mevcut.y_stajyerKimlik ?? 0;
                     if (mevcut.e_sifreDegisecekmi == null)
                         mevcut.e_sifreDegisecekmi = true;
                     yonetici.e_sifreDegisecekmi = mevcut.e_sifreDegisecekmi.Value;
@@ -1322,7 +1323,7 @@ namespace UniStaj
             ViewBag.gerekce = gerekce;
             return RedirectToAction("Index", "YarismaBasvuruHakkiYok");
         }
-        public ActionResult HataSayfasi()
+        public ActionResult HataSayfasi(Exception ex)
         {
             return RedirectToAction("Index", "HataSayfasi");
         }

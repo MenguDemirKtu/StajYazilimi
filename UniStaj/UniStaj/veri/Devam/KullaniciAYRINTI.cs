@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace UniStaj.veri
 {
@@ -34,7 +34,7 @@ namespace UniStaj.veri
         {
             get
             {
-                return (enumref_KullaniciTuru)this.i_kullaniciTuruKimlik;
+                return (enumref_KullaniciTuru)(this.i_kullaniciTuruKimlik ?? 1);
             }
             set
             {

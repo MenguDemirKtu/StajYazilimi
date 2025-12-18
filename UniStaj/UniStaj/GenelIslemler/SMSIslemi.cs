@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore; // 
+﻿using System.Text;
+using Microsoft.EntityFrameworkCore; // 
 using Newtonsoft.Json;
-using System.Text;
 using UniStaj.veri;
 
 

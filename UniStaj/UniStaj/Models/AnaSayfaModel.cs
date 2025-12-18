@@ -64,7 +64,6 @@ namespace UniStaj.Models
             baglantilar = new List<AnaSayfaBaglanti>();
         }
 
-
         public class AnaSayfaBaglanti
         {
             public int sirasi { get; set; }
@@ -121,6 +120,7 @@ namespace UniStaj.Models
             varsayilan();
             baglantilar = new List<AnaSayfaBaglanti>();
         }
+
         public async Task veriCekKosut(Yonetici kime)
         {
             using (veri.Varlik vari = new Varlik())
@@ -168,7 +168,12 @@ namespace UniStaj.Models
                 yazilimAdi = Genel.yazilimAyari.yazilimAdi;
                 var turu = kime._turu();
 
+                if (turu == enumref_KullaniciTuru.Stajyer)
+                {
+                    Stajyer? stajyer = await vari.Stajyers.FirstOrDefaultAsync(x => x.stajyerkimlik == kime.i_stajyerKimlik);
+                    await StajyerModel.stajyerinYukumlulukleriniOlustur(vari, stajyer);
 
+                }
 
                 //if (turu == enumref_KullaniciTuru.Yazilimci)
                 //{

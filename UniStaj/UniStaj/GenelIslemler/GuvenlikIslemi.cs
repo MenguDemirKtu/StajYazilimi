@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore; // 
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore; // 
 using UniStaj.veri;
 
 namespace UniStaj.GenelIslemler

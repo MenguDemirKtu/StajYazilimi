@@ -158,7 +158,11 @@ namespace UniStaj.veri
         public virtual DbSet<StajBirimYetkilisiBirimi> StajBirimYetkilisiBirimis { get; set; }
         public virtual DbSet<PersonelAYRINTI> PersonelAYRINTIs { get; set; }
         public virtual DbSet<Personel> Personels { get; set; }
+        public virtual DbSet<StajyerYukumlulukAYRINTI> StajyerYukumlulukAYRINTIs { get; set; }
+        public virtual DbSet<StajyerYukumluluk> StajyerYukumluluks { get; set; }
+        public virtual DbSet<StajBasvurusu> StajBasvurusus { get; set; }
+        public virtual DbSet<StajBasvurusuAYRINTI> StajBasvurusuAYRINTIs { get; set; }
         public virtual DbSet<YuklenenDosyalarAYRINTI> YuklenenDosyalarAYRINTIs { get; set; }
         #endregion
-    }
-}
+    }
+}

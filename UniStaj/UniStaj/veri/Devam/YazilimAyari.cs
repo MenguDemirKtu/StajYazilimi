@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace UniStaj.veri
 {

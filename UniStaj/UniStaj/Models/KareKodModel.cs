@@ -1,6 +1,6 @@
-﻿using QRCoder;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using QRCoder;
 
 namespace UniStaj.Models
 {
