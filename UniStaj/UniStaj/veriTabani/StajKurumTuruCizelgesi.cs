@@ -1,6 +1,6 @@
+using System.Linq.Expressions;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using UniStaj.veri;
 
 namespace UniStaj.veriTabani

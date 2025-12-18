@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace UniStaj.veri
 {
@@ -20,6 +20,7 @@ namespace UniStaj.veri
         public void _icDenetim(int dilKimlik, veri.Varlik vari)
         {
             uyariVerInt32(i_stajkurumturukimlik, "stajKurumTuru", dilKimlik);
+
         }
 
 
@@ -63,6 +64,15 @@ namespace UniStaj.veri
         public override void _kontrolEt(int dilKimlik, veri.Varlik vari)
         {
             _icDenetim(dilKimlik, vari);
+            if (stajKurumAdi == null)
+            {
+                throw new Exception("Kurum adý boþ býrakýlamaz.");
+            }
+
+            if (vergiNo == null)
+            {
+                throw new Exception("Vergi numarasý boþ býrakýlamaz.");
+            }
         }
 
 
