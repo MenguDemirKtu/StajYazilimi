@@ -47,8 +47,6 @@ namespace UniStaj.Models
                 StajBirimiAYRINTIArama _kosul = new StajBirimiAYRINTIArama();
                 _kosul.kodu = kod;
                 StajBirimiAYRINTI? kart = await _kosul.bul(vari);
-
-
                 StajBirimiTurleriAYRINTIArama _kosul2 = new StajBirimiTurleriAYRINTIArama();
                 _kosul2.i_stajBirimiKimlik = kart.stajBirimikimlik;
                 stajBirimTurleri = await _kosul2.cek(vari);
@@ -93,8 +91,6 @@ namespace UniStaj.Models
             if (await sayfasi.yetkiVarmiKos(kartVerisi, yetkiTuru) == false)
                 throw new Exception(Ikazlar.islemiYapmayaYetkinizYok(sayfasi.dilKimlik));
         }
-
-
 
 
         public async Task<StajBirimi> kaydetKos(Sayfa sayfasi)

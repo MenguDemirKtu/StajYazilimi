@@ -8,6 +8,20 @@
     <form id="formKayit" name="formKayit" autocomplete="off">
         @{
         int dilKimlik = Model.gecerliDil();
+               <div class="card-body border-bottom" style="background-color: @Ayar.aramaKutusuArkaPlan;">
+            <div class="row g-3"><div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.ogrenciNo, new { @class = @Ayar.textBoxBicim(), maxlength = "20" ,   placeholder = @Ayar.sozcuk("Öğrenci No", dilKimlik) })</div>
+<div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.tcKimlikNo, new { @class = @Ayar.textBoxBicim(), maxlength = "11" ,   placeholder = @Ayar.sozcuk("TC Kimlik No", dilKimlik) })</div>
+<div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.i_stajBirimiKimlik, Bilesen.doldur(Model._ayStajBirimiAYRINTI) ,  @Ayar.sozcuk("Staj Birimi", dilKimlik), new { @class = "form-control select2" })</div>
+<div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.stajyerAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "100" ,   placeholder = @Ayar.sozcuk("Stajyer Adı", dilKimlik) })</div>
+<div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.stajyerSoyadi, new { @class = @Ayar.textBoxBicim(), maxlength = "100" ,   placeholder = @Ayar.sozcuk("Stajyer Soyadı", dilKimlik) })</div>
+<div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.sinifi, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Sınıfı", dilKimlik) })</div>
+<div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.telefon, new { @class = @Ayar.textBoxBicim(), maxlength = "12" ,   placeholder = @Ayar.sozcuk("Telefon", dilKimlik) })</div>
+<div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.ePosta, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = @Ayar.sozcuk("E Posta", dilKimlik) })</div>
+ <div class="col-xxl-2 col-lg-4">
+                    <button type="button" class="btn btn-soft-secondary w-100" style="background-color:#e5f4ff;" onclick="cek(); return false;"><i class="mdi mdi-filter-outline align-middle"></i>@Ayar.sozcuk("Ayrıntılı Ara", dilKimlik)  </button>
+ </div>     </div>
+        </div> <hr/>  <br/>
+
             bool eklemeIzniVarmi = (bool)ViewBag.eklemeIznivar;
             bool silmeIzniVarmi = (bool)ViewBag.silmeIznivar;
             <i style="float: left; width: 50%; color: white; ">

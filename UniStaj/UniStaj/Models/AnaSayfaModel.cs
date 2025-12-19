@@ -73,7 +73,7 @@ namespace UniStaj.Models
 
             simge4.baslik = "";
             simge4.fotosu = "fa fa-info-circle";
-        
+
             baglantilar = new List<AnaSayfaBaglanti>();
         }
 
@@ -163,7 +163,7 @@ namespace UniStaj.Models
                     Stajyer? stajyer = await vari.Stajyers.FirstOrDefaultAsync(x => x.stajyerkimlik == kime.i_stajyerKimlik);
                     await StajyerModel.stajyerinYukumlulukleriniOlustur(vari, stajyer);
 
-                    if ( stajyer!=null)
+                    if (stajyer != null)
                     {
                         baslik1 = "Bağlı Olduğu Birim";
                         var birim = await vari.StajBirimis.FirstOrDefaultAsync(b => b.stajBirimikimlik == stajyer.i_stajBirimiKimlik);
@@ -196,7 +196,7 @@ namespace UniStaj.Models
 
                 }
 
-                
+
             }
         }
     }

@@ -1,5 +1,5 @@
-using System.Data.Entity;
 using Newtonsoft.Json;
+using System.Data.Entity;
 using UniStaj.veri;
 using UniStaj.veriTabani;
 namespace UniStaj.Models
