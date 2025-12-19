@@ -12,6 +12,8 @@ namespace UniStaj.Models
         public StajBirimiAYRINTIArama aramaParametresi { get; set; }
 
         public List<StajTuruAYRINTI> _ayStajTuruAYRINTI { get; set; }
+        public String yetkiliTcleri { get; set; }
+
 
 
         public StajBirimiModel()
@@ -19,6 +21,7 @@ namespace UniStaj.Models
             this.kartVerisi = new StajBirimi();
             this.dokumVerisi = new List<StajBirimiAYRINTI>();
             this.aramaParametresi = new StajBirimiAYRINTIArama();
+            this.yetkiliTcleri = " ";
         }
 
         public async Task turleriKaydet()
@@ -136,6 +139,16 @@ namespace UniStaj.Models
                         }
                     }
                 }
+
+                StajBirimYetkilisiAYRINTIArama yetkiliKosul = new StajBirimYetkilisiAYRINTIArama();
+                var tcList = yetkiliTcleri.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+                for (int i = 0; i < tcList.Count; i++)
+                {
+                    string tc = tcList[i];
+                    yetkiliKosul.tcKimlikNo = tc;
+                    var yetkililer = await yetkiliKosul.cek(vari);
+                }
+
 
 
                 return kartVerisi;
