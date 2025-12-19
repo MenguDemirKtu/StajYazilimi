@@ -24,64 +24,64 @@ int   dilKimlik = Model.gecerliDil();
                     @Html.TextBoxFor(m => m.kartVerisi.vergiNo, new { @class = @Ayar.textBoxBicim(), maxlength = "50", onchange="firmaCek(); return false;" , placeholder = @Ayar.sozcuk("Vergi No", dilKimlik) })
                 </div>
             </div>
-<div class=@Ayar.yariGenislik>
+            <div class="@Ayar.yariGenislik">
                 <div class="@Ayar.formGrup">
-                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Kurum Adı", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.stajKurumAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "200" ,   placeholder = @Ayar.sozcuk("Kurum Adı", dilKimlik) }) 
+                    <label class="@Ayar.labelBicim">@Ayar.sozcuk("Kurum Adı", dilKimlik)</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.stajKurumAdi, new {@class = Ayar.textBoxBicim() + " kurumBilgi",maxlength = "200",disabled = "disabled",placeholder = Ayar.sozcuk("Kurum Adı", dilKimlik)})
                 </div>
             </div>
-<div class=@Ayar.yariGenislik>
+            <div class="@Ayar.yariGenislik">
                 <div class="@Ayar.formGrup">
-                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Kurum Türü", dilKimlik)  </label>
-                    @Html.DropDownListFor(m => m.kartVerisi.i_stajkurumturukimlik, Bilesen.doldur(Model._ayStajKurumTuruAYRINTI) ,  @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                    <label class="@Ayar.labelBicim">@Ayar.sozcuk("Kurum Türü", dilKimlik)</label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_stajkurumturukimlik,Bilesen.doldur(Model._ayStajKurumTuruAYRINTI),Ayar.sozcuk("Lütfen Seçiniz", dilKimlik),new {@class = "form-control select2 kurumBilgi",disabled = "disabled"})
                 </div>
             </div>
-<div class=@Ayar.yariGenislik>
+            <div class="@Ayar.yariGenislik">
                 <div class="@Ayar.formGrup">
-                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Hizmet Alanı", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.hizmetAlani, new { @class = @Ayar.textBoxBicim(), maxlength = "50" ,   placeholder = @Ayar.sozcuk("Hizmet Alanı", dilKimlik) }) 
+                    <label class="@Ayar.labelBicim">@Ayar.sozcuk("Hizmet Alanı", dilKimlik)</label>
+                    @Html.TextBoxFor(m => m.kartVerisi.hizmetAlani, new {@class = Ayar.textBoxBicim() + " kurumBilgi",maxlength = "50",disabled = "disabled",placeholder = Ayar.sozcuk("Hizmet Alanı", dilKimlik)})
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
                 <div class="@Ayar.formGrup">
                     <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("IBAN", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.ibanNo, new { @class = @Ayar.textBoxBicim(), maxlength = "30" ,   placeholder = @Ayar.sozcuk("IBAN", dilKimlik) }) 
+                    @Html.TextBoxFor(m => m.kartVerisi.ibanNo, new { @class = @Ayar.textBoxBicim() + " kurumBilgi", maxlength = "30",disabled = "disabled", placeholder = @Ayar.sozcuk("IBAN", dilKimlik) })
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
                 <div class="@Ayar.formGrup">
                     <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Çalışan Sayısı", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.calisanSayisi, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Çalışan Sayısı", dilKimlik) }) 
+                    @Html.TextBoxFor(m => m.kartVerisi.calisanSayisi, new { @class = @Ayar.textBoxBicim() + " kurumBilgi", disabled = "disabled", placeholder = @Ayar.sozcuk("Çalışan Sayısı", dilKimlik) })
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
                 <div class="@Ayar.formGrup">
                     <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Adresi", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.adresi, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = @Ayar.sozcuk("Adresi", dilKimlik) }) 
+                    @Html.TextBoxFor(m => m.kartVerisi.adresi, new { @class = @Ayar.textBoxBicim() + " kurumBilgi", maxlength = "150", disabled = "disabled", placeholder = @Ayar.sozcuk("Adresi", dilKimlik) })
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
                 <div class="@Ayar.formGrup">
                     <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Tel No", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.telNo, new { @class = @Ayar.textBoxBicim(), maxlength = "12" ,   placeholder = @Ayar.sozcuk("Tel No", dilKimlik) }) 
+                    @Html.TextBoxFor(m => m.kartVerisi.telNo, new { @class = @Ayar.textBoxBicim() + " kurumBilgi", maxlength = "12", disabled = "disabled", placeholder = @Ayar.sozcuk("Tel No", dilKimlik) })
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
                 <div class="@Ayar.formGrup">
                     <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("E-Posta", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.ePosta, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = @Ayar.sozcuk("E-Posta", dilKimlik) }) 
+                    @Html.TextBoxFor(m => m.kartVerisi.ePosta, new { @class = @Ayar.textBoxBicim() + " kurumBilgi", maxlength = "150", disabled = "disabled", placeholder = @Ayar.sozcuk("E-Posta", dilKimlik) })
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
                 <div class="@Ayar.formGrup">
                     <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Faks", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.faks, new { @class = @Ayar.textBoxBicim(), maxlength = "12" ,   placeholder = @Ayar.sozcuk("Faks", dilKimlik) }) 
+                    @Html.TextBoxFor(m => m.kartVerisi.faks, new { @class = @Ayar.textBoxBicim() + " kurumBilgi", maxlength = "12", disabled = "disabled", placeholder = @Ayar.sozcuk("Faks", dilKimlik) })
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
                 <div class="@Ayar.formGrup">
                     <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Web Sitesi", dilKimlik)  </label>
-                    @Html.TextBoxFor(m => m.kartVerisi.webAdresi, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = @Ayar.sozcuk("Web Sitesi", dilKimlik) }) 
+                    @Html.TextBoxFor(m => m.kartVerisi.webAdresi, new { @class = @Ayar.textBoxBicim() + " kurumBilgi", maxlength = "150", disabled = "disabled", placeholder = @Ayar.sozcuk("Web Sitesi", dilKimlik) })
                 </div>
             </div>
 <div class=@Ayar.yariGenislik>
@@ -155,36 +155,36 @@ int   dilKimlik = Model.gecerliDil();
         var vergiNo = $('#kartVerisi_vergiNo').val();
 
             if (!vergiNo) {
+                $('.kurumBilgi').prop('disabled',true).prop('readonly',false);
             return;
     }
 
 
                 $.getJSON('/StajBasvurusu/firmaBilgisiCek?vergiNo='+vergiNo, function (response) {
             if (!response.success) {
-            Swal.fire("Hata", response.message, "error");
+                 $('.kurumBilgi').prop('disabled',false).prop('readonly',false);
             return;
         }
 
         var data = response.bilgi;
 
 
-            $('#kartVerisi_stajKurumAdi').val(data.stajKurumAdi);
-                $('#kartVerisi_i_stajkurumturukimlik').val(data.i_stajkurumturukimlik).trigger('change');
-    ;
-            $('#kartVerisi_hizmetAlani').val(data.hizmetAlani);
-            $('#kartVerisi_ibanNo').val(data.ibanNo);
-            $('#kartVerisi_calisanSayisi').val(data.calisanSayisi);
-            $('#kartVerisi_adresi').val(data.adresi);
-            $('#kartVerisi_telNo').val(data.telNo);
-            $('#kartVerisi_ePosta').val(data.ePosta);
-            $('#kartVerisi_faks').val(data.faks);
-            $('#kartVerisi_webAdresi').val(data.webAdresi);
+                $('#kartVerisi_stajKurumAdi').val(data.stajKurumAdi).prop('readonly', true);;
+                $('#kartVerisi_i_stajkurumturukimlik').val(data.i_stajkurumturukimlik).trigger('change').prop('disabled', true);
+                $('#kartVerisi_hizmetAlani').val(data.hizmetAlani).prop('readonly', true);;
+                $('#kartVerisi_ibanNo').val(data.ibanNo).prop('readonly', true);;
+                $('#kartVerisi_calisanSayisi').val(data.calisanSayisi).prop('readonly', true);;
+                $('#kartVerisi_adresi').val(data.adresi).prop('readonly', true);;
+                $('#kartVerisi_telNo').val(data.telNo).prop('readonly', true);;
+                $('#kartVerisi_ePosta').val(data.ePosta).prop('readonly', true);;
+                $('#kartVerisi_faks').val(data.faks).prop('readonly', true);;
+                $('#kartVerisi_webAdresi').val(data.webAdresi).prop('readonly', true);;
         });
     }
    
 
     function ekle() {
-
+            $('.kurumBilgi').prop('disabled', false);
 var valdata = $("#formKayit").serialize();
 console.table(valdata);
 $.ajax({
