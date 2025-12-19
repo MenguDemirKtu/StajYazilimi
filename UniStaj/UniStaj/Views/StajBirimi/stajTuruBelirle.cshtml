@@ -5,4 +5,85 @@
 @using UniStaj
 @using UniStaj.veri
 @model UniStaj.Models.StajBirimiModel
+<form id="formKayit" name="formKayit" autocomplete="off">
+@{
+int   dilKimlik = Model.gecerliDil();
+<table class="@Ayar.tabloBicim1" >
+    <thead>
+        <tr>
+                    <th> Staj Türü   </th>
+                    <th> Gün Sayısı   </th>
+                    <th>   Sınıfları   </th>
+                    <th>   Ek Açıklama   </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            for(int i=0; i<Model.stajBirimTurleri.Count; i++)
+            {
+                var siradaki = Model.stajBirimTurleri[i];
+                <tr>
+                            <td>@siradaki.stajTuruAdi </td>
+                            <td>
+                                @Html.HiddenFor(m => m.stajBirimTurleri[i].stajBirimiTurlerikimlik)
+                                @Html.TextBoxFor(m => m.stajBirimTurleri[i].gunu, new { @class = @Ayar.textBoxBicim(), maxlength = "500", placeholder = @Ayar.sozcuk("Gün Sayısı", 1) })
+
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.stajBirimTurleri[i].siniflari, new { @class = @Ayar.textBoxBicim(), maxlength = "500", placeholder = @Ayar.sozcuk("Sınıfları", 1) })
+
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.stajBirimTurleri[i].ekAciklama, new { @class = @Ayar.textBoxBicim(), maxlength = "500", placeholder = @Ayar.sozcuk("Ek Açıklama", 1) })
+
+                            </td>
+                </tr>
+            }
+            }
+        </tbody>
+    </table>
+
+}
+<button class="@Ayar.btnEkle" onclick="kaydet(); return false;" > Kaydet </button>
+</form>
+
+
+<script>
+    function kaydet() {
+
+    var valdata = $("#formKayit").serialize();
+    console.table(valdata);
+    $.ajax({
+    url: "/StajBirimi/turleriKaydet/",
+    type: "Post",
+    data: valdata,
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    dataType: "json",
+    success: function (response) {
+    if (!response.success) {
+    Swal.fire(
+    '@Ayar.sozcuk("Hata", dilKimlik)',
+    response.message,
+    'error'        );
+    return false;
+    }
+    else {
+    Swal.fire(	'@Ayar.sozcuk("Başarılı", dilKimlik)',   response.message,
+    'success'                    ).then(function () {
+    if(response.yonlensinmi == true)
+    {
+    window.location.href= response.yonlenmeAdresi;
+    }
+    var deger = String(document.getElementById("yenimi").value);
+    if (deger == "True") {
+    window.location.reload();
+    }
+    })
+    }
+    }
+    });
+    }
+
+</script>
 

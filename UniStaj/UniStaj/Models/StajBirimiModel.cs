@@ -21,6 +21,24 @@ namespace UniStaj.Models
             this.aramaParametresi = new StajBirimiAYRINTIArama();
         }
 
+        public async Task turleriKaydet()
+        {
+            using (veri.Varlik vari = new Varlik())
+            {
+                for (int i = 0; i < stajBirimTurleri.Count; i++)
+                {
+                    StajBirimiTurleri? tekli = await StajBirimiTurleri.olusturKos(vari, stajBirimTurleri[i].stajBirimiTurlerikimlik);
+                    if (tekli != null)
+                    {
+                        tekli.gunu = stajBirimTurleri[i].gunu;
+                        tekli.ekAciklama = stajBirimTurleri[i].ekAciklama;
+                        tekli.siniflari = stajBirimTurleri[i].siniflari;
+                        await tekli.kaydetKos(vari, false);
+                    }
+                }
+            }
+        }
+
         public List<StajBirimiTurleriAYRINTI> stajBirimTurleri { get; set; }
         public async Task stajTurleriCek(Yonetici kim, string kod)
         {
