@@ -62,16 +62,16 @@ namespace UniStaj.Models
             deger7 = null;
             deger8 = null;
 
-            simge1.baslik = "Birim Bilgisi";
+            simge1.baslik = "";
             simge1.fotosu = "fa fa-building";
 
-            simge2.baslik = "Zorunlu Stajlar";
+            simge2.baslik = "";
             simge2.fotosu = "fa fa-briefcase";
 
-            simge3.baslik = "Kalan Gün";
+            simge3.baslik = "";
             simge3.fotosu = "fa fa-clock";
 
-            simge4.baslik = "Başvuru Durumu";
+            simge4.baslik = "";
             simge4.fotosu = "fa fa-info-circle";
         
             baglantilar = new List<AnaSayfaBaglanti>();
