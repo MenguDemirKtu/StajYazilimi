@@ -28,14 +28,14 @@ namespace UniStaj.Models
         public string? deger7 { get; set; }
         public string? deger8 { get; set; }
 
-        public SimgeAYRINTI? simge1 { get; set; }
-        public SimgeAYRINTI? simge2 { get; set; }
-        public SimgeAYRINTI? simge3 { get; set; }
-        public SimgeAYRINTI? simge4 { get; set; }
-        public SimgeAYRINTI? simge5 { get; set; }
-        public SimgeAYRINTI? simge6 { get; set; }
-        public SimgeAYRINTI? simge7 { get; set; }
-        public SimgeAYRINTI? simge8 { get; set; }
+        public SimgeAYRINTI simge1 { get; set; } = new SimgeAYRINTI();
+        public SimgeAYRINTI simge2 { get; set; } = new SimgeAYRINTI();
+        public SimgeAYRINTI simge3 { get; set; } = new SimgeAYRINTI();
+        public SimgeAYRINTI simge4 { get; set; } = new SimgeAYRINTI();
+        public SimgeAYRINTI simge5 { get; set; } = new SimgeAYRINTI();
+        public SimgeAYRINTI simge6 { get; set; } = new SimgeAYRINTI();
+        public SimgeAYRINTI simge7 { get; set; } = new SimgeAYRINTI();
+        public SimgeAYRINTI simge8 { get; set; } = new SimgeAYRINTI();
 
         public int lisanssizSporcuSayisi { get; set; }
         public int topluYarismaBasvuruSayisi { get; set; }
@@ -44,23 +44,36 @@ namespace UniStaj.Models
         {
             duyurular = new List<DuyuruRolBagiAYRINTI>();
             baglantilar = new List<AnaSayfaBaglanti>();
-            baslik1 = "ASDASD";
-            baslik2 = "FDSGD";
-            baslik3 = "GDFGD";
-            baslik4 = "DFGDF";
-            baslik5 = "DFGDFGDFG";
-            baslik6 = "DFG";
-            baslik7 = "DFG";
-            baslik8 = "DFG";
+            baslik1 = null;
+            baslik2 = null;
+            baslik3 = null;
+            baslik4 = null;
+            baslik5 = null;
+            baslik6 = null;
+            baslik7 = null;
+            baslik8 = null;
 
-            deger1 = "1";
-            deger2 = "2";
-            deger3 = "3";
-            deger4 = "4";
-            deger5 = "5";
-            deger6 = "6";
-            deger7 = "7";
-            deger8 = "8";
+            deger1 = null;
+            deger2 = null;
+            deger3 = null;
+            deger4 = null;
+            deger5 = null;
+            deger6 = null;
+            deger7 = null;
+            deger8 = null;
+
+            simge1.baslik = "Birim Bilgisi";
+            simge1.fotosu = "fa fa-building";
+
+            simge2.baslik = "Zorunlu Stajlar";
+            simge2.fotosu = "fa fa-briefcase";
+
+            simge3.baslik = "Kalan Gün";
+            simge3.fotosu = "fa fa-clock";
+
+            simge4.baslik = "Başvuru Durumu";
+            simge4.fotosu = "fa fa-info-circle";
+        
             baglantilar = new List<AnaSayfaBaglanti>();
         }
 
@@ -81,29 +94,6 @@ namespace UniStaj.Models
         }
 
         public List<AnaSayfaBaglanti> baglantilar { get; set; }
-
-        //private async Task yazilimciBilgisiCek(veri.varlik vari, Yonetici kimi)
-        //{
-        //    baslik1 = "Değer 1";
-        //    baslik2 = "Değer 2";
-        //    baslik3 = "Değer 3";
-        //    baslik4 = "Değer 4";
-        //    baslik5 = "Değer 5";
-        //    baslik6 = "Değer 6";
-        //    baslik7 = "Değer 7";
-        //    baslik8 = "Değer 8";
-
-        //    deger1 = "";
-        //    deger2 = "";
-        //    deger3 = "";
-        //    deger4 = "";
-        //    deger5 = "";
-        //    deger6 = "";
-        //    deger7 = "";
-        //    deger8 = "";
-
-
-        //}
         public List<DuyuruRolBagiAYRINTI>? duyurular { get; set; }
 
         private SimgeAYRINTI simgeBul(List<SimgeAYRINTI> liste, string tanim)
@@ -126,7 +116,7 @@ namespace UniStaj.Models
             using (veri.Varlik vari = new Varlik())
             {
                 varsayilan();
-
+                /*               
                 List<SimgeAYRINTI> resimler = await vari.SimgeAYRINTIs.Where(p => p.varmi == true).ToListAsync();
                 simge1 = simgeBul(resimler, "Araç");
                 simge2 = simgeBul(resimler, "Görev");
@@ -136,7 +126,7 @@ namespace UniStaj.Models
                 simge6 = simgeBul(resimler, "Araç");
                 simge7 = simgeBul(resimler, "Araç");
                 simge8 = simgeBul(resimler, "Araç");
-
+                */
 
                 duyurular = await vari.DuyuruRolBagiAYRINTIs.ToListAsync();
                 try
@@ -173,20 +163,40 @@ namespace UniStaj.Models
                     Stajyer? stajyer = await vari.Stajyers.FirstOrDefaultAsync(x => x.stajyerkimlik == kime.i_stajyerKimlik);
                     await StajyerModel.stajyerinYukumlulukleriniOlustur(vari, stajyer);
 
+                    if ( stajyer!=null)
+                    {
+                        baslik1 = "Bağlı Olduğu Birim";
+                        var birim = await vari.StajBirimis.FirstOrDefaultAsync(b => b.stajBirimikimlik == stajyer.i_stajBirimiKimlik);
+
+                        if (birim != null)
+                            deger1 = birim.stajBirimAdi;
+                        else
+                            deger1 = "Birim Atanmamış";
+                        var yukumlulukler = await vari.StajyerYukumluluks.Where(y => y.i_stajyerKimlik == stajyer.stajyerkimlik).ToListAsync();
+                        baslik2 = "Zorunlu Staj Sayısı";
+                        deger2 = yukumlulukler.Count + " Adet";
+
+                        baslik3 = "Kalan Gün Sayısı";
+                        int toplamGereken = yukumlulukler.Sum(y => y.gunSayisi ?? 0);
+                        int toplamKabul = yukumlulukler.Sum(y => y.kabulEdilenGunSayisi ?? 0);
+                        int kalan = toplamGereken - toplamKabul;
+                        deger3 = (kalan > 0 ? kalan : 0) + " Gün";
+
+                        baslik4 = "Son Başvuru Durumu";
+
+                        var sonBasvuru = await vari.StajBasvurusus.Where(b => b.i_stajyerKimlik == stajyer.stajyerkimlik).OrderByDescending(b => b.baslangic).FirstOrDefaultAsync();
+
+                        if (sonBasvuru != null)
+                        {
+
+                        }
+                        else
+                            deger4 = "Başvuru Yok";
+                    }
+
                 }
 
-                //if (turu == enumref_KullaniciTuru.Yazilimci)
-                //{
-                //    await yazilimciBilgisiCek(vari, kime);
-                //}
-
-                //bool iskurYetkilisimi = await kime.rolIslemiVarmi(vari, enumref_RolIslemi.İŞKUR_ÜNİVERSİTE_YETKİLİSİ);
-                //if (iskurYetkilisimi)
-                //    await iskurYetkiliCekKosut(vari, kime);
-
-                //bool iskurGenelYetkilisimi = await kime.rolIslemiVarmi(vari, enumref_RolIslemi.ISKUR_BOLUM_YETKILISI);
-                //if (iskurGenelYetkilisimi)
-                //    await iskurBolumCekKosut(vari, kime);
+                
             }
         }
     }
