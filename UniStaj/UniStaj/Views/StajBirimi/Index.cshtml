@@ -55,7 +55,9 @@
                     </tr>
                 </thead>
                 <tbody>
-  @{    List<StajBirimiAYRINTI> veri = Model.dokumVerisi;
+                @{  
+      
+                        List<StajBirimiAYRINTI> veri = Model.dokumVerisi;
                         foreach (var satir in veri)
                         {
                             <tr row_id="@satir._birincilAnahtar().ToString()">
@@ -63,12 +65,12 @@
                                     <input type="checkbox" class="checkBox"
                                            value="@satir._birincilAnahtar()" />
                                 </td>
-<td>@Html.Raw(satir.stajBirimAdi)</td>
-<td>@satir.telefon</td>
-<td>@satir.ePosta</td>
-<td>@satir.birimSorumluAdi</td>
-<td>@satir.e_altBirimMi</td>
-<td>@satir.i_ustStajBirimiKimlik</td>
+                                <td>@Html.Raw(satir.stajBirimAdi)</td>
+                                <td>@satir.telefon</td>
+                                <td>@satir.ePosta</td>
+                                <td>@satir.birimSorumluAdi</td>
+                                <td>@satir.e_altBirimMi</td>
+                                <td>@satir.i_ustStajBirimiKimlik</td>
                                 <td>
                                     <a class="btn btn-outline-secondary btn-sm edit" onclick="kartAc(@satir._birincilAnahtar()); return false;" style="color: #ffffff !important; background-color: #ffae00; border-color: #ffae00; " title="Edit">
                                         <i class="fas fa-pencil-alt"></i>

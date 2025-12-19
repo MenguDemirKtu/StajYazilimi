@@ -11,6 +11,8 @@ namespace UniStaj.Models
         public List<StajBirimiAYRINTI> dokumVerisi { get; set; }
         public StajBirimiAYRINTIArama aramaParametresi { get; set; }
 
+        public List<StajTuruAYRINTI> _ayStajTuruAYRINTI { get; set; }
+
 
         public StajBirimiModel()
         {
@@ -19,6 +21,21 @@ namespace UniStaj.Models
             this.aramaParametresi = new StajBirimiAYRINTIArama();
         }
 
+        public List<StajBirimiTurleriAYRINTI> stajBirimTurleri { get; set; }
+        public async Task stajTurleriCek(Yonetici kim, string kod)
+        {
+            using (veri.Varlik vari = new Varlik())
+            {
+                StajBirimiAYRINTIArama _kosul = new StajBirimiAYRINTIArama();
+                _kosul.kodu = kod;
+                StajBirimiAYRINTI? kart = await _kosul.bul(vari);
+
+
+                StajBirimiTurleriAYRINTIArama _kosul2 = new StajBirimiTurleriAYRINTIArama();
+                _kosul2.i_stajBirimiKimlik = kart.stajBirimikimlik;
+                stajBirimTurleri = await _kosul2.cek(vari);
+            }
+        }
 
         public async Task<AramaTalebi> ayrintiliAraKos(Sayfa sayfasi)
         {
@@ -70,10 +87,49 @@ namespace UniStaj.Models
                 kartVerisi._kontrolEt(sayfasi.dilKimlik, vari);
                 kartVerisi._sayfaAta(sayfasi);
                 await kartVerisi.kaydetKos(vari, true);
+
+                StajBirimiTurleriAYRINTIArama _kosul = new StajBirimiTurleriAYRINTIArama();
+                _kosul.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                List<StajBirimiTurleriAYRINTI> kayitlilar = await _kosul.cek(vari);
+
+
+                List<int> liste = this.turleri.ToList();
+
+                for (int i = 0; i < liste.Count; i++)
+                {
+                    var karsilik = kayitlilar.FirstOrDefault(p => p.i_stajTuruKimlik == liste[i]);
+                    if (karsilik == null)
+                    {
+                        StajBirimiTurleri yeni = new StajBirimiTurleri();
+                        yeni.e_gecerlimi = true;
+                        yeni.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                        yeni.i_stajTuruKimlik = liste[i];
+                        await yeni.kaydetKos(vari, false);
+                    }
+                }
+
+
+                for (int i = 0; i < kayitlilar.Count; i++)
+                {
+                    int yer = liste.IndexOf(kayitlilar[i].i_stajTuruKimlik);
+
+                    if (yer == -1)
+                    {
+                        StajBirimiTurleri? silinecek = await StajBirimiTurleri.olusturKos(vari, kayitlilar[i].stajBirimiTurlerikimlik);
+                        if (silinecek != null)
+                        {
+                            await silinecek.silKos(vari, false);
+                        }
+                    }
+                }
+
+
                 return kartVerisi;
             }
         }
 
+
+        public int[] turleri { get; set; }
 
         public async Task veriCekKos(Yonetici kime, long kimlik)
         {
@@ -86,13 +142,20 @@ namespace UniStaj.Models
                     kartVerisi = kart;
                 dokumVerisi = new List<StajBirimiAYRINTI>();
                 await baglilariCek(vari, kime);
+
+                StajBirimiTurleriArama _kosul = new StajBirimiTurleriArama();
+                _kosul.i_stajBirimiKimlik = Convert.ToInt32(kimlik);
+                List<StajBirimiTurleri> liste = await _kosul.cek(vari);
+                turleri = liste.Select(p => p.i_stajTuruKimlik).ToArray();
             }
         }
 
         public List<StajBirimiAYRINTI> _ayStajBirimiAYRINTI { get; set; }
+
         public async Task baglilariCek(veri.Varlik vari, Yonetici kim)
         {
             _ayStajBirimiAYRINTI = await vari.StajBirimiAYRINTIs.ToListAsync();
+            _ayStajTuruAYRINTI = await StajTuruAYRINTI.ara(vari);
         }
 
         public async Task veriCekKos(Yonetici kime)

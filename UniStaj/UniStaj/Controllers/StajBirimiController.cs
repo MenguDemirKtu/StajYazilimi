@@ -97,11 +97,37 @@ namespace UniStaj.Controllers
                     return OturumAcilmadi();
                 await gelen.yetkiKontrolu(this);
                 await gelen.kaydetKos(this);
-                return basariBildirimi(gelen.kartVerisi, dilKimlik);
+                return basariBildirimi(gelen.kartVerisi, dilKimlik, "/StajBirimi/StajTuruBelirle?kod=" + gelen.kartVerisi.kodu);
             }
             catch (Exception istisna)
             {
                 return hataBildirimi(istisna);
+            }
+        }
+
+        public async Task<ActionResult> stajTuruBelirle(string kod)
+        {
+            try
+            {
+                string tanitim = "...";
+                tanitim = await Genel.dokumKisaAciklamaKos(this, "StajBirimi");
+                gorunumAyari("", "", "Ana Sayfa", "/", "/StajBirimi/", tanitim);
+                if (!oturumAcildimi())
+                    return OturumAcilmadi();
+                if (await yetkiVarmiKos())
+                {
+                    Models.StajBirimiModel modeli = new Models.StajBirimiModel();
+                    await modeli.stajTurleriCek(mevcutKullanici(), kod);
+                    return View(modeli);
+                }
+                else
+                {
+                    return YetkiYok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return await HataSayfasiKosut(ex);
             }
         }
     }

@@ -37,5 +37,8 @@ namespace UniStaj.veri
         [Display(Name = ".")]
         public bool? varmi { get; set; }
 
+        [Display(Name = "Kodu")]
+        [Column(TypeName = "nvarchar(40)")]
+        public string? kodu { get; set; }
     }
 }

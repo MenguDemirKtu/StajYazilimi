@@ -1,6 +1,6 @@
-using System.Linq.Expressions;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using UniStaj.veri;
 
 namespace UniStaj.veriTabani
@@ -17,6 +17,7 @@ namespace UniStaj.veriTabani
         public string? altBirimMi { get; set; }
         public Int32? i_ustStajBirimiKimlik { get; set; }
         public bool? varmi { get; set; }
+        public string? kodu { get; set; }
         public StajBirimiAYRINTIArama()
         {
             this.varmi = true;
@@ -43,6 +44,8 @@ namespace UniStaj.veriTabani
                 predicate = predicate.And(x => x.i_ustStajBirimiKimlik == i_ustStajBirimiKimlik);
             if (varmi != null)
                 predicate = predicate.And(x => x.varmi == varmi);
+            if (kodu != null)
+                predicate = predicate.And(x => x.kodu != null && x.kodu.Contains(kodu));
             return predicate;
 
         }

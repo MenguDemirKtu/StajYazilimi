@@ -1,5 +1,5 @@
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace UniStaj.veri
 {
@@ -14,7 +14,8 @@ namespace UniStaj.veri
 
         public void bicimlendir(veri.Varlik vari)
         {
-
+            if (string.IsNullOrEmpty(this.kodu))
+                kodu = Guid.NewGuid().ToString();
         }
 
         public void _icDenetim(int dilKimlik, veri.Varlik vari)
