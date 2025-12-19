@@ -105,6 +105,26 @@ namespace UniStaj.Controllers
             }
         }
 
+
+        [HttpPost]
+        public async Task<ActionResult> turleriKaydet(Models.StajBirimiModel gelen)
+        {
+            try
+            {
+
+                if (!oturumAcildimi())
+                    return OturumAcilmadi();
+
+                await gelen.turleriKaydet();
+
+                return basariBildirimi("Başarıyla kaydedildi");
+            }
+            catch (Exception ex)
+            {
+                return hataBildirimi(ex);
+            }
+        }
+
         public async Task<ActionResult> stajTuruBelirle(string kod)
         {
             try

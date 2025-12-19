@@ -195,6 +195,13 @@ namespace UniStaj
         Zorunlu = 1
 
     }
+ public enum enumref_StajBasvuruDurumu
+ {
+Basvuru_Onaylandi = 2 , 
+Onay_Bekleniyor = 1 , 
+Reddedildi = 3 
+ 
+ }
     public enum enumref_BelgeDurumu
     {
         Onaylandi = 3,
@@ -204,6 +211,7 @@ namespace UniStaj
 
     }
 }
+
 
 
 
