@@ -120,7 +120,7 @@ namespace UniStaj.Controllers
                 if (await yetkiVarmiKos())
                 {
                     Models.StajBirimAsamasiModel modeli = new Models.StajBirimAsamasiModel();
-                    await modeli.kosulaGoreCek(mevcutKullanici(), id);
+                    await modeli.birimKodunaGoreCek(mevcutKullanici(), id);
                     return View(modeli);
                 }
                 else

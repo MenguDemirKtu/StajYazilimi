@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Data.Entity;
 using UniStaj.veri;
 using UniStaj.veriTabani;
 namespace UniStaj.Models
@@ -106,6 +107,21 @@ namespace UniStaj.Models
                 dokumVerisi = await kosul.cek(vari);
                 await baglilariCek(vari, kime);
             }
+        }
+        public async Task birimKodunaGoreCek(Yonetici kime, string birimKodu)
+        {
+            using (veri.Varlik vari = new Varlik())
+            {
+                StajBirimiAYRINTI? birimi = await vari.StajBirimiAYRINTIs.FirstOrDefaultAsync(p => p.kodu == birimKodu) ??
+                    throw new Exception("Bu koda sahip birim bulunamadý");
+
+                StajBirimAsamasiAYRINTIArama _kosul = new StajBirimAsamasiAYRINTIArama();
+                _kosul.i_stajBirimiKimlik = birimi.stajBirimikimlik;
+
+                this.dokumVerisi = await _kosul.cek(vari);
+
+            }
+
         }
         public async Task kosulaGoreCek(Yonetici kime, string id)
         {
