@@ -1,0 +1,137 @@
+﻿@{
+ViewBag.Title = "Kart";
+Layout = "~/Views/_ana.cshtml";
+}
+@using UniStaj
+@using UniStaj.veri
+@model UniStaj.Models.PersonelModel
+<script src="~/assets/js/jquery.dataTables.min.js"></script>
+<form id="formKayit" name="formKayit" autocomplete="off">
+@{
+int   dilKimlik = Model.gecerliDil();
+}
+<div class="@Ayar.tamGenislik">
+<div class="row">
+@Html.HiddenFor(model => model.fotoKonumu)
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Sicil No", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.sicilNo, new { @class = @Ayar.textBoxBicim(), maxlength = "11" ,   placeholder = @Ayar.sozcuk("Sicil No", dilKimlik) }) 
+                </div>
+            </div>
+       @Html.HiddenFor(model => model.kartVerisi.personelKimlik)
+       @Html.HiddenFor(model => model.kartVerisi.personelKimlik)
+       @Html.HiddenFor(model => model.kartVerisi.varmi)
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("TC Kimlik No", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.tcKimlikNo, new { @class = @Ayar.textBoxBicim(), maxlength = "11" ,   placeholder = @Ayar.sozcuk("TC Kimlik No", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Adı", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.adi, new { @class = @Ayar.textBoxBicim(), maxlength = "100" ,   placeholder = @Ayar.sozcuk("Adı", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Soyadı", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.soyAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "100" ,   placeholder = @Ayar.sozcuk("Soyadı", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Telefon", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.telefon, new { @class = @Ayar.textBoxBicim(), maxlength = "12" ,   placeholder = @Ayar.sozcuk("Telefon", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("E-Posta", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.ePosta, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = @Ayar.sozcuk("E-Posta", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Kişi", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.y_kisiKimlik, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Kişi", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Cinsiyet", dilKimlik)  </label>
+                    @Html.DropDownListFor(m => m.kartVerisi.i_cinsiyetKimlik, Bilesen.doldur(Model._ayref_Cinsiyet) ,  @Ayar.sozcuk("Lütfen Seçiniz", dilKimlik), new { @class = "form-control select2" })
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Pasaport No", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.pasaportNo, new { @class = @Ayar.textBoxBicim(), maxlength = "30" ,   placeholder = @Ayar.sozcuk("Pasaport No", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Doğum Tarihi", dilKimlik)  </label>
+				 @Html.TextBoxFor(m => m.kartVerisi.dogumTarihi, "{0:yyyy-MM-dd}", new { type = "date", @class = "form-control" })
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Ana Adı", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.anaAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "100" ,   placeholder = @Ayar.sozcuk("Ana Adı", dilKimlik) }) 
+                </div>
+            </div>
+<div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label  class="@Ayar.labelBicim"> @Ayar.sozcuk("Baba Adı", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.kartVerisi.babaAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "100" ,   placeholder = @Ayar.sozcuk("Baba Adı", dilKimlik) }) 
+                </div>
+            </div>
+@Html.HiddenFor(model => model.yenimi)
+</div>
+<hr />
+<button type="button" onclick="ekle(); return false;" id="btnKaydet" class="btn btn-success" data-bs-toggle="modal">
+@Ayar.sozcuk("Kaydet", dilKimlik)
+</button>
+</div>
+</form>
+
+<script>
+function ekle() {
+
+var valdata = $("#formKayit").serialize();
+console.table(valdata);
+$.ajax({
+url: "/Personel/Kaydet/",
+type: "Post",
+data: valdata,
+contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+dataType: "json",
+success: function (response) {
+if (!response.success) {
+Swal.fire(
+'@Ayar.sozcuk("Hata", dilKimlik)',
+response.message,
+'error'        );
+return false;
+}
+else {
+Swal.fire(	'@Ayar.sozcuk("Başarılı", dilKimlik)',   response.message,
+'success'                    ).then(function () {
+if(response.yonlensinmi == true)
+{
+window.location.href= response.yonlenmeAdresi;
+}
+var deger = String(document.getElementById("yenimi").value);
+if (deger == "True") {
+window.location.reload();
+}
+})
+}
+}
+});
+}
+
+</script>
+

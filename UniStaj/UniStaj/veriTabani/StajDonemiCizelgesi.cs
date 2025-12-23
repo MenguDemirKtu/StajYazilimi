@@ -57,13 +57,8 @@ namespace UniStaj.veriTabani
         }
     }
 
-
     public class StajDonemiCizelgesi
     {
-
-
-
-
         /// <summary> 
         /// Girilen koşullara göre veri çeker. 
         /// </summary>  
