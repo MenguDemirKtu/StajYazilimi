@@ -153,16 +153,17 @@ namespace UniStaj.Models
                     var yetkili = yetkililer.First();
                     StajBirimYetkilisiBirimiArama bagArama = new StajBirimYetkilisiBirimiArama();
                     bagArama.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
-                    bagArama.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik; bagArama.varmi = true;
+                    bagArama.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                    bagArama.varmi = true;
                     var mevcutBag = await bagArama.bul(vari);
 
                     if (mevcutBag == null)
                     {
-                        StajBirimYetkilisiBirimi yeniYetkili = new StajBirimYetkilisiBirimi();
-                        yeniYetkili.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
-                        yeniYetkili.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
-                        yeniYetkili.e_gecerliMi = true;
-                        await yeniYetkili.kaydetKos(vari, false);
+                        StajBirimYetkilisiBirimi yeniBirimYetkilisi = new StajBirimYetkilisiBirimi();
+                        yeniBirimYetkilisi.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
+                        yeniBirimYetkilisi.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                        yeniBirimYetkilisi.e_gecerliMi = true;
+                        await yeniBirimYetkilisi.kaydetKos(vari, false);
 
 
                         KullaniciAYRINTIArama _kullaniciKosulu = new KullaniciAYRINTIArama();
@@ -174,7 +175,6 @@ namespace UniStaj.Models
                         Kullanici kullanici;
                         if (eskiKullanici == null)
                         {
-
                             kullanici = new Kullanici();
                             kullanici.kullaniciAdi = yetkili.tcKimlikNo;
                             kullanici.sifre = GuvenlikIslemi.sifrele(yetkili.tcKimlikNo.Substring(yetkililer[0].tcKimlikNo.Length - 5));
