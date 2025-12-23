@@ -1,21 +1,20 @@
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using UniStaj.veri;
 using UniStaj.veriTabani;
 namespace UniStaj.Models
 {
-    public class PersonelModel : ModelTabani
+    public class StajDonemiModel : ModelTabani
     {
-        public Personel kartVerisi { get; set; }
-        public List<PersonelAYRINTI> dokumVerisi { get; set; }
-        public PersonelAYRINTIArama aramaParametresi { get; set; }
+        public StajDonemi kartVerisi { get; set; }
+        public List<StajDonemiAYRINTI> dokumVerisi { get; set; }
+        public StajDonemiAYRINTIArama aramaParametresi { get; set; }
 
 
-        public PersonelModel()
+        public StajDonemiModel()
         {
-            this.kartVerisi = new Personel();
-            this.dokumVerisi = new List<PersonelAYRINTI>();
-            this.aramaParametresi = new PersonelAYRINTIArama();
+            this.kartVerisi = new StajDonemi();
+            this.dokumVerisi = new List<StajDonemiAYRINTI>();
+            this.aramaParametresi = new StajDonemiAYRINTIArama();
         }
 
 
@@ -39,14 +38,14 @@ namespace UniStaj.Models
                 List<string> kayitlar = id.Split(',').ToList();
                 for (int i = 0; i < kayitlar.Count; i++)
                 {
-                    Personel? silinecek = await Personel.olusturKos(vari, kayitlar[i]);
+                    StajDonemi? silinecek = await StajDonemi.olusturKos(vari, kayitlar[i]);
                     if (silinecek == null)
                         continue;
                     silinecek._sayfaAta(sayfasi);
                     await silinecek.silKos(vari);
                 }
             }
-            Models.PersonelModel modeli = new Models.PersonelModel();
+            Models.StajDonemiModel modeli = new Models.StajDonemiModel();
             await modeli.veriCekKos(silen);
         }
         public async Task yetkiKontrolu(Sayfa sayfasi)
@@ -61,7 +60,7 @@ namespace UniStaj.Models
 
 
 
-        public async Task<Personel> kaydetKos(Sayfa sayfasi)
+        public async Task<StajDonemi> kaydetKos(Sayfa sayfasi)
         {
             using (veri.Varlik vari = new veri.Varlik())
             {
@@ -80,25 +79,24 @@ namespace UniStaj.Models
             yenimiBelirle(kimlik);
             using (veri.Varlik vari = new Varlik())
             {
-                var kart = await Personel.olusturKos(vari, kimlik);
+                var kart = await StajDonemi.olusturKos(vari, kimlik);
                 if (kart != null)
                     kartVerisi = kart;
-                dokumVerisi = new List<PersonelAYRINTI>();
+                dokumVerisi = new List<StajDonemiAYRINTI>();
                 await baglilariCek(vari, kime);
             }
         }
 
-        public List<ref_Cinsiyet> _ayref_Cinsiyet { get; set; }
-        public async Task baglilariCek(veri.Varlik vari, Yonetici kim) { _ayref_Cinsiyet = await vari.ref_Cinsiyets.ToListAsync(); }
+        public async Task baglilariCek(veri.Varlik vari, Yonetici kim) { }
 
         public async Task veriCekKos(Yonetici kime)
         {
             this.kullanan = kime;
             using (veri.Varlik vari = new Varlik())
             {
-                PersonelAYRINTIArama kosul = new PersonelAYRINTIArama();
+                StajDonemiAYRINTIArama kosul = new StajDonemiAYRINTIArama();
                 kosul.varmi = true;
-                kartVerisi = new Personel();
+                kartVerisi = new StajDonemi();
                 dokumVerisi = await kosul.cek(vari);
                 await baglilariCek(vari, kime);
             }
@@ -111,9 +109,9 @@ namespace UniStaj.Models
                 var talep = vari.AramaTalebis.FirstOrDefault(p => p.kodu == id);
                 if (talep != null)
                 {
-                    PersonelAYRINTIArama kosul = JsonConvert.DeserializeObject<PersonelAYRINTIArama>(talep.talepAyrintisi ?? "") ?? new PersonelAYRINTIArama();
+                    StajDonemiAYRINTIArama kosul = JsonConvert.DeserializeObject<StajDonemiAYRINTIArama>(talep.talepAyrintisi ?? "") ?? new StajDonemiAYRINTIArama();
                     dokumVerisi = await kosul.cek(vari);
-                    kartVerisi = new Personel();
+                    kartVerisi = new StajDonemi();
                     await baglilariCek(vari, kime);
                     aramaParametresi = kosul;
                 }

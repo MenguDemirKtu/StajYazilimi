@@ -3,10 +3,10 @@ using System.Linq.Expressions;
 
 namespace UniStaj.veri
 {
-    public partial class StajBirimiTurleri : Bilesen
+    public partial class StajDonemi : Bilesen
     {
 
-        public StajBirimiTurleri()
+        public StajDonemi()
         {
             _varSayilan();
         }
@@ -19,30 +19,28 @@ namespace UniStaj.veri
 
         public void _icDenetim(int dilKimlik, veri.Varlik vari)
         {
-            uyariVerInt32(i_stajBirimiKimlik, "Staj Birimi", dilKimlik);
-            uyariVerInt32(i_stajTuruKimlik, "Staj Türü", dilKimlik);
         }
 
 
         public override string _tanimi()
         {
-            return bossaDoldur(i_stajBirimiKimlik);
+            return bossaDoldur(stajDonemAdi);
         }
 
 
 
-        public async static Task<StajBirimiTurleri?> olusturKos(Varlik vari, object deger)
+        public async static Task<StajDonemi?> olusturKos(Varlik vari, object deger)
         {
             Int64 kimlik = Convert.ToInt64(deger);
             if (kimlik <= 0)
             {
-                StajBirimiTurleri sonuc = new StajBirimiTurleri();
+                StajDonemi sonuc = new StajDonemi();
                 sonuc._varSayilan();
                 return sonuc;
             }
             else
             {
-                return await vari.StajBirimiTurleris.FirstOrDefaultAsync(p => p.stajBirimiTurlerikimlik == kimlik && p.varmi == true);
+                return await vari.StajDonemis.FirstOrDefaultAsync(p => p.stajDonemikimlik == kimlik && p.varmi == true);
             }
         }
 
@@ -52,12 +50,12 @@ namespace UniStaj.veri
             if (varmi == null)
                 varmi = true;
             bicimlendir(vari);
-            await veriTabani.StajBirimiTurleriCizelgesi.kaydetKos(this, vari, yedeklensinmi);
+            await veriTabani.StajDonemiCizelgesi.kaydetKos(this, vari, yedeklensinmi);
         }
         public async Task silKos(veri.Varlik vari, params bool[] yedeklensinmi)
         {
             varmi = false;
-            await veriTabani.StajBirimiTurleriCizelgesi.silKos(this, vari, yedeklensinmi);
+            await veriTabani.StajDonemiCizelgesi.silKos(this, vari, yedeklensinmi);
         }
 
 
@@ -70,16 +68,16 @@ namespace UniStaj.veri
         public override void _varSayilan()
         {
             this.varmi = true;
-            this.e_gecerlimi = true;
+            this.varmi = true;
         }
 
-        public static async Task<List<StajBirimiTurleri>> ara(params Expression<Func<StajBirimiTurleri, bool>>[] kosullar)
+        public static async Task<List<StajDonemi>> ara(params Expression<Func<StajDonemi, bool>>[] kosullar)
         {
-            return await veriTabani.StajBirimiTurleriCizelgesi.ara(kosullar);
+            return await veriTabani.StajDonemiCizelgesi.ara(kosullar);
         }
-        public static async Task<List<StajBirimiTurleri>> ara(veri.Varlik vari, params Expression<Func<StajBirimiTurleri, bool>>[] kosullar)
+        public static async Task<List<StajDonemi>> ara(veri.Varlik vari, params Expression<Func<StajDonemi, bool>>[] kosullar)
         {
-            return await veriTabani.StajBirimiTurleriCizelgesi.ara(vari, kosullar);
+            return await veriTabani.StajDonemiCizelgesi.ara(vari, kosullar);
         }
 
 
@@ -88,23 +86,23 @@ namespace UniStaj.veri
 
         public override string _cizelgeAdi()
         {
-            return "StajBirimiTurleri";
+            return "StajDonemi";
         }
 
 
         public override string _turkceAdi()
         {
-            return "Staj Birimi Türleri";
+            return "Staj Dönemi";
         }
         public override string _birincilAnahtarAdi()
         {
-            return "stajBirimiTurlerikimlik";
+            return "stajDonemikimlik";
         }
 
 
         public override long _birincilAnahtar()
         {
-            return this.stajBirimiTurlerikimlik;
+            return this.stajDonemikimlik;
         }
 
 

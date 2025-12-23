@@ -12,6 +12,8 @@ namespace UniStaj.Models
         public StajBirimiAYRINTIArama aramaParametresi { get; set; }
 
         public List<StajTuruAYRINTI> _ayStajTuruAYRINTI { get; set; }
+        public String yetkiliTcleri { get; set; }
+
 
 
         public StajBirimiModel()
@@ -19,6 +21,7 @@ namespace UniStaj.Models
             this.kartVerisi = new StajBirimi();
             this.dokumVerisi = new List<StajBirimiAYRINTI>();
             this.aramaParametresi = new StajBirimiAYRINTIArama();
+            this.yetkiliTcleri = " ";
         }
 
         public async Task turleriKaydet()
@@ -136,6 +139,44 @@ namespace UniStaj.Models
                         }
                     }
                 }
+
+                StajBirimYetkilisiAYRINTIArama yetkiliKosul = new StajBirimYetkilisiAYRINTIArama();
+                var tcList = yetkiliTcleri.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+                for (int i = 0; i < tcList.Count; i++)
+                {
+                    string tc = tcList[i];
+                    yetkiliKosul.tcKimlikNo = tc;
+                    var yetkililer = await yetkiliKosul.cek(vari);
+                }
+
+
+
+                List<ref_StajAsamasi> asamalar = await vari.ref_StajAsamasis.OrderBy(p => p.StajAsamasiKimlik).ToListAsync();
+
+                StajBirimAsamasiAYRINTIArama _asamaKosulu = new StajBirimAsamasiAYRINTIArama();
+                _asamaKosulu.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                List<StajBirimAsamasiAYRINTI> kayitliAsamalar = await _asamaKosulu.cek(vari);
+
+
+                int sira = 1;
+                for (int i = 0; i < asamalar.Count; i++)
+                {
+                    int yer = kayitliAsamalar.FindIndex(p => p.i_stajAsamasiKimlik == asamalar[i].StajAsamasiKimlik);
+                    if (yer == -1)
+                    {
+                        StajBirimAsamasi yeni = new StajBirimAsamasi();
+                        yeni.i_stajAsamasiKimlik = asamalar[i].StajAsamasiKimlik;
+                        yeni.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                        yeni.sirasi = sira;
+                        yeni.e_gecerliMi = true;
+                        yeni.aciklama = "";
+                        await yeni.kaydetKos(vari, false);
+                    }
+                    sira++;
+                }
+
+
+
 
 
                 return kartVerisi;

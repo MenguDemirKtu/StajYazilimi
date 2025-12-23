@@ -58,6 +58,12 @@ int   dilKimlik = Model.gecerliDil();
                @Html.Raw(Genel.cokluSecimHazirla("turleri", "turleri", Bilesen.doldur(Model._ayStajTuruAYRINTI, Model.turleri )))
                 </div>
             </div>
+            <div class=@Ayar.yariGenislik>
+                <div class="@Ayar.formGrup">
+                    <label class="@Ayar.labelBicim"> @Ayar.sozcuk("Birim Yetkili TCleri", dilKimlik)  </label>
+                    @Html.TextBoxFor(m => m.yetkiliTcleri, new { @class = @Ayar.textBoxBicim(), maxlength = "120", placeholder = @Ayar.sozcuk("Birim yetkilileri tclerini virgül ile ayırarak yazınız", dilKimlik) })
+                </div>
+            </div>
 @Html.HiddenFor(model => model.yenimi)
 </div>
 <hr />

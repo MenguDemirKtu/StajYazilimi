@@ -1,21 +1,20 @@
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using UniStaj.veri;
 using UniStaj.veriTabani;
 namespace UniStaj.Models
 {
-    public class PersonelModel : ModelTabani
+    public class StajBirimAsamasiModel : ModelTabani
     {
-        public Personel kartVerisi { get; set; }
-        public List<PersonelAYRINTI> dokumVerisi { get; set; }
-        public PersonelAYRINTIArama aramaParametresi { get; set; }
+        public StajBirimAsamasi kartVerisi { get; set; }
+        public List<StajBirimAsamasiAYRINTI> dokumVerisi { get; set; }
+        public StajBirimAsamasiAYRINTIArama aramaParametresi { get; set; }
 
 
-        public PersonelModel()
+        public StajBirimAsamasiModel()
         {
-            this.kartVerisi = new Personel();
-            this.dokumVerisi = new List<PersonelAYRINTI>();
-            this.aramaParametresi = new PersonelAYRINTIArama();
+            this.kartVerisi = new StajBirimAsamasi();
+            this.dokumVerisi = new List<StajBirimAsamasiAYRINTI>();
+            this.aramaParametresi = new StajBirimAsamasiAYRINTIArama();
         }
 
 
@@ -39,14 +38,14 @@ namespace UniStaj.Models
                 List<string> kayitlar = id.Split(',').ToList();
                 for (int i = 0; i < kayitlar.Count; i++)
                 {
-                    Personel? silinecek = await Personel.olusturKos(vari, kayitlar[i]);
+                    StajBirimAsamasi? silinecek = await StajBirimAsamasi.olusturKos(vari, kayitlar[i]);
                     if (silinecek == null)
                         continue;
                     silinecek._sayfaAta(sayfasi);
                     await silinecek.silKos(vari);
                 }
             }
-            Models.PersonelModel modeli = new Models.PersonelModel();
+            Models.StajBirimAsamasiModel modeli = new Models.StajBirimAsamasiModel();
             await modeli.veriCekKos(silen);
         }
         public async Task yetkiKontrolu(Sayfa sayfasi)
@@ -61,7 +60,7 @@ namespace UniStaj.Models
 
 
 
-        public async Task<Personel> kaydetKos(Sayfa sayfasi)
+        public async Task<StajBirimAsamasi> kaydetKos(Sayfa sayfasi)
         {
             using (veri.Varlik vari = new veri.Varlik())
             {
@@ -80,25 +79,30 @@ namespace UniStaj.Models
             yenimiBelirle(kimlik);
             using (veri.Varlik vari = new Varlik())
             {
-                var kart = await Personel.olusturKos(vari, kimlik);
+                var kart = await StajBirimAsamasi.olusturKos(vari, kimlik);
                 if (kart != null)
                     kartVerisi = kart;
-                dokumVerisi = new List<PersonelAYRINTI>();
+                dokumVerisi = new List<StajBirimAsamasiAYRINTI>();
                 await baglilariCek(vari, kime);
             }
         }
 
-        public List<ref_Cinsiyet> _ayref_Cinsiyet { get; set; }
-        public async Task baglilariCek(veri.Varlik vari, Yonetici kim) { _ayref_Cinsiyet = await vari.ref_Cinsiyets.ToListAsync(); }
+        public List<StajBirimiAYRINTI> _ayStajBirimiAYRINTI { get; set; }
+        public List<ref_StajAsamasi> _ayref_StajAsamasi { get; set; }
+        public async Task baglilariCek(veri.Varlik vari, Yonetici kim)
+        {
+            _ayStajBirimiAYRINTI = await StajBirimiAYRINTI.ara(vari);
+            _ayref_StajAsamasi = await ref_StajAsamasi.ara(vari);
+        }
 
         public async Task veriCekKos(Yonetici kime)
         {
             this.kullanan = kime;
             using (veri.Varlik vari = new Varlik())
             {
-                PersonelAYRINTIArama kosul = new PersonelAYRINTIArama();
+                StajBirimAsamasiAYRINTIArama kosul = new StajBirimAsamasiAYRINTIArama();
                 kosul.varmi = true;
-                kartVerisi = new Personel();
+                kartVerisi = new StajBirimAsamasi();
                 dokumVerisi = await kosul.cek(vari);
                 await baglilariCek(vari, kime);
             }
@@ -111,9 +115,9 @@ namespace UniStaj.Models
                 var talep = vari.AramaTalebis.FirstOrDefault(p => p.kodu == id);
                 if (talep != null)
                 {
-                    PersonelAYRINTIArama kosul = JsonConvert.DeserializeObject<PersonelAYRINTIArama>(talep.talepAyrintisi ?? "") ?? new PersonelAYRINTIArama();
+                    StajBirimAsamasiAYRINTIArama kosul = JsonConvert.DeserializeObject<StajBirimAsamasiAYRINTIArama>(talep.talepAyrintisi ?? "") ?? new StajBirimAsamasiAYRINTIArama();
                     dokumVerisi = await kosul.cek(vari);
-                    kartVerisi = new Personel();
+                    kartVerisi = new StajBirimAsamasi();
                     await baglilariCek(vari, kime);
                     aramaParametresi = kosul;
                 }
