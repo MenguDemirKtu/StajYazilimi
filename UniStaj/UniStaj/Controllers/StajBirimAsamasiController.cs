@@ -104,5 +104,34 @@ namespace UniStaj.Controllers
                 return hataBildirimi(istisna);
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult> View(string id)
+        {
+            try
+            {
+
+                string tanitim = "...";
+                tanitim = await Genel.dokumKisaAciklamaKos(this, "StajBirimAsamasi");
+                gorunumAyari("", "", "Ana Sayfa", "/", "/StajBirimAsamasiDüzenleme/", tanitim);
+
+                if (!oturumAcildimi())
+                    return OturumAcilmadi();
+                if (await yetkiVarmiKos())
+                {
+                    Models.StajBirimAsamasiModel modeli = new Models.StajBirimAsamasiModel();
+                    await modeli.kosulaGoreCek(mevcutKullanici(), id);
+                    return View(modeli);
+                }
+                else
+                {
+                    return YetkiYok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return await HataSayfasiKosut(ex);
+            }
+        }
     }
 }
