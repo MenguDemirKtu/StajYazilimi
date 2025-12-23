@@ -30,8 +30,8 @@
             </td>
 
             <td>
-                @Html.TextBox(
-                    $"dokumVerisi[{i}].sirasi",
+                @Html.TextBoxFor(
+                    "dokumVerisi[{i}].sirasi",
                     siradaki.sirasi,
                     new {
                         @class = Ayar.textBoxBicim(),
