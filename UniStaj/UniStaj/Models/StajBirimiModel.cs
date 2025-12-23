@@ -147,10 +147,19 @@ namespace UniStaj.Models
                     var yetkiliArama = new StajBirimYetkilisiAYRINTIArama();
                     yetkiliArama.tcKimlikNo = tc;
                     var yetkililer = await yetkiliArama.cek(vari);
-                    if (yetkililer.Count == 0)
-                        continue;
-
                     var yetkili = yetkililer.First();
+                    if (yetkili == null)
+                    {
+                        StajBirimYetkilisi yeniYetkili = new StajBirimYetkilisi();
+                        yeniYetkili.tcKimlikNo = yetkili.tcKimlikNo;
+                        yeniYetkili.ad = yetkili.ad;
+                        yeniYetkili.soyad = yetkili.soyad;
+                        yeniYetkili.telefon = yetkili.telefon;
+                        yeniYetkili.ePosta = yetkili.ePosta;
+                        yeniYetkili.varmi = true;
+                        await yeniYetkili.kaydetKos(vari, false);
+                    }
+
                     StajBirimYetkilisiBirimiArama bagArama = new StajBirimYetkilisiBirimiArama();
                     bagArama.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
                     bagArama.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
