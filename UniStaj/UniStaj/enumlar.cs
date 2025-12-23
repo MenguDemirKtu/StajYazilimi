@@ -202,6 +202,17 @@ namespace UniStaj
         Reddedildi = 3
 
     }
+    public enum enumref_StajAsamasi
+    {
+        Akademisyenin_Onayi = 3,
+        Basvuru = 1,
+        Birimin_Basvuru_Onayi = 2,
+        Komisyon_Onayi = 6,
+        Kurum_Yetkili_Onayi = 5,
+        Stajyerin_Staj_Bitti_Beyani = 4,
+        Tamamlanma = 7
+
+    }
     public enum enumref_BelgeDurumu
     {
         Onaylandi = 3,
@@ -211,6 +222,7 @@ namespace UniStaj
 
     }
 }
+
 
 
 
