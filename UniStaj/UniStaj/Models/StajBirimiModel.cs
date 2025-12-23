@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore; //.Entity;
 using Newtonsoft.Json;
+using UniStaj.GenelIslemler;
 using UniStaj.veri;
 using UniStaj.veriTabani;
 
@@ -140,13 +141,74 @@ namespace UniStaj.Models
                     }
                 }
 
-                StajBirimYetkilisiAYRINTIArama yetkiliKosul = new StajBirimYetkilisiAYRINTIArama();
                 var tcList = yetkiliTcleri.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
-                for (int i = 0; i < tcList.Count; i++)
+                foreach (var tc in tcList)
                 {
-                    string tc = tcList[i];
-                    yetkiliKosul.tcKimlikNo = tc;
-                    var yetkililer = await yetkiliKosul.cek(vari);
+                    var yetkiliArama = new StajBirimYetkilisiAYRINTIArama();
+                    yetkiliArama.tcKimlikNo = tc;
+                    var yetkililer = await yetkiliArama.cek(vari);
+                    if (yetkililer.Count == 0)
+                        continue;
+
+                    var yetkili = yetkililer.First();
+                    StajBirimYetkilisiBirimi yeniYetkili = new StajBirimYetkilisiBirimi();
+                    yeniYetkili.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
+                    yeniYetkili.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                    yeniYetkili.e_gecerliMi = true;
+                    await yeniYetkili.kaydetKos(vari, false);
+
+
+                    KullaniciAYRINTIArama _kullaniciKosulu = new KullaniciAYRINTIArama();
+                    _kullaniciKosulu.kullaniciAdi = yetkili.tcKimlikNo;
+                    _kullaniciKosulu.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
+                    _kullaniciKosulu.varmi = true;
+                    KullaniciAYRINTI? eskiKullanici = await _kullaniciKosulu.bul(vari);
+
+                    Kullanici kullanici;
+                    if (eskiKullanici == null)
+                    {
+
+                        kullanici = new Kullanici();
+                        kullanici.kullaniciAdi = yetkili.tcKimlikNo;
+                        kullanici.sifre = GuvenlikIslemi.sifrele(yetkili.tcKimlikNo.Substring(yetkililer[0].tcKimlikNo.Length - 5));
+                        kullanici.tcKimlikNo = yetkili.tcKimlikNo;
+                        kullanici.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
+                        kullanici.gercekAdi = yetkili.ad + " " + yetkili.soyad;
+                        kullanici.telefon = yetkili.telefon;
+                        kullanici.ePostaAdresi = yetkili.ePosta;
+                        kullanici.y_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
+                        kullanici.kaydet(vari, false);
+                    }
+                    else
+                    {
+                        kullanici = await vari.Kullanicis.FirstAsync(x => x.kullaniciKimlik == eskiKullanici.kullaniciKimlik);
+                    }
+
+                    RolAYRINTIArama rolKosul = new RolAYRINTIArama();
+                    rolKosul.e_varsayilanmi = true;
+                    rolKosul.e_gecerlimi = true;
+                    rolKosul.i_varsayilanOlduguKullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
+
+
+                    RolAYRINTI? rolu = await rolKosul.bul(vari);
+                    if (rolu != null)
+                    {
+                        KullaniciRoluArama rolBagArama = new KullaniciRoluArama();
+                        rolBagArama.i_kullaniciKimlik = kullanici.kullaniciKimlik;
+                        rolBagArama.i_rolKimlik = rolu.rolKimlik;
+                        rolBagArama.e_gecerlimi = true;
+                        var mevcutRolBagi = await rolBagArama.bul(vari);
+
+                        if (mevcutRolBagi == null)
+                        {
+                            KullaniciRolu bag = new KullaniciRolu();
+                            bag.i_kullaniciKimlik = kullanici.kullaniciKimlik;
+                            bag.i_rolKimlik = rolu.rolKimlik;
+                            bag.e_gecerlimi = true;
+                            await bag.kaydetKos(vari, false);
+                        }
+                    }
+
                 }
 
 
