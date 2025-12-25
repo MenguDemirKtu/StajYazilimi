@@ -151,6 +151,27 @@ namespace UniStaj.Models
                         kosul.i_stajyerKimlik = stajyer.stajyerkimlik;
                     }
                 }
+
+                if (kime._KullaniciTuru == enumref_KullaniciTuru.Birim_Staj_Sorumlusu)
+                {
+                    StajBirimYetkilisiAYRINTI? yetkili = await StajBirimYetkilisiAYRINTI.olusturKos(vari, kime.i_stajBirimYetkilisiKimlik);
+
+                    StajBirimYetkilisiBirimiAYRINTIArama _arama = new StajBirimYetkilisiBirimiAYRINTIArama();
+                    _arama.i_stajBirimYetkilisiKimlik = kime.i_stajBirimYetkilisiKimlik;
+                    StajBirimYetkilisiBirimiAYRINTI? baglanti = await _arama.bul(vari);
+                    if (baglanti != null)
+                    {
+                        kosul.i_stajBirimiKimlik = baglanti.i_stajBirimiKimlik;
+                    }
+                    else
+                    {
+                        // hiç sonuç gelmesin
+                        kosul.varmi = false;
+                    }
+
+
+                }
+
                 dokumVerisi = await kosul.cek(vari);
                 await baglilariCek(vari, kime);
             }

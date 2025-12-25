@@ -133,7 +133,6 @@ namespace UniStaj.Models
 
                 baslik3 = "Onay Bekleyen Başvuru Sayısı:";
                 int onayBekleyenSayi = await vari.StajBasvurusuAYRINTIs.CountAsync(x => x.i_stajBasvuruDurumuKimlik == (int)enumref_StajBasvuruDurumu.Onay_Bekleniyor && x.i_stajBirimiKimlik == birimYetkilisi.i_stajBirimiKimlik);
-
                 deger3 = onayBekleyenSayi + " Başvuru";
 
             }
