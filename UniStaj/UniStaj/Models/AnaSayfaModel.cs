@@ -40,6 +40,9 @@ namespace UniStaj.Models
         public int lisanssizSporcuSayisi { get; set; }
         public int topluYarismaBasvuruSayisi { get; set; }
         public int kulupDisiplinSayisi { get; set; }
+
+        public bool BirimStajSorumlusuMu { get; set; }
+
         public void varsayilan()
         {
             duyurular = new List<DuyuruRolBagiAYRINTI>();
@@ -128,6 +131,7 @@ namespace UniStaj.Models
                 simge8 = simgeBul(resimler, "Araç");
                 */
 
+
                 duyurular = await vari.DuyuruRolBagiAYRINTIs.ToListAsync();
                 try
                 {
@@ -157,6 +161,9 @@ namespace UniStaj.Models
                 kisiAdi = kime.gercekAdi;
                 yazilimAdi = Genel.yazilimAyari.yazilimAdi;
                 var turu = kime._turu();
+
+                this.BirimStajSorumlusuMu =
+                    (turu == enumref_KullaniciTuru.Birim_Staj_Sorumlusu);
 
                 if (turu == enumref_KullaniciTuru.Stajyer)
                 {
@@ -194,6 +201,35 @@ namespace UniStaj.Models
                             deger4 = "Başvuru Yok";
                     }
 
+                }
+
+                KullaniciAYRINTI mevcutKullanici = await vari.KullaniciAYRINTIs.FirstOrDefaultAsync(x => x.kullaniciKimlik == kime.kullaniciKimlik);
+                if (turu == enumref_KullaniciTuru.Birim_Staj_Sorumlusu)
+                {
+
+                    StajBirimYetkilisiBirimi? birimYetkilisi = await vari.StajBirimYetkilisiBirimis.FirstOrDefaultAsync(x => x.i_stajBirimYetkilisiKimlik == mevcutKullanici.y_stajBirimYetkilisiKimlik);
+                    if (birimYetkilisi != null)
+                    {
+                        baslik1 = "Bağlı Olduğu Birim";
+                        var birim = await vari.StajBirimis.FirstOrDefaultAsync(b => b.stajBirimikimlik == birimYetkilisi.i_stajBirimiKimlik);
+
+                        if (birim != null)
+                            deger1 = birim.stajBirimAdi;
+                        else
+                            deger1 = "Birim Atanmamış";
+
+                        baslik2 = "Birime Başvuru Yapan Öğrenci";
+                        var stajyerSayisi = await vari.Stajyers.CountAsync(x => x.i_stajBirimiKimlik == birimYetkilisi.i_stajBirimiKimlik);
+
+                        deger2 = stajyerSayisi + " Öğrenci";
+
+                        baslik3 = "Onay Bekleyen Başvuru Sayısı:";
+
+                        int onayBekleyenSayi = await vari.StajBasvurusus.CountAsync(x => x.i_stajBasvuruDurumuKimlik == (int)enumref_StajBasvuruDurumu.Onay_Bekleniyor);
+
+                        deger3 = onayBekleyenSayi + " Başvuru";
+
+                    }
                 }
 
 

@@ -207,7 +207,13 @@
 
                     <p class="text-muted fw-small mb-1">@Model.baslik3</p>
                     <h4 class="mb-0">@Model.deger3</h4>
-
+                    @if (Model.BirimStajSorumlusuMu)
+                    {
+                        <span class="basvuru-link"
+                              onclick="onayBekleyenBasvurularaGit()">
+                            Başvuruları görüntülemek için tıklayınız
+                        </span>
+                    }
                 </div>
             </div>
         </div>
@@ -472,7 +478,12 @@
         alert('bvaşladı');
         window.location.href= adres;
     }
+
+    function onayBekleyenBasvurularaGit() {
+        window.location.href = '/StajBasvurusu/';
+    }
 </script>
+
 
 
 <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
