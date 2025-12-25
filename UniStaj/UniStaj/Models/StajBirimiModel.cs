@@ -147,17 +147,29 @@ namespace UniStaj.Models
                     var yetkiliArama = new StajBirimYetkilisiAYRINTIArama();
                     yetkiliArama.tcKimlikNo = tc;
                     var yetkililer = await yetkiliArama.cek(vari);
-                    var yetkili = yetkililer.First();
+                    var yetkili = yetkililer.FirstOrDefault();
                     if (yetkili == null)
                     {
-                        StajBirimYetkilisi yeniYetkili = new StajBirimYetkilisi();
-                        yeniYetkili.tcKimlikNo = yetkili.tcKimlikNo;
-                        yeniYetkili.ad = yetkili.ad;
-                        yeniYetkili.soyad = yetkili.soyad;
-                        yeniYetkili.telefon = yetkili.telefon;
-                        yeniYetkili.ePosta = yetkili.ePosta;
-                        yeniYetkili.varmi = true;
-                        await yeniYetkili.kaydetKos(vari, false);
+                        var personelArama = new PersonelArama();
+                        personelArama.tcKimlikNo = tc;
+                        var personel = await personelArama.bul(vari);
+                        if (personel != null)
+                        {
+                            StajBirimYetkilisi yeniYetkili = new StajBirimYetkilisi();
+                            yeniYetkili.tcKimlikNo = personel.tcKimlikNo;
+                            yeniYetkili.ad = personel.adi;
+                            yeniYetkili.soyad = personel.soyAdi;
+                            yeniYetkili.telefon = personel.telefon;
+                            yeniYetkili.ePosta = personel.ePosta;
+                            yeniYetkili.varmi = true;
+                            await yeniYetkili.kaydetKos(vari, false);
+                            yetkililer = await yetkiliArama.cek(vari);
+                            yetkili = yetkililer.FirstOrDefault();
+                        }
+                        else
+                        {
+                            throw new Exception("Kayýtlý personel bulunamadý.");
+                        }
                     }
 
                     StajBirimYetkilisiBirimiArama bagArama = new StajBirimYetkilisiBirimiArama();
