@@ -238,6 +238,7 @@ namespace UniStaj
                     yonetici.ogrenciNo = mevcut.ogrenciNo ?? "";
                     yonetici.yoneticiTuru = "Kullanıcı";
                     yonetici.fotosu = mevcut.fotosu ?? "";
+                    yonetici.i_stajBirimYetkilisiKimlik = mevcut.y_stajBirimYetkilisiKimlik ?? 0;
                     yonetici.i_stajyerKimlik = mevcut.y_stajyerKimlik ?? 0;
                     if (mevcut.e_sifreDegisecekmi == null)
                         mevcut.e_sifreDegisecekmi = true;

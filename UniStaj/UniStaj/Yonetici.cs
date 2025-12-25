@@ -30,6 +30,8 @@ namespace UniStaj
         }
 
 
+        public int i_stajBirimYetkilisiKimlik { get; set; }
+
         public int i_kullaniciTuruKimlik { get; set; }
 
         public int dilKimlik { get; set; }
