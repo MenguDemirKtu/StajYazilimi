@@ -78,6 +78,7 @@ namespace UniStaj
             e_kodOnaylandimi = false;
             ekKullaniciSayisi = 0;
             i_stajyerKimlik = 0;
+            i_stajBirimYetkilisiKimlik = 0;
         }
 
 

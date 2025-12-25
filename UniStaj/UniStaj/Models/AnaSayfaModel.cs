@@ -115,7 +115,6 @@ namespace UniStaj.Models
         }
         private async Task stajSorumlusuEkrani(veri.Varlik vari, Yonetici kim)
         {
-
             StajBirimYetkilisiBirimi? birimYetkilisi = await vari.StajBirimYetkilisiBirimis.FirstOrDefaultAsync(x => x.i_stajBirimYetkilisiKimlik == kim.i_stajBirimYetkilisiKimlik);
             if (birimYetkilisi != null)
             {
@@ -128,12 +127,12 @@ namespace UniStaj.Models
                     deger1 = "Birim Atanmamış";
 
                 baslik2 = "Birime Başvuran  Öğrenci";
-                var stajyerSayisi = await vari.Stajyers.CountAsync(x => x.i_stajBirimiKimlik == birimYetkilisi.i_stajBirimiKimlik);
+                var stajyerSayisi = await vari.StajBasvurusuAYRINTIs.CountAsync(x => x.i_stajBirimiKimlik == birimYetkilisi.i_stajBirimiKimlik);
 
                 deger2 = stajyerSayisi + " Öğrenci";
 
                 baslik3 = "Onay Bekleyen Başvuru Sayısı:";
-                int onayBekleyenSayi = await vari.StajBasvurusuAYRINTIs.CountAsync(x => x.i_stajBasvuruDurumuKimlik == (int)enumref_StajBasvuruDurumu.Onay_Bekleniyor);
+                int onayBekleyenSayi = await vari.StajBasvurusuAYRINTIs.CountAsync(x => x.i_stajBasvuruDurumuKimlik == (int)enumref_StajBasvuruDurumu.Onay_Bekleniyor && x.i_stajBirimiKimlik == birimYetkilisi.i_stajBirimiKimlik);
 
                 deger3 = onayBekleyenSayi + " Başvuru";
 
