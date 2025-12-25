@@ -8,6 +8,23 @@
     <form id="formKayit" name="formKayit" autocomplete="off">
         @{
         int dilKimlik = Model.gecerliDil();
+               <div class="card-body border-bottom" style="background-color: @Ayar.aramaKutusuArkaPlan;">
+            <div class="row g-3"><div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.i_stajyerKimlik, Bilesen.doldur(Model._ayStajyerAYRINTI) ,  @Ayar.sozcuk("Stajyer", dilKimlik), new { @class = "form-control select2" })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.stajKurumAdi, new { @class = @Ayar.textBoxBicim(), maxlength = "200" ,   placeholder = @Ayar.sozcuk("Kurum", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.i_stajTuruKimlik, Bilesen.doldur(Model._ayStajTuruAYRINTI) ,  @Ayar.sozcuk("Staj Türü", dilKimlik), new { @class = "form-control select2" })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.hizmetAlani, new { @class = @Ayar.textBoxBicim(), maxlength = "50" ,   placeholder = @Ayar.sozcuk("Hizmet Alanı", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.vergiNo, new { @class = @Ayar.textBoxBicim(), maxlength = "50" ,   placeholder = @Ayar.sozcuk("Vergi No", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.telNo, new { @class = @Ayar.textBoxBicim(), maxlength = "12" ,   placeholder = @Ayar.sozcuk("Tel No", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.ePosta, new { @class = @Ayar.textBoxBicim(), maxlength = "150" ,   placeholder = @Ayar.sozcuk("E-Posta", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.yetkilisi, new { @class = @Ayar.textBoxBicim(), maxlength = "200" ,   placeholder = @Ayar.sozcuk("Yetkili", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.gunSayisi, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Gün Sayısı", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.TextBoxFor(m => m.aramaParametresi.sinifi, new { @class = @Ayar.textBoxBicim(),   placeholder = @Ayar.sozcuk("Sınıfı", dilKimlik) })</div>
+            <div class="@Ayar.aramaSutunGenislik">@Html.DropDownListFor(m => m.aramaParametresi.i_stajBasvuruDurumuKimlik, Bilesen.doldur(Model._ayref_StajBasvuruDurumu) ,  @Ayar.sozcuk(".", dilKimlik), new { @class = "form-control select2" })</div>
+             <div class="col-xxl-2 col-lg-4">
+                    <button type="button" class="btn btn-soft-secondary w-100" style="background-color:#e5f4ff;" onclick="cek(); return false;"><i class="mdi mdi-filter-outline align-middle"></i>@Ayar.sozcuk("Ayrıntılı Ara", dilKimlik)  </button>
+ </div>     </div>
+        </div> <hr/>  <br/>
+
             bool eklemeIzniVarmi = (bool)ViewBag.eklemeIznivar;
             bool silmeIzniVarmi = (bool)ViewBag.silmeIznivar;
             <i style="float: left; width: 50%; color: white; ">
@@ -15,7 +32,7 @@
                 {
                     <button type="button" class="btn btn-success btn-rounded waves-effect waves-light " onclick="kartAc(0);return false;">
                         <i class="mdi mdi-plus me-1"></i>
-   @Ikazlar.yeniKayitEkle("Staj Başvurusu", dilKimlik) 
+                        @Ikazlar.yeniKayitEkle("Staj Başvurusu", dilKimlik) 
                     </button>
                 }
                 else

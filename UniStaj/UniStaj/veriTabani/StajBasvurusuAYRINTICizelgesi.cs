@@ -38,6 +38,8 @@ namespace UniStaj.veriTabani
         public string? calismaGunleri { get; set; }
         public string? kodu { get; set; }
         public string? stajTuruAdi { get; set; }
+
+        public int? i_stajBasvuruDurumuKimlik { get; set; }
         public StajBasvurusuAYRINTIArama()
         {
             this.varmi = true;
@@ -106,6 +108,11 @@ namespace UniStaj.veriTabani
                 predicate = predicate.And(x => x.kodu != null && x.kodu.Contains(kodu));
             if (stajTuruAdi != null)
                 predicate = predicate.And(x => x.stajTuruAdi != null && x.stajTuruAdi.Contains(stajTuruAdi));
+
+            if (i_stajBasvuruDurumuKimlik != null)
+                predicate = predicate.And(x => x.i_stajBasvuruDurumuKimlik == i_stajBasvuruDurumuKimlik);
+
+
             return predicate;
 
         }

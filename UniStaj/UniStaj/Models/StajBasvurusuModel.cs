@@ -114,6 +114,7 @@ namespace UniStaj.Models
         public List<StajyerAYRINTI> _ayStajyerAYRINTI { get; set; }
         public List<StajKurumTuruAYRINTI> _ayStajKurumTuruAYRINTI { get; set; }
         public List<StajTuruAYRINTI> _ayStajTuruAYRINTI { get; set; }
+        public List<ref_StajBasvuruDurumu> _ayref_StajBasvuruDurumu { get; set; }
         public async Task baglilariCek(veri.Varlik vari, Yonetici kim)
         {
             _ayStajyerAYRINTI = await StajyerAYRINTI.ara(vari);
@@ -129,6 +130,8 @@ namespace UniStaj.Models
                 vari,
                 x => yukumlulukluStajTuruIdleri.Contains(x.stajTurukimlik)
             );
+
+            _ayref_StajBasvuruDurumu = await ref_StajBasvuruDurumu.ara();
 
 
         }
@@ -185,14 +188,45 @@ namespace UniStaj.Models
                 if (talep != null)
                 {
                     StajBasvurusuAYRINTIArama kosul = JsonConvert.DeserializeObject<StajBasvurusuAYRINTIArama>(talep.talepAyrintisi ?? "") ?? new StajBasvurusuAYRINTIArama();
+
+                    if (kime.i_kullaniciTuruKimlik == (int)enumref_KullaniciTuru.Stajyer)
+                    {
+                        Stajyer? stajyer = await Stajyer.olusturKos(vari, kime.i_stajyerKimlik);
+
+                        if (stajyer != null)
+                        {
+                            //kartVerisi.i_stajyerKimlik = int.Parse(stajyer.ogrenciNo);
+                            kosul.i_stajyerKimlik = stajyer.stajyerkimlik;
+                        }
+                    }
+
+                    if (kime._KullaniciTuru == enumref_KullaniciTuru.Birim_Staj_Sorumlusu)
+                    {
+                        StajBirimYetkilisiAYRINTI? yetkili = await StajBirimYetkilisiAYRINTI.olusturKos(vari, kime.i_stajBirimYetkilisiKimlik);
+
+                        StajBirimYetkilisiBirimiAYRINTIArama _arama = new StajBirimYetkilisiBirimiAYRINTIArama();
+                        _arama.i_stajBirimYetkilisiKimlik = kime.i_stajBirimYetkilisiKimlik;
+                        StajBirimYetkilisiBirimiAYRINTI? baglanti = await _arama.bul(vari);
+                        if (baglanti != null)
+                        {
+                            kosul.i_stajBirimiKimlik = baglanti.i_stajBirimiKimlik;
+                        }
+                        else
+                        {
+                            // hiç sonuç gelmesin
+                            kosul.varmi = false;
+                        }
+
+
+                    }
+
+
+
                     dokumVerisi = await kosul.cek(vari);
                     kartVerisi = new StajBasvurusu();
                     await baglilariCek(vari, kime);
 
-                    if (kime._turu() == enumref_KullaniciTuru.Stajyer)
-                    {
-                        kosul.i_stajyerKimlik = kime.i_stajyerKimlik;
-                    }
+
 
                     aramaParametresi = kosul;
                 }
