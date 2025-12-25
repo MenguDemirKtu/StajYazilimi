@@ -141,103 +141,7 @@ namespace UniStaj.Models
                     }
                 }
 
-                var tcList = yetkiliTcleri.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
-                foreach (var tc in tcList)
-                {
-                    var yetkiliArama = new StajBirimYetkilisiAYRINTIArama();
-                    yetkiliArama.tcKimlikNo = tc;
-                    var yetkililer = await yetkiliArama.cek(vari);
-                    var yetkili = yetkililer.FirstOrDefault();
-                    if (yetkili == null)
-                    {
-                        var personelArama = new PersonelArama();
-                        personelArama.tcKimlikNo = tc;
-                        var personel = await personelArama.bul(vari);
-                        if (personel != null)
-                        {
-                            StajBirimYetkilisi yeniYetkili = new StajBirimYetkilisi();
-                            yeniYetkili.tcKimlikNo = personel.tcKimlikNo;
-                            yeniYetkili.ad = personel.adi;
-                            yeniYetkili.soyad = personel.soyAdi;
-                            yeniYetkili.telefon = personel.telefon;
-                            yeniYetkili.ePosta = personel.ePosta;
-                            yeniYetkili.varmi = true;
-                            await yeniYetkili.kaydetKos(vari, false);
-                            yetkililer = await yetkiliArama.cek(vari);
-                            yetkili = yetkililer.FirstOrDefault();
-                        }
-                        else
-                        {
-                            throw new Exception("Kayýtlý personel bulunamadý.");
-                        }
-                    }
-
-                    StajBirimYetkilisiBirimiArama bagArama = new StajBirimYetkilisiBirimiArama();
-                    bagArama.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
-                    bagArama.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
-                    bagArama.varmi = true;
-                    var mevcutBag = await bagArama.bul(vari);
-
-                    if (mevcutBag == null)
-                    {
-                        StajBirimYetkilisiBirimi yeniBirimYetkilisi = new StajBirimYetkilisiBirimi();
-                        yeniBirimYetkilisi.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
-                        yeniBirimYetkilisi.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
-                        yeniBirimYetkilisi.e_gecerliMi = true;
-                        await yeniBirimYetkilisi.kaydetKos(vari, false);
-
-
-                        KullaniciAYRINTIArama _kullaniciKosulu = new KullaniciAYRINTIArama();
-                        _kullaniciKosulu.kullaniciAdi = yetkili.tcKimlikNo;
-                        _kullaniciKosulu.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
-                        _kullaniciKosulu.varmi = true;
-                        KullaniciAYRINTI? eskiKullanici = await _kullaniciKosulu.bul(vari);
-
-                        Kullanici kullanici;
-                        if (eskiKullanici == null)
-                        {
-                            kullanici = new Kullanici();
-                            kullanici.kullaniciAdi = yetkili.tcKimlikNo;
-                            kullanici.sifre = GuvenlikIslemi.sifrele(yetkili.tcKimlikNo.Substring(yetkililer[0].tcKimlikNo.Length - 5));
-                            kullanici.tcKimlikNo = yetkili.tcKimlikNo;
-                            kullanici.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
-                            kullanici.gercekAdi = yetkili.ad + " " + yetkili.soyad;
-                            kullanici.telefon = yetkili.telefon;
-                            kullanici.ePostaAdresi = yetkili.ePosta;
-                            kullanici.y_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
-                            kullanici.kaydet(vari, false);
-                        }
-                        else
-                        {
-                            kullanici = await vari.Kullanicis.FirstAsync(x => x.kullaniciKimlik == eskiKullanici.kullaniciKimlik);
-                        }
-
-                        RolAYRINTIArama rolKosul = new RolAYRINTIArama();
-                        rolKosul.e_varsayilanmi = true;
-                        rolKosul.e_gecerlimi = true;
-                        rolKosul.i_varsayilanOlduguKullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
-
-
-                        RolAYRINTI? rolu = await rolKosul.bul(vari);
-                        if (rolu != null)
-                        {
-                            KullaniciRoluArama rolBagArama = new KullaniciRoluArama();
-                            rolBagArama.i_kullaniciKimlik = kullanici.kullaniciKimlik;
-                            rolBagArama.i_rolKimlik = rolu.rolKimlik;
-                            rolBagArama.e_gecerlimi = true;
-                            var mevcutRolBagi = await rolBagArama.bul(vari);
-
-                            if (mevcutRolBagi == null)
-                            {
-                                KullaniciRolu bag = new KullaniciRolu();
-                                bag.i_kullaniciKimlik = kullanici.kullaniciKimlik;
-                                bag.i_rolKimlik = rolu.rolKimlik;
-                                bag.e_gecerlimi = true;
-                                await bag.kaydetKos(vari, false);
-                            }
-                        }
-                    }
-                }
+                await yetkiliKaydet(vari, yetkiliTcleri);
 
 
 
@@ -273,6 +177,114 @@ namespace UniStaj.Models
             }
         }
 
+        private async Task yetkiliKaydet(veri.Varlik vari, string yetkiliTcleri)
+        {
+            if (string.IsNullOrEmpty(yetkiliTcleri))
+                return;
+
+            var tcList = yetkiliTcleri.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+            foreach (var tc in tcList)
+            {
+                var yetkiliArama = new StajBirimYetkilisiAYRINTIArama();
+                yetkiliArama.tcKimlikNo = tc;
+                List<StajBirimYetkilisiAYRINTI> yetkililer = await yetkiliArama.cek(vari);
+                StajBirimYetkilisiAYRINTI? yetkili = yetkililer.FirstOrDefault();
+                PersonelAYRINTI? personel = new PersonelAYRINTI();
+                if (yetkili == null)
+                {
+                    var personelArama = new PersonelAYRINTIArama();
+                    personelArama.tcKimlikNo = tc;
+                    personel = await personelArama.bul(vari);
+                    if (personel != null)
+                    {
+                        StajBirimYetkilisi yeniYetkili = new StajBirimYetkilisi();
+                        yeniYetkili.tcKimlikNo = personel.tcKimlikNo;
+                        yeniYetkili.ad = personel.adi;
+                        yeniYetkili.soyad = personel.soyAdi;
+                        yeniYetkili.telefon = personel.telefon;
+                        yeniYetkili.ePosta = personel.ePosta;
+                        yeniYetkili.varmi = true;
+                        await yeniYetkili.kaydetKos(vari, false);
+                        yetkililer = await yetkiliArama.cek(vari);
+                        yetkili = yetkililer.FirstOrDefault();
+                    }
+                    else
+                    {
+                        throw new Exception("Birim kaydedildi ancak " + tc + " TC kimlik numaralý personel bulunamadý");
+                    }
+                }
+
+                StajBirimYetkilisiBirimiArama bagArama = new StajBirimYetkilisiBirimiArama();
+                bagArama.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
+                bagArama.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                bagArama.varmi = true;
+                StajBirimYetkilisiBirimi? mevcutBag = await bagArama.bul(vari);
+
+                if (mevcutBag == null)
+                {
+                    StajBirimYetkilisiBirimi yeniBirimYetkilisi = new StajBirimYetkilisiBirimi();
+                    yeniBirimYetkilisi.i_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
+                    yeniBirimYetkilisi.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                    yeniBirimYetkilisi.e_gecerliMi = true;
+                    await yeniBirimYetkilisi.kaydetKos(vari, false);
+                }
+
+
+                KullaniciAYRINTIArama _kullaniciKosulu = new KullaniciAYRINTIArama();
+                _kullaniciKosulu.kullaniciAdi = yetkili.tcKimlikNo;
+                _kullaniciKosulu.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
+                _kullaniciKosulu.varmi = true;
+                _kullaniciKosulu.y_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
+                KullaniciAYRINTI? eskiKullanici = await _kullaniciKosulu.bul(vari);
+
+                Kullanici kullanici;
+                if (eskiKullanici == null)
+                {
+                    kullanici = new Kullanici();
+                    kullanici.kullaniciAdi = yetkili.tcKimlikNo;
+                    kullanici.sifre = GuvenlikIslemi.sifrele(yetkili.tcKimlikNo.Substring(yetkililer[0].tcKimlikNo.Length - 5));
+                    kullanici.tcKimlikNo = yetkili.tcKimlikNo;
+                    kullanici.i_kullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
+                    kullanici.gercekAdi = yetkili.ad + " " + yetkili.soyad;
+                    kullanici.telefon = yetkili.telefon;
+                    kullanici.ePostaAdresi = yetkili.ePosta;
+                    kullanici.y_personelKimlik = personel.personelKimlik;
+                    kullanici.y_stajBirimYetkilisiKimlik = yetkili.stajBirimYetkilisikimlik;
+                    kullanici.kaydet(vari, false);
+                }
+                else
+                {
+                    kullanici = await vari.Kullanicis.FirstAsync(x => x.kullaniciKimlik == eskiKullanici.kullaniciKimlik);
+                }
+
+                RolAYRINTIArama rolKosul = new RolAYRINTIArama();
+                rolKosul.e_varsayilanmi = true;
+                rolKosul.e_gecerlimi = true;
+                rolKosul.i_varsayilanOlduguKullaniciTuruKimlik = (int)enumref_KullaniciTuru.Birim_Staj_Sorumlusu;
+
+
+                RolAYRINTI? rolu = await rolKosul.bul(vari);
+                if (rolu != null)
+                {
+                    KullaniciRoluArama rolBagArama = new KullaniciRoluArama();
+                    rolBagArama.i_kullaniciKimlik = kullanici.kullaniciKimlik;
+                    rolBagArama.i_rolKimlik = rolu.rolKimlik;
+                    rolBagArama.e_gecerlimi = true;
+                    var mevcutRolBagi = await rolBagArama.bul(vari);
+
+                    if (mevcutRolBagi == null)
+                    {
+                        KullaniciRolu bag = new KullaniciRolu();
+                        bag.i_kullaniciKimlik = kullanici.kullaniciKimlik;
+                        bag.i_rolKimlik = rolu.rolKimlik;
+                        bag.e_gecerlimi = true;
+                        await bag.kaydetKos(vari, false);
+                    }
+                }
+            }
+        }
+
+
 
         public int[] turleri { get; set; }
 
@@ -292,6 +304,14 @@ namespace UniStaj.Models
                 _kosul.i_stajBirimiKimlik = Convert.ToInt32(kimlik);
                 List<StajBirimiTurleri> liste = await _kosul.cek(vari);
                 turleri = liste.Select(p => p.i_stajTuruKimlik).ToArray();
+
+
+                StajBirimYetkilisiBirimiAYRINTIArama _yetkiliArama = new StajBirimYetkilisiBirimiAYRINTIArama();
+                _yetkiliArama.i_stajBirimiKimlik = kartVerisi.stajBirimikimlik;
+                List<StajBirimYetkilisiBirimiAYRINTI> kisiler = await _yetkiliArama.cek(vari);
+
+                this.yetkiliTcleri = string.Join(",", kisiler.Select(p => p.tcKimlikNo).ToList());
+
             }
         }
 

@@ -46,6 +46,7 @@ namespace UniStaj.veriTabani
         public bool? e_sozlesmeOnaylandimi { get; set; }
         public string? ciftOnayKodu { get; set; }
         public Int32? sonGunGirisi { get; set; }
+        public int? y_stajBirimYetkilisiKimlik { get; set; }
         public KullaniciAYRINTIArama()
         {
             this.varmi = true;
@@ -130,6 +131,13 @@ namespace UniStaj.veriTabani
                 predicate = predicate.And(x => x.ciftOnayKodu != null && x.ciftOnayKodu.Contains(ciftOnayKodu));
             if (sonGunGirisi != null)
                 predicate = predicate.And(x => x.sonGunGirisi == sonGunGirisi);
+
+
+            if (y_stajBirimYetkilisiKimlik != null)
+                predicate = predicate.And(x => x.y_stajBirimYetkilisiKimlik == y_stajBirimYetkilisiKimlik);
+
+
+
             return predicate;
 
         }

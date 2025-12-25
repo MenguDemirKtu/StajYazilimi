@@ -116,7 +116,6 @@ namespace UniStaj.Controllers
                     return OturumAcilmadi();
 
                 await gelen.turleriKaydet();
-
                 return basariBildirimi("Başarıyla kaydedildi");
             }
             catch (Exception ex)
