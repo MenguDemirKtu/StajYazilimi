@@ -44,6 +44,11 @@
                     <tr>
                         <th> </th>
     <th> @Ayar.sozcuk( "Stajyer", dilKimlik)</th>
+    <th> @Ayar.sozcuk("Sınıfı", dilKimlik)</th>
+    <th> @Ayar.sozcuk("Staj Türü", dilKimlik)</th>
+    <th> @Ayar.sozcuk("Başlangıç", dilKimlik)</th>
+    <th> @Ayar.sozcuk("Bitiş", dilKimlik)</th>
+    <th> @Ayar.sozcuk("Gün Sayısı", dilKimlik)</th>
     <th> @Ayar.sozcuk( "Kurum Adı", dilKimlik)</th>
     <th> @Ayar.sozcuk( "Kurum Türü", dilKimlik)</th>
     <th> @Ayar.sozcuk( "Hizmet Alanı", dilKimlik)</th>
@@ -58,11 +63,6 @@
     <th> @Ayar.sozcuk( "Yetkili Ad Soyad", dilKimlik)</th>
     <th> @Ayar.sozcuk( "Yetkili Görevi", dilKimlik)</th>
     <th> @Ayar.sozcuk( "Yetkili Tel", dilKimlik)</th>
-    <th> @Ayar.sozcuk( "Staj Türü", dilKimlik)</th>
-    <th> @Ayar.sozcuk( "Başlangıç", dilKimlik)</th>
-    <th> @Ayar.sozcuk( "Bitiş", dilKimlik)</th>
-    <th> @Ayar.sozcuk( "Gün Sayısı", dilKimlik)</th>
-    <th> @Ayar.sozcuk( "Sınıfı", dilKimlik)</th>
     <th> @Ayar.sozcuk( "Çalışma Günleri", dilKimlik)</th>
     <th> @Ayar.sozcuk( "Kodu", dilKimlik)</th>
                         <th>
@@ -80,8 +80,13 @@
                                            value="@satir._birincilAnahtar()" />
                                 </td>
 <td>@satir.stajyerAdi @satir.stajyerSoyadi</td>
+<td>@satir.sinifi</td>
+<td>@satir.stajTuruAdi</td>
+<td>@(satir.baslangic.HasValue ? satir.baslangic.Value.ToString("dd.MM.yyyy"): "")</td>
+<td>@(satir.bitis.HasValue? satir.bitis.Value.ToString("dd.MM.yyyy"): "")</td>
+<td>@satir.gunSayisi</td>
 <td>@satir.stajKurumAdi</td>
-<td>@satir.i_stajkurumturukimlik</td>
+<td>@(Model._ayStajKurumTuruAYRINTI.FirstOrDefault(x => x.stajKurumTurukimlik == satir.i_stajkurumturukimlik) ?.stajKurumTurAdi?? "-")</td>
 <td>@satir.hizmetAlani</td>
 <td>@satir.vergiNo</td>
 <td>@satir.ibanNo</td>
@@ -94,11 +99,6 @@
 <td>@satir.yetkilisi</td>
 <td>@satir.yetkiliGorevi</td>
 <td>@satir.yetkiliTel</td>
-<td>@satir.stajTuruAdi</td>
-<td>@satir.baslangic</td>
-<td>@satir.bitis</td>
-<td>@satir.gunSayisi</td>
-<td>@satir.sinifi</td>
 <td>@satir.calismaGunleri</td>
 <td>@satir.kodu</td>
                                 <td>
